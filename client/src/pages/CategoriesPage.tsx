@@ -1,12 +1,9 @@
-import { useState, useEffect } from "react";
-import { useLocation } from "wouter";
+import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ChevronDown, ChevronRight, ShoppingCart } from "lucide-react";
+import { ChevronRight, ShoppingCart } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
 import { useToast } from "@/hooks/use-toast";
-import CustomizationModal from "@/components/CustomizationModal";
-import { getSectorById, parsePrompt2File, parseRulesFile, type ParsedCategory, type ParsedRule } from "@/lib/sectors";
 
 // Helper function to get service image based on item name and category
 const getServiceImage = (itemName: string, categoryName: string, sectorId?: string): string => {
@@ -813,12 +810,45 @@ export default function CategoriesPage() {
         )}
       </div>
 
-      <CustomizationModal
-        isOpen={customizationModal.isOpen}
-        onClose={() => setCustomizationModal({ isOpen: false })}
-        item={customizationModal.item!}
-        category={customizationModal.category!}
-      />
+      {customizationModal.isOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-lg max-w-md w-full mx-4">
+            <h3 className="text-lg font-semibold mb-4">Customize {customizationModal.item?.name}</h3>
+            <p className="text-gray-600 mb-4">Customization options will be available soon.</p>
+            <div className="flex justify-end gap-2">
+              <Button 
+                variant="outline" 
+                onClick={() => setCustomizationModal({ isOpen: false })}
+              >
+                Cancel
+              </Button>
+              <Button 
+                onClick={() => {
+                  if (customizationModal.item && customizationModal.category) {
+                    dispatch({
+                      type: "ADD_ITEM",
+                      payload: {
+                        id: customizationModal.item.id,
+                        name: customizationModal.item.name,
+                        price: customizationModal.item.price,
+                        image: getServiceImage(customizationModal.item.name, customizationModal.category.name)
+                      }
+                    });
+                    
+                    toast({
+                      title: "Added to cart",
+                      description: `${customizationModal.item.name} has been added to your cart.`,
+                    });
+                  }
+                  setCustomizationModal({ isOpen: false });
+                }}
+              >
+                Add to Cart
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
