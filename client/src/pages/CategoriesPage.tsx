@@ -672,8 +672,15 @@ export default function CategoriesPage() {
   const { dispatch } = useCart();
   const { toast } = useToast();
 
+  useEffect(() => {
+    console.log('selectedCategory state changed to:', selectedCategory);
+  }, [selectedCategory]);
+
   const handleCategoryClick = (categoryName: string) => {
+    console.log('Category clicked:', categoryName);
+    console.log('Current selectedCategory:', selectedCategory);
     setSelectedCategory(categoryName);
+    console.log('Setting selectedCategory to:', categoryName);
   };
 
   const handleAddToCart = (item: CategoryItem, category: Category) => {
@@ -713,6 +720,9 @@ export default function CategoriesPage() {
           <p className="text-gray-600 max-w-2xl mx-auto">
             Explore our complete menu organized by categories. Click on any category to see all available items.
           </p>
+          <div className="mt-4 p-2 bg-yellow-100 rounded text-sm">
+            Debug: selectedCategory = "{selectedCategory || 'null'}"
+          </div>
         </div>
 
         {!selectedCategory ? (
@@ -723,7 +733,12 @@ export default function CategoriesPage() {
                 <CardContent className="p-0">
                   <div 
                     className="cursor-pointer p-6 hover:bg-gray-50 transition-colors"
-                    onClick={() => handleCategoryClick(category.name)}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      console.log('Card clicked for category:', category.name);
+                      handleCategoryClick(category.name);
+                    }}
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-4">
