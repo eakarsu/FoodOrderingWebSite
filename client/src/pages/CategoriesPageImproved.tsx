@@ -74,15 +74,35 @@ const getServiceImage = (itemName: string, categoryName: string, sectorId?: stri
 // Function to load sector-specific content
 const loadSectorContent = async (sectorId: string): Promise<{ categories: ParsedCategory[], rules: Record<string, ParsedRule[]> }> => {
   try {
-    // Try to load sector-specific files first
     let prompt2Content = "";
     let rulesContent = "";
     
-    // Try different timestamp variations for the files
-    const timestamps = ['1749900541844', '1749900541845', '1749900541846', '1749900541841'];
+    // Try to load sector-specific files directly from sectors folder
+    try {
+      const prompt2Response = await fetch(`/sectors/${sectorId}_prompt2.txt`);
+      if (prompt2Response.ok) {
+        prompt2Content = await prompt2Response.text();
+        console.log(`Loaded prompt2 for ${sectorId}`);
+      }
+    } catch (error) {
+      console.log(`No prompt2 file found for ${sectorId}`);
+    }
     
-    for (const timestamp of timestamps) {
-      if (!prompt2Content) {
+    try {
+      const rulesResponse = await fetch(`/sectors/${sectorId}_rules.txt`);
+      if (rulesResponse.ok) {
+        rulesContent = await rulesResponse.text();
+        console.log(`Loaded rules for ${sectorId}`);
+      }
+    } catch (error) {
+      console.log(`No rules file found for ${sectorId}`);
+    }
+    
+    // If no sector-specific files found, try with attached_assets folder and timestamps
+    if (!prompt2Content) {
+      const timestamps = ['1749900541844', '1749900541845', '1749900541846', '1749900541841'];
+      
+      for (const timestamp of timestamps) {
         try {
           const prompt2Response = await fetch(`/attached_assets/${sectorId}_prompt2_${timestamp}.txt`);
           if (prompt2Response.ok) {
@@ -96,8 +116,10 @@ const loadSectorContent = async (sectorId: string): Promise<{ categories: Parsed
       }
     }
     
-    for (const timestamp of timestamps) {
-      if (!rulesContent) {
+    if (!rulesContent) {
+      const timestamps = ['1749900541844', '1749900541845', '1749900541846', '1749900541841'];
+      
+      for (const timestamp of timestamps) {
         try {
           const rulesResponse = await fetch(`/attached_assets/${sectorId}_rules_${timestamp}.txt`);
           if (rulesResponse.ok) {
@@ -111,12 +133,13 @@ const loadSectorContent = async (sectorId: string): Promise<{ categories: Parsed
       }
     }
     
-    // If no sector-specific files found, try default files
+    // If still no files found, try default files
     if (!prompt2Content) {
       try {
         const defaultResponse = await fetch('/attached_assets/prompt2.txt');
         if (defaultResponse.ok) {
           prompt2Content = await defaultResponse.text();
+          console.log('Loaded default prompt2.txt');
         }
       } catch (error) {
         console.error('Error loading default prompt2.txt:', error);
@@ -128,6 +151,7 @@ const loadSectorContent = async (sectorId: string): Promise<{ categories: Parsed
         const defaultResponse = await fetch('/attached_assets/rules.txt');
         if (defaultResponse.ok) {
           rulesContent = await defaultResponse.text();
+          console.log('Loaded default rules.txt');
         }
       } catch (error) {
         console.error('Error loading default rules.txt:', error);
@@ -136,6 +160,8 @@ const loadSectorContent = async (sectorId: string): Promise<{ categories: Parsed
     
     const categories = prompt2Content ? parsePrompt2File(prompt2Content) : [];
     const rules = rulesContent ? parseRulesFile(rulesContent) : {};
+    
+    console.log(`Parsed ${categories.length} categories for ${sectorId}`);
     
     return { categories, rules };
   } catch (error) {
