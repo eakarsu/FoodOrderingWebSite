@@ -664,6 +664,7 @@ interface Category {
 
 export default function CategoriesPage() {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [forceRender, setForceRender] = useState(0);
   const [customizationModal, setCustomizationModal] = useState<{
     isOpen: boolean;
     item?: CategoryItem;
@@ -672,8 +673,15 @@ export default function CategoriesPage() {
   const { dispatch } = useCart();
   const { toast } = useToast();
 
+  useEffect(() => {
+    console.log('selectedCategory state changed to:', selectedCategory);
+  }, [selectedCategory]);
+
   const handleCategoryClick = (categoryName: string) => {
+    console.log('Category clicked:', categoryName);
+    console.log('Current selectedCategory:', selectedCategory);
     setSelectedCategory(categoryName);
+    console.log('Setting selectedCategory to:', categoryName);
   };
 
   const handleAddToCart = (item: CategoryItem, category: Category) => {
@@ -713,6 +721,9 @@ export default function CategoriesPage() {
           <p className="text-gray-600 max-w-2xl mx-auto">
             Explore our complete menu organized by categories. Click on any category to see all available items.
           </p>
+          <div className="mt-4 p-2 bg-yellow-100 rounded text-sm">
+            Debug: selectedCategory = "{selectedCategory || 'null'}"
+          </div>
         </div>
 
         {selectedCategory === null ? (
