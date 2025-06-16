@@ -218,11 +218,14 @@ export default function CategoriesPage() {
     const urlParams = new URLSearchParams(window.location.search);
     const sectorParam = urlParams.get('sector');
     if (sectorParam) {
+      console.log(`Loading sector from URL: ${sectorParam}`);
       setCurrentSector(sectorParam);
       loadSectorData(sectorParam);
     } else {
-      // Default to food service if no sector specified
-      loadSectorData('food_service');
+      // Default to auto_repair if no sector specified (since it has working files)
+      console.log('No sector specified, defaulting to auto_repair');
+      setCurrentSector('auto_repair');
+      loadSectorData('auto_repair');
     }
   }, [location]);
 

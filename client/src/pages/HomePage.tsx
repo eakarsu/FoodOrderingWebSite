@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
 import { Clock, Award, Heart, Brain, Leaf, Star, MessageSquare, Phone, Settings, Search, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -8,7 +8,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Input } from "@/components/ui/input";
 import { useCart } from "@/contexts/CartContext";
 import { getAIRecommendations, type AIRecommendation } from "@/lib/openai";
-import { SECTORS, type Sector } from "@/lib/sectors";
+import { SECTORS, type Sector, parsePrompt2File, parseRulesFile, type ParsedCategory, type ParsedRule } from "@/lib/sectors";
 import type { MenuItem } from "@shared/schema";
 import ContactUsDirectly from "@/components/ContactUsDirectly";
 
@@ -16,6 +16,7 @@ export default function HomePage() {
   const { dispatch } = useCart();
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedSector, setSelectedSector] = useState<Sector | null>(null);
+  const [, setLocation] = useLocation();
 
   // Filter sectors based on search
   const filteredSectors = SECTORS.filter(sector =>
@@ -23,10 +24,129 @@ export default function HomePage() {
     sector.description.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const handleSectorSelect = (sector: Sector) => {
+  // Function to load sector-specific content (same as CategoriesPageImproved)
+  const loadSectorContent = async (sectorId: string): Promise<{ categories: ParsedCategory[], rules: Record<string, ParsedRule[]> }> => {
+    try {
+      let prompt2Content = "";
+      let rulesContent = "";
+      
+      console.log(`Loading content for sector: ${sectorId}`);
+      
+      // Try to load sector-specific files from the sectors directory
+      try {
+        const prompt2Response = await fetch(`/sectors/${sectorId}_prompt2.txt`);
+        if (prompt2Response.ok) {
+          prompt2Content = await prompt2Response.text();
+          console.log(`Successfully loaded prompt2 for ${sectorId}`);
+        } else {
+          console.log(`Failed to load prompt2 for ${sectorId}: ${prompt2Response.status}`);
+        }
+      } catch (error) {
+        console.log(`Error loading prompt2 file for ${sectorId}:`, error);
+      }
+      
+      try {
+        const rulesResponse = await fetch(`/sectors/${sectorId}_rules.txt`);
+        if (rulesResponse.ok) {
+          rulesContent = await rulesResponse.text();
+          console.log(`Successfully loaded rules for ${sectorId}`);
+        } else {
+          console.log(`Failed to load rules for ${sectorId}: ${rulesResponse.status}`);
+        }
+      } catch (error) {
+        console.log(`Error loading rules file for ${sectorId}:`, error);
+      }
+      
+      // If no sector-specific files found, try with attached_assets folder and timestamps
+      if (!prompt2Content) {
+        console.log(`Trying attached_assets for ${sectorId} prompt2`);
+        const timestamps = ['1749900541844', '1749900541845', '1749900541846', '1749900541841'];
+        
+        for (const timestamp of timestamps) {
+          try {
+            const prompt2Response = await fetch(`/attached_assets/${sectorId}_prompt2_${timestamp}.txt`);
+            if (prompt2Response.ok) {
+              prompt2Content = await prompt2Response.text();
+              console.log(`Loaded prompt2 for ${sectorId} with timestamp ${timestamp}`);
+              break;
+            }
+          } catch (error) {
+            // Continue to next timestamp
+          }
+        }
+      }
+      
+      if (!rulesContent) {
+        console.log(`Trying attached_assets for ${sectorId} rules`);
+        const timestamps = ['1749900541844', '1749900541845', '1749900541846', '1749900541841'];
+        
+        for (const timestamp of timestamps) {
+          try {
+            const rulesResponse = await fetch(`/attached_assets/${sectorId}_rules_${timestamp}.txt`);
+            if (rulesResponse.ok) {
+              rulesContent = await rulesResponse.text();
+              console.log(`Loaded rules for ${sectorId} with timestamp ${timestamp}`);
+              break;
+            }
+          } catch (error) {
+            // Continue to next timestamp
+          }
+        }
+      }
+      
+      // If still no files found, try default files
+      if (!prompt2Content) {
+        console.log('Trying default prompt2.txt');
+        try {
+          const defaultResponse = await fetch('/attached_assets/prompt2.txt');
+          if (defaultResponse.ok) {
+            prompt2Content = await defaultResponse.text();
+            console.log('Loaded default prompt2.txt');
+          }
+        } catch (error) {
+          console.error('Error loading default prompt2.txt:', error);
+        }
+      }
+      
+      if (!rulesContent) {
+        console.log('Trying default rules.txt');
+        try {
+          const defaultResponse = await fetch('/attached_assets/rules.txt');
+          if (defaultResponse.ok) {
+            rulesContent = await defaultResponse.text();
+            console.log('Loaded default rules.txt');
+          }
+        } catch (error) {
+          console.error('Error loading default rules.txt:', error);
+        }
+      }
+      
+      console.log(`Content loaded - prompt2: ${prompt2Content.length} chars, rules: ${rulesContent.length} chars`);
+      
+      const categories = prompt2Content ? parsePrompt2File(prompt2Content) : [];
+      const rules = rulesContent ? parseRulesFile(rulesContent) : {};
+      
+      console.log(`Parsed ${categories.length} categories for ${sectorId}`);
+      console.log('Categories:', categories.map(c => c.name));
+      
+      return { categories, rules };
+    } catch (error) {
+      console.error('Error loading sector content:', error);
+      return { categories: [], rules: {} };
+    }
+  };
+
+  const handleSectorSelect = async (sector: Sector) => {
     setSelectedSector(sector);
     // Store selected sector in localStorage for persistence
     localStorage.setItem('selectedSector', sector.id);
+    
+    // Load sector content to verify it works
+    const { categories } = await loadSectorContent(sector.id);
+    console.log(`Sector ${sector.id} has ${categories.length} categories`);
+    
+    // Navigate to categories page with sector parameter
+    setLocation(`/categories?sector=${sector.id}`);
   };
 
   return (
@@ -121,6 +241,10 @@ export default function HomePage() {
                     style={{ 
                       backgroundColor: sector.primaryColor,
                       borderColor: sector.primaryColor 
+                    }}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleSectorSelect(sector);
                     }}
                   >
                     Select Service
