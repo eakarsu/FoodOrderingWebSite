@@ -764,6 +764,71 @@ export default function CategoriesPage() {
         </div>
       </div>
 
+      {/* Category Modal */}
+      {categoryModal.isOpen && categoryModal.category && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg max-w-4xl w-full mx-4 max-h-[90vh] overflow-hidden">
+            <div className="p-6 border-b">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                  <div className="text-4xl">{categoryModal.category.image}</div>
+                  <div>
+                    <h2 className="text-2xl font-bold text-secondary">{categoryModal.category.name}</h2>
+                    <p className="text-gray-600">
+                      {categoryModal.category.items.length} items available
+                    </p>
+                  </div>
+                </div>
+                <Button 
+                  variant="outline" 
+                  onClick={() => setCategoryModal({ isOpen: false })}
+                >
+                  ✕ Close
+                </Button>
+              </div>
+            </div>
+            
+            <div className="p-6 overflow-y-auto max-h-[70vh]">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {categoryModal.category.items.map((item) => (
+                  <Card key={item.id} className="overflow-hidden">
+                    <div className="relative">
+                      <img 
+                        src={getServiceImage(item.name, categoryModal.category!.name)}
+                        alt={item.name}
+                        className="w-full h-32 object-cover"
+                        onError={(e) => {
+                          const target = e.target as HTMLImageElement;
+                          target.src = "https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=400&h=300&fit=crop&auto=format";
+                        }}
+                      />
+                    </div>
+                    <CardContent className="p-3">
+                      <h4 className="font-semibold text-secondary mb-1 text-sm">{item.name}</h4>
+                      {item.description && (
+                        <p className="text-gray-600 text-xs mb-2 line-clamp-2">{item.description}</p>
+                      )}
+                      <div className="flex items-center justify-between">
+                        <p className="text-primary font-bold">${item.price.toFixed(2)}</p>
+                        <Button
+                          onClick={() => handleAddToCart(item, categoryModal.category!)}
+                          size="sm"
+                          className="bg-primary hover:bg-primary/90 text-xs"
+                        >
+                          <ShoppingCart size={12} className="mr-1" />
+                          {categoryModal.category!.hasRules ? "Customize" : "Add"}
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Customization Modal */}
       {customizationModal.isOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded-lg max-w-md w-full mx-4">
