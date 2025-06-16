@@ -675,17 +675,9 @@ export default function CategoriesPage() {
   const { dispatch } = useCart();
   const { toast } = useToast();
 
-  useEffect(() => {
-    console.log('categoryModal state changed:', categoryModal);
-  }, [categoryModal]);
-
-
   const handleCategoryClick = (categoryName: string) => {
-    console.log('Category clicked:', categoryName);
     const category = categoriesData.find(cat => cat.name === categoryName);
-    console.log('Found category:', category);
     if (category) {
-      console.log('Setting modal to open with category:', category.name);
       setCategoryModal({
         isOpen: true,
         category: category
@@ -730,9 +722,6 @@ export default function CategoriesPage() {
           <p className="text-gray-600 max-w-2xl mx-auto">
             Explore our complete menu organized by categories. Click on any category to see all available items.
           </p>
-          <div className="mt-4 p-2 bg-yellow-100 rounded text-sm">
-            Debug: Modal isOpen = {String(categoryModal.isOpen)} | Category = {categoryModal.category?.name || 'none'}
-          </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
