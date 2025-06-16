@@ -663,7 +663,10 @@ interface Category {
 
 
 export default function CategoriesPage() {
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [categoryModal, setCategoryModal] = useState<{
+    isOpen: boolean;
+    category?: Category;
+  }>({ isOpen: false });
   const [customizationModal, setCustomizationModal] = useState<{
     isOpen: boolean;
     item?: CategoryItem;
@@ -672,15 +675,16 @@ export default function CategoriesPage() {
   const { dispatch } = useCart();
   const { toast } = useToast();
 
-  useEffect(() => {
-    console.log('selectedCategory state changed to:', selectedCategory);
-  }, [selectedCategory]);
 
   const handleCategoryClick = (categoryName: string) => {
     console.log('Category clicked:', categoryName);
-    console.log('Current selectedCategory:', selectedCategory);
-    setSelectedCategory(categoryName);
-    console.log('Setting selectedCategory to:', categoryName);
+    const category = categoriesData.find(cat => cat.name === categoryName);
+    if (category) {
+      setCategoryModal({
+        isOpen: true,
+        category: category
+      });
+    }
   };
 
   const handleAddToCart = (item: CategoryItem, category: Category) => {
@@ -721,110 +725,43 @@ export default function CategoriesPage() {
             Explore our complete menu organized by categories. Click on any category to see all available items.
           </p>
           <div className="mt-4 p-2 bg-yellow-100 rounded text-sm">
-            Debug: selectedCategory = "{selectedCategory || 'null'}"
+            Debug: categoryModal.isOpen = {String(categoryModal.isOpen)} | category = {categoryModal.category?.name || 'null'}
           </div>
         </div>
 
-        {!selectedCategory ? (
-          // Show category grid when no category is selected
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {categoriesData.map((category) => (
-              <Card key={category.name} className="overflow-hidden hover:shadow-lg transition-shadow">
-                <CardContent className="p-0">
-                  <div 
-                    className="cursor-pointer p-6 hover:bg-gray-50 transition-colors"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      console.log('Card clicked for category:', category.name);
-                      handleCategoryClick(category.name);
-                    }}
-                  >
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-4">
-                        <div className="text-4xl">{category.image}</div>
-                        <div>
-                          <h3 className="text-xl font-bold text-secondary">{category.name}</h3>
-                          <p className="text-gray-600 text-sm">
-                            {category.items.length} item{category.items.length !== 1 ? 's' : ''}
-                            {category.hasRules && " • Customizable"}
-                          </p>
-                        </div>
-                      </div>
-                      <div className="text-gray-400">
-                        <ChevronRight size={24} />
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {categoriesData.map((category) => (
+            <Card key={category.name} className="overflow-hidden hover:shadow-lg transition-shadow">
+              <CardContent className="p-0">
+                <div 
+                  className="cursor-pointer p-6 hover:bg-gray-50 transition-colors"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    console.log('Card clicked for category:', category.name);
+                    handleCategoryClick(category.name);
+                  }}
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-4">
+                      <div className="text-4xl">{category.image}</div>
+                      <div>
+                        <h3 className="text-xl font-bold text-secondary">{category.name}</h3>
+                        <p className="text-gray-600 text-sm">
+                          {category.items.length} item{category.items.length !== 1 ? 's' : ''}
+                          {category.hasRules && " • Customizable"}
+                        </p>
                       </div>
                     </div>
+                    <div className="text-gray-400">
+                      <ChevronRight size={24} />
+                    </div>
                   </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        ) : (
-          // Show selected category items
-          <div>
-            <div className="mb-6">
-              <Button 
-                variant="outline" 
-                onClick={() => setSelectedCategory(null)}
-                className="mb-4"
-              >
-                ← Back to Categories
-              </Button>
-              <div className="flex items-center gap-4">
-                <div className="text-5xl">
-                  {categoriesData.find(cat => cat.name === selectedCategory)?.image}
                 </div>
-                <div>
-                  <h2 className="text-3xl font-bold text-secondary">{selectedCategory}</h2>
-                  <p className="text-gray-600">
-                    {categoriesData.find(cat => cat.name === selectedCategory)?.items.length} items available
-                  </p>
-                </div>
-              </div>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {categoriesData
-                .find(cat => cat.name === selectedCategory)
-                ?.items.map((item) => {
-                  const category = categoriesData.find(cat => cat.name === selectedCategory)!;
-                  return (
-                    <Card key={item.id} className="overflow-hidden">
-                      <div className="relative">
-                        <img 
-                          src={getServiceImage(item.name, category.name)}
-                          alt={item.name}
-                          className="w-full h-48 object-cover"
-                          onError={(e) => {
-                            const target = e.target as HTMLImageElement;
-                            target.src = "https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=400&h=300&fit=crop&auto=format";
-                          }}
-                        />
-                      </div>
-                      <CardContent className="p-4">
-                        <h4 className="font-semibold text-secondary mb-2">{item.name}</h4>
-                        {item.description && (
-                          <p className="text-gray-600 text-sm mb-3">{item.description}</p>
-                        )}
-                        <div className="flex items-center justify-between">
-                          <p className="text-primary font-bold text-lg">${item.price.toFixed(2)}</p>
-                          <Button
-                            onClick={() => handleAddToCart(item, category)}
-                            size="sm"
-                            className="bg-primary hover:bg-primary/90"
-                          >
-                            <ShoppingCart size={16} className="mr-1" />
-                            {category.hasRules ? "Customize" : "Add"}
-                          </Button>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  );
-                })}
-            </div>
-          </div>
-        )}
+              </CardContent>
+            </Card>
+          ))}
+        </div>
       </div>
 
       {customizationModal.isOpen && (
