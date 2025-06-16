@@ -672,15 +672,8 @@ export default function CategoriesPage() {
   const { dispatch } = useCart();
   const { toast } = useToast();
 
-  useEffect(() => {
-    console.log('selectedCategory state changed to:', selectedCategory);
-  }, [selectedCategory]);
-
   const handleCategoryClick = (categoryName: string) => {
-    console.log('Category clicked:', categoryName);
-    console.log('Current selectedCategory:', selectedCategory);
     setSelectedCategory(categoryName);
-    console.log('Setting selectedCategory to:', categoryName);
   };
 
   const handleAddToCart = (item: CategoryItem, category: Category) => {
@@ -720,36 +713,35 @@ export default function CategoriesPage() {
           <p className="text-gray-600 max-w-2xl mx-auto">
             Explore our complete menu organized by categories. Click on any category to see all available items.
           </p>
-          <div className="mt-4 p-2 bg-yellow-100 rounded text-sm">
-            Debug: selectedCategory = "{selectedCategory || 'null'}"
-          </div>
         </div>
 
-        {!selectedCategory ? (
+        {selectedCategory === null ? (
           // Show category grid when no category is selected
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {categoriesData.map((category) => (
               <Card key={category.name} className="overflow-hidden hover:shadow-lg transition-shadow">
-                <div 
-                  className="cursor-pointer p-6 hover:bg-gray-50 transition-colors"
-                  onClick={() => handleCategoryClick(category.name)}
-                >
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-4">
-                      <div className="text-4xl">{category.image}</div>
-                      <div>
-                        <h3 className="text-xl font-bold text-secondary">{category.name}</h3>
-                        <p className="text-gray-600 text-sm">
-                          {category.items.length} item{category.items.length !== 1 ? 's' : ''}
-                          {category.hasRules && " • Customizable"}
-                        </p>
+                <CardContent className="p-0">
+                  <div 
+                    className="cursor-pointer p-6 hover:bg-gray-50 transition-colors"
+                    onClick={() => handleCategoryClick(category.name)}
+                  >
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-4">
+                        <div className="text-4xl">{category.image}</div>
+                        <div>
+                          <h3 className="text-xl font-bold text-secondary">{category.name}</h3>
+                          <p className="text-gray-600 text-sm">
+                            {category.items.length} item{category.items.length !== 1 ? 's' : ''}
+                            {category.hasRules && " • Customizable"}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="text-gray-400">
+                        <ChevronRight size={24} />
                       </div>
                     </div>
-                    <div className="text-gray-400">
-                      <ChevronRight size={24} />
-                    </div>
                   </div>
-                </div>
+                </CardContent>
               </Card>
             ))}
           </div>
