@@ -676,9 +676,14 @@ export default function CategoriesPage() {
   const { toast } = useToast();
 
   const handleCategoryClick = (categoryName: string) => {
+    console.log('Category clicked:', categoryName);
+    console.log('Current selectedCategory:', selectedCategory);
+    
     if (selectedCategory === categoryName) {
+      console.log('Closing category');
       setSelectedCategory(null); // Close if already selected
     } else {
+      console.log('Opening category:', categoryName);
       setSelectedCategory(categoryName); // Open the selected category
     }
   };
@@ -720,6 +725,10 @@ export default function CategoriesPage() {
           <p className="text-gray-600 max-w-2xl mx-auto">
             Explore our complete menu organized by categories. Click on any category to see all available items.
           </p>
+          {/* Debug info */}
+          <div className="mt-4 p-2 bg-yellow-100 rounded text-sm">
+            Debug: Selected Category = "{selectedCategory || 'none'}"
+          </div>
         </div>
 
         {!selectedCategory ? (
@@ -729,7 +738,12 @@ export default function CategoriesPage() {
               <Card key={category.name} className="overflow-hidden hover:shadow-lg transition-shadow">
                 <div 
                   className="cursor-pointer p-6 hover:bg-gray-50 transition-colors"
-                  onClick={() => handleCategoryClick(category.name)}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    console.log('Card clicked for category:', category.name);
+                    handleCategoryClick(category.name);
+                  }}
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-4">
