@@ -740,11 +740,7 @@ export default function CategoriesPage() {
           </div>
         </div>
 
-        {(() => {
-          console.log('Rendering with selectedCategory:', selectedCategory);
-          console.log('Should show grid:', !selectedCategory);
-          return !selectedCategory;
-        })() ? (
+        {!selectedCategory ? (
           // Show category grid when no category is selected
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {categoriesData.map((category) => (
