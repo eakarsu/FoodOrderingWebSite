@@ -672,34 +672,8 @@ export default function CategoriesPage() {
   const { dispatch } = useCart();
   const { toast } = useToast();
 
-  // Debug effect to track state changes
-  useEffect(() => {
-    console.log('=== STATE CHANGE ===');
-    console.log('selectedCategory changed to:', selectedCategory);
-    console.log('Type of selectedCategory:', typeof selectedCategory);
-    console.log('selectedCategory === null:', selectedCategory === null);
-    console.log('!selectedCategory:', !selectedCategory);
-    console.log('=== STATE CHANGE END ===');
-  }, [selectedCategory]);
-
-  // Debug effect to track component mount
-  useEffect(() => {
-    console.log('=== COMPONENT MOUNTED ===');
-    console.log('Initial selectedCategory:', selectedCategory);
-    console.log('categoriesData length:', categoriesData.length);
-    console.log('=== COMPONENT MOUNTED END ===');
-  }, []);
-
   const handleCategoryClick = (categoryName: string) => {
-    console.log('=== CATEGORY CLICK START ===');
-    console.log('handleCategoryClick called with:', categoryName);
-    console.log('Current selectedCategory before setState:', selectedCategory);
-    console.log('About to call setSelectedCategory with:', categoryName);
-    
     setSelectedCategory(categoryName);
-    
-    console.log('setSelectedCategory called');
-    console.log('=== CATEGORY CLICK END ===');
   };
 
   const handleAddToCart = (item: CategoryItem, category: Category) => {
@@ -741,7 +715,7 @@ export default function CategoriesPage() {
           </p>
         </div>
 
-        {selectedCategory === null ? (
+        {!selectedCategory ? (
           // Show category grid when no category is selected
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {categoriesData.map((category) => (
