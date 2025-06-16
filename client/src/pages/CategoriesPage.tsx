@@ -672,8 +672,17 @@ export default function CategoriesPage() {
   const { dispatch } = useCart();
   const { toast } = useToast();
 
+  useEffect(() => {
+    console.log('selectedCategory state changed to:', selectedCategory);
+    console.log('Type:', typeof selectedCategory);
+    console.log('!selectedCategory:', !selectedCategory);
+  }, [selectedCategory]);
+
   const handleCategoryClick = (categoryName: string) => {
+    console.log('Category clicked:', categoryName);
+    console.log('Current selectedCategory:', selectedCategory);
     setSelectedCategory(categoryName);
+    console.log('Setting selectedCategory to:', categoryName);
   };
 
   const handleAddToCart = (item: CategoryItem, category: Category) => {
@@ -713,9 +722,17 @@ export default function CategoriesPage() {
           <p className="text-gray-600 max-w-2xl mx-auto">
             Explore our complete menu organized by categories. Click on any category to see all available items.
           </p>
+          <div className="mt-4 p-2 bg-yellow-100 rounded text-sm">
+            Debug: selectedCategory = "{selectedCategory || 'null'}" | Type: {typeof selectedCategory} | !selectedCategory: {String(!selectedCategory)}
+          </div>
         </div>
 
-        {!selectedCategory ? (
+        {(() => {
+          console.log('Render check - selectedCategory:', selectedCategory);
+          console.log('Render check - !selectedCategory:', !selectedCategory);
+          console.log('Will show grid:', !selectedCategory);
+          return !selectedCategory;
+        })() ? (
           // Show category grid when no category is selected
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {categoriesData.map((category) => (
