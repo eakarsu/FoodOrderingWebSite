@@ -18,8 +18,9 @@ interface SMSResponse {
 
 // Get Twilio access token from your API
 export async function getTwilioToken(): Promise<TwilioToken> {
-  try {
-    const response = await fetch('/api/twilio/token', {
+  const tokenUrl = process.env.TOKEN_WEBHOOK_URL || 'https://omniassistai.com/token';
+  try { 
+    const response = await fetch(tokenUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -39,8 +40,56 @@ export async function getTwilioToken(): Promise<TwilioToken> {
 
 // Send SMS via your API
 export async function sendSMS(to: string, message: string): Promise<SMSResponse> {
-  try {
-    const response = await fetch('/api/twilio/sms', {
+    console.log(`sendSMS sending ${message} to ${to}`)
+    const smsUrl = process.env.SMS_WEBHOOK_URL || 'https://omniassistai.com/sms';
+    try {
+        // ✅ Send form data directly to Python backend
+        const formData = new URLSearchParams();
+        formData.append('From', to);
+        formData.append('Body', message);
+        formData.append('MessageSid', `SM${Date.now()}${Math.random().toString(36).substr(2, 9)}`);
+
+        const response = await fetch(smsUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',  // ✅ Form data
+            },
+            body: formData.toString(),
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+
+        // Handle XML response from Python backend
+        const responseText = await response.text();
+        let botResponse = '';
+        
+        if (responseText.includes('<?xml')) {
+            const messageMatch = responseText.match(/<Message>(.*?)<\/Message>/s);
+            botResponse = messageMatch ? messageMatch[1].trim() : 'Response received';
+        } else {
+            botResponse = responseText;
+        }
+
+        return {
+            success: true,
+            response: botResponse
+        };
+    } catch (error) {
+        if (error instanceof Error) {
+            throw new Error(`Failed to send SMS: ${error.message}`);
+        }
+        throw new Error('Failed to send SMS: Unknown error');
+    }
+}
+
+// Send SMS via your API
+export async function sendSMS_backup(to: string, message: string): Promise<SMSResponse> {
+  console.log (` sendSMS sending 2 ${message} to ${to}`)
+  const smsUrl = process.env.SMS_WEBHOOK_URL || 'https://omniassistai.com/sms';
+  try { 
+    const response = await fetch(smsUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -103,7 +152,7 @@ export async function makeCall(to: string): Promise<void> {
     console.error('Error making call:', error);
     throw error;
   }
-}
+}  
 
 // Initialize Twilio Device for incoming calls
 export async function initializeTwilioDevice(): Promise<any> {
