@@ -675,6 +675,10 @@ export default function CategoriesPage() {
   const { dispatch } = useCart();
   const { toast } = useToast();
 
+  useEffect(() => {
+    console.log('selectedCategory state changed to:', selectedCategory);
+  }, [selectedCategory]);
+
   const handleCategoryClick = (categoryName: string) => {
     console.log('Category clicked:', categoryName);
     console.log('Current selectedCategory:', selectedCategory);
@@ -686,6 +690,11 @@ export default function CategoriesPage() {
       console.log('Opening category:', categoryName);
       setSelectedCategory(categoryName); // Open the selected category
     }
+    
+    // Force a re-render check
+    setTimeout(() => {
+      console.log('After state update, selectedCategory:', selectedCategory);
+    }, 100);
   };
 
   const handleAddToCart = (item: CategoryItem, category: Category) => {
@@ -731,7 +740,11 @@ export default function CategoriesPage() {
           </div>
         </div>
 
-        {!selectedCategory ? (
+        {(() => {
+          console.log('Rendering with selectedCategory:', selectedCategory);
+          console.log('Should show grid:', !selectedCategory);
+          return !selectedCategory;
+        })() ? (
           // Show category grid when no category is selected
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {categoriesData.map((category) => (
