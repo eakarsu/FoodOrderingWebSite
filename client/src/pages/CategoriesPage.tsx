@@ -677,7 +677,6 @@ export default function CategoriesPage() {
 
 
   const handleCategoryClick = (categoryName: string) => {
-    console.log('Category clicked:', categoryName);
     const category = categoriesData.find(cat => cat.name === categoryName);
     if (category) {
       setCategoryModal({
@@ -724,9 +723,6 @@ export default function CategoriesPage() {
           <p className="text-gray-600 max-w-2xl mx-auto">
             Explore our complete menu organized by categories. Click on any category to see all available items.
           </p>
-          <div className="mt-4 p-2 bg-yellow-100 rounded text-sm">
-            Debug: categoryModal.isOpen = {String(categoryModal.isOpen)} | category = {categoryModal.category?.name || 'null'}
-          </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -735,12 +731,7 @@ export default function CategoriesPage() {
               <CardContent className="p-0">
                 <div 
                   className="cursor-pointer p-6 hover:bg-gray-50 transition-colors"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    console.log('Card clicked for category:', category.name);
-                    handleCategoryClick(category.name);
-                  }}
+                  onClick={() => handleCategoryClick(category.name)}
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-4">
