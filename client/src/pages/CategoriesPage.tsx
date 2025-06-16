@@ -673,13 +673,22 @@ export default function CategoriesPage() {
   const { toast } = useToast();
 
   useEffect(() => {
+    console.log('=== STATE CHANGE ===');
     console.log('selectedCategory changed to:', selectedCategory);
+    console.log('Type of selectedCategory:', typeof selectedCategory);
+    console.log('Boolean check !selectedCategory:', !selectedCategory);
+    console.log('=== STATE CHANGE END ===');
   }, [selectedCategory]);
 
   const handleCategoryClick = (categoryName: string) => {
+    console.log('=== CATEGORY CLICK START ===');
     console.log('handleCategoryClick called with:', categoryName);
+    console.log('Current selectedCategory before setState:', selectedCategory);
+    
     setSelectedCategory(categoryName);
-    console.log('selectedCategory set to:', categoryName);
+    
+    console.log('setSelectedCategory called with:', categoryName);
+    console.log('=== CATEGORY CLICK END ===');
   };
 
   const handleAddToCart = (item: CategoryItem, category: Category) => {
@@ -719,6 +728,9 @@ export default function CategoriesPage() {
           <p className="text-gray-600 max-w-2xl mx-auto">
             Explore our complete menu organized by categories. Click on any category to see all available items.
           </p>
+          <div className="mt-4 p-2 bg-yellow-100 rounded text-sm">
+            DEBUG: selectedCategory = "{selectedCategory || 'null'}" | Type: {typeof selectedCategory}
+          </div>
         </div>
 
         {!selectedCategory ? (
