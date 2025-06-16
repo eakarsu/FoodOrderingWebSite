@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ChevronRight, ShoppingCart } from "lucide-react";
@@ -672,8 +672,14 @@ export default function CategoriesPage() {
   const { dispatch } = useCart();
   const { toast } = useToast();
 
+  useEffect(() => {
+    console.log('selectedCategory changed to:', selectedCategory);
+  }, [selectedCategory]);
+
   const handleCategoryClick = (categoryName: string) => {
+    console.log('handleCategoryClick called with:', categoryName);
     setSelectedCategory(categoryName);
+    console.log('selectedCategory set to:', categoryName);
   };
 
   const handleAddToCart = (item: CategoryItem, category: Category) => {
@@ -722,7 +728,11 @@ export default function CategoriesPage() {
               <Card key={category.name} className="overflow-hidden hover:shadow-lg transition-shadow">
                 <div 
                   className="cursor-pointer p-6 hover:bg-gray-50 transition-colors"
-                  onClick={() => handleCategoryClick(category.name)}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    console.log('Category clicked:', category.name);
+                    handleCategoryClick(category.name);
+                  }}
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-4">
