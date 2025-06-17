@@ -174,10 +174,6 @@ export default function HomePage() {
                       backgroundColor: sector.primaryColor,
                       borderColor: sector.primaryColor 
                     }}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleSectorSelect(sector);
-                    }}
                   >
                     Select Service
                     <ArrowRight className="ml-2 h-4 w-4" />
