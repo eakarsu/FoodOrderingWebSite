@@ -77,29 +77,36 @@ const loadSectorContent = async (sectorId: string): Promise<{ categories: Parsed
     let prompt2Content = "";
     let rulesContent = "";
     
-    // Try to load sector-specific files directly from sectors folder
+    console.log(`Loading content for sector: ${sectorId}`);
+    
+    // First, try to load sector-specific files from the sectors directory
     try {
       const prompt2Response = await fetch(`/sectors/${sectorId}_prompt2.txt`);
       if (prompt2Response.ok) {
         prompt2Content = await prompt2Response.text();
-        console.log(`Loaded prompt2 for ${sectorId}`);
+        console.log(`Successfully loaded prompt2 for ${sectorId} from /sectors/`);
+      } else {
+        console.log(`Failed to load prompt2 for ${sectorId} from /sectors/: ${prompt2Response.status}`);
       }
     } catch (error) {
-      console.log(`No prompt2 file found for ${sectorId}`);
+      console.log(`Error loading prompt2 file for ${sectorId} from /sectors/:`, error);
     }
     
     try {
       const rulesResponse = await fetch(`/sectors/${sectorId}_rules.txt`);
       if (rulesResponse.ok) {
         rulesContent = await rulesResponse.text();
-        console.log(`Loaded rules for ${sectorId}`);
+        console.log(`Successfully loaded rules for ${sectorId} from /sectors/`);
+      } else {
+        console.log(`Failed to load rules for ${sectorId} from /sectors/: ${rulesResponse.status}`);
       }
     } catch (error) {
-      console.log(`No rules file found for ${sectorId}`);
+      console.log(`Error loading rules file for ${sectorId} from /sectors/:`, error);
     }
     
     // If no sector-specific files found, try with attached_assets folder and timestamps
     if (!prompt2Content) {
+      console.log(`Trying attached_assets for ${sectorId} prompt2`);
       const timestamps = ['1749900541844', '1749900541845', '1749900541846', '1749900541841'];
       
       for (const timestamp of timestamps) {
@@ -107,7 +114,7 @@ const loadSectorContent = async (sectorId: string): Promise<{ categories: Parsed
           const prompt2Response = await fetch(`/attached_assets/${sectorId}_prompt2_${timestamp}.txt`);
           if (prompt2Response.ok) {
             prompt2Content = await prompt2Response.text();
-            console.log(`Loaded prompt2 for ${sectorId} with timestamp ${timestamp}`);
+            console.log(`Loaded prompt2 for ${sectorId} with timestamp ${timestamp} from attached_assets`);
             break;
           }
         } catch (error) {
@@ -117,6 +124,7 @@ const loadSectorContent = async (sectorId: string): Promise<{ categories: Parsed
     }
     
     if (!rulesContent) {
+      console.log(`Trying attached_assets for ${sectorId} rules`);
       const timestamps = ['1749900541844', '1749900541845', '1749900541846', '1749900541841'];
       
       for (const timestamp of timestamps) {
@@ -124,7 +132,7 @@ const loadSectorContent = async (sectorId: string): Promise<{ categories: Parsed
           const rulesResponse = await fetch(`/attached_assets/${sectorId}_rules_${timestamp}.txt`);
           if (rulesResponse.ok) {
             rulesContent = await rulesResponse.text();
-            console.log(`Loaded rules for ${sectorId} with timestamp ${timestamp}`);
+            console.log(`Loaded rules for ${sectorId} with timestamp ${timestamp} from attached_assets`);
             break;
           }
         } catch (error) {
@@ -133,13 +141,14 @@ const loadSectorContent = async (sectorId: string): Promise<{ categories: Parsed
       }
     }
     
-    // If still no files found, try default files
+    // If still no files found, try default files as last resort
     if (!prompt2Content) {
+      console.log('Trying default prompt2.txt as fallback');
       try {
         const defaultResponse = await fetch('/attached_assets/prompt2.txt');
         if (defaultResponse.ok) {
           prompt2Content = await defaultResponse.text();
-          console.log('Loaded default prompt2.txt');
+          console.log('Loaded default prompt2.txt as fallback');
         }
       } catch (error) {
         console.error('Error loading default prompt2.txt:', error);
@@ -147,21 +156,36 @@ const loadSectorContent = async (sectorId: string): Promise<{ categories: Parsed
     }
     
     if (!rulesContent) {
+      console.log('Trying default rules.txt as fallback');
       try {
         const defaultResponse = await fetch('/attached_assets/rules.txt');
         if (defaultResponse.ok) {
           rulesContent = await defaultResponse.text();
-          console.log('Loaded default rules.txt');
+          console.log('Loaded default rules.txt as fallback');
         }
       } catch (error) {
         console.error('Error loading default rules.txt:', error);
       }
     }
     
+    console.log(`Final content loaded - prompt2: ${prompt2Content.length} chars, rules: ${rulesContent.length} chars`);
+    
+    if (prompt2Content.length === 0) {
+      console.warn(`No prompt2 content found for sector: ${sectorId}`);
+    }
+    if (rulesContent.length === 0) {
+      console.warn(`No rules content found for sector: ${sectorId}`);
+    }
+    
     const categories = prompt2Content ? parsePrompt2File(prompt2Content) : [];
     const rules = rulesContent ? parseRulesFile(rulesContent) : {};
     
     console.log(`Parsed ${categories.length} categories for ${sectorId}`);
+    if (categories.length > 0) {
+      console.log('Categories found:', categories.map(c => c.name));
+    } else {
+      console.warn(`No categories parsed for sector: ${sectorId}`);
+    }
     
     return { categories, rules };
   } catch (error) {
