@@ -24,71 +24,50 @@ export default function HomePage() {
     sector.description.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  // Function to load sector-specific content (same as CategoriesPageImproved)
+  // Function to load sector-specific content - SECTORS FOLDER ONLY
   const loadSectorContent = async (sectorId: string): Promise<{ categories: ParsedCategory[], rules: Record<string, ParsedRule[]> }> => {
+    console.log(`=== HOME PAGE LOADING SECTOR: ${sectorId} ===`);
+    
+    let prompt2Content = "";
+    let rulesContent = "";
+    
+    // ONLY load from /sectors/ directory - NO FALLBACKS
+    const prompt2Url = `/sectors/${sectorId}_prompt2.txt`;
+    const rulesUrl = `/sectors/${sectorId}_rules.txt`;
+    
+    console.log(`HOME: Fetching prompt2 from: ${prompt2Url}`);
     try {
-      let prompt2Content = "";
-      let rulesContent = "";
-      
-      console.log(`Loading content for sector: ${sectorId}`);
-      
-      // Load sector-specific files from the sectors directory only
-      try {
-        const prompt2Response = await fetch(`/sectors/${sectorId}_prompt2.txt`);
-        if (prompt2Response.ok) {
-          prompt2Content = await prompt2Response.text();
-          console.log(`Successfully loaded prompt2 for ${sectorId} from /sectors/`);
-        } else {
-          console.error(`Failed to load prompt2 for ${sectorId} from /sectors/: ${prompt2Response.status}`);
-        }
-      } catch (error) {
-        console.error(`Error loading prompt2 file for ${sectorId} from /sectors/:`, error);
-      }
-      
-      try {
-        const rulesResponse = await fetch(`/sectors/${sectorId}_rules.txt`);
-        if (rulesResponse.ok) {
-          rulesContent = await rulesResponse.text();
-          console.log(`Successfully loaded rules for ${sectorId} from /sectors/`);
-        } else {
-          console.error(`Failed to load rules for ${sectorId} from /sectors/: ${rulesResponse.status}`);
-        }
-      } catch (error) {
-        console.error(`Error loading rules file for ${sectorId} from /sectors/:`, error);
-      }
-      
-      console.log(`Final content loaded - prompt2: ${prompt2Content.length} chars, rules: ${rulesContent.length} chars`);
-      
-      if (prompt2Content.length === 0) {
-        console.error(`No prompt2 content found for sector: ${sectorId}. Expected file path: /sectors/${sectorId}_prompt2.txt`);
+      const prompt2Response = await fetch(prompt2Url);
+      if (prompt2Response.ok) {
+        prompt2Content = await prompt2Response.text();
+        console.log(`HOME ✅: Loaded prompt2 for ${sectorId} (${prompt2Content.length} chars)`);
       } else {
-        console.log(`First 200 chars of prompt2 content:`, prompt2Content.substring(0, 200));
+        console.error(`HOME ❌: prompt2 for ${sectorId} - Status: ${prompt2Response.status}`);
       }
-      
-      if (rulesContent.length === 0) {
-        console.error(`No rules content found for sector: ${sectorId}. Expected file path: /sectors/${sectorId}_rules.txt`);
-      } else {
-        console.log(`First 200 chars of rules content:`, rulesContent.substring(0, 200));
-      }
-      
-      const categories = prompt2Content ? parsePrompt2File(prompt2Content) : [];
-      const rules = rulesContent ? parseRulesFile(rulesContent) : {};
-      
-      console.log(`Parsed ${categories.length} categories for ${sectorId}`);
-      if (categories.length > 0) {
-        console.log('Categories found:', categories.map(c => c.name));
-      } else {
-        console.error(`No categories parsed for sector: ${sectorId}`);
-        if (prompt2Content.length > 0) {
-          console.error('Prompt2 content exists but parsing failed. Content preview:', prompt2Content.substring(0, 500));
-        }
-      }
-      
-      return { categories, rules };
     } catch (error) {
-      console.error('Error loading sector content:', error);
-      return { categories: [], rules: {} };
+      console.error(`HOME ❌: Loading prompt2 for ${sectorId}:`, error);
     }
+    
+    console.log(`HOME: Fetching rules from: ${rulesUrl}`);
+    try {
+      const rulesResponse = await fetch(rulesUrl);
+      if (rulesResponse.ok) {
+        rulesContent = await rulesResponse.text();
+        console.log(`HOME ✅: Loaded rules for ${sectorId} (${rulesContent.length} chars)`);
+      } else {
+        console.error(`HOME ❌: rules for ${sectorId} - Status: ${rulesResponse.status}`);
+      }
+    } catch (error) {
+      console.error(`HOME ❌: Loading rules for ${sectorId}:`, error);
+    }
+    
+    // Parse the content
+    const categories = prompt2Content ? parsePrompt2File(prompt2Content) : [];
+    const rules = rulesContent ? parseRulesFile(rulesContent) : {};
+    
+    console.log(`HOME: Parsed ${categories.length} categories for ${sectorId}`);
+    
+    return { categories, rules };
   };
 
   const handleSectorSelect = (sector: Sector) => {
