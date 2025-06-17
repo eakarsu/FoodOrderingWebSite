@@ -81,24 +81,28 @@ const loadSectorContent = async (sectorId: string): Promise<{ categories: Parsed
     
     // Load sector-specific files from the sectors directory only
     try {
-      const prompt2Response = await fetch(`/sectors/${sectorId}_prompt2.txt`);
+      const prompt2Url = `/sectors/${sectorId}_prompt2.txt`;
+      console.log(`Attempting to fetch: ${prompt2Url}`);
+      const prompt2Response = await fetch(prompt2Url);
       if (prompt2Response.ok) {
         prompt2Content = await prompt2Response.text();
-        console.log(`Successfully loaded prompt2 for ${sectorId} from /sectors/`);
+        console.log(`Successfully loaded prompt2 for ${sectorId} from /sectors/ (${prompt2Content.length} chars)`);
       } else {
-        console.error(`Failed to load prompt2 for ${sectorId} from /sectors/: ${prompt2Response.status}`);
+        console.error(`Failed to load prompt2 for ${sectorId} from /sectors/: ${prompt2Response.status} ${prompt2Response.statusText}`);
       }
     } catch (error) {
       console.error(`Error loading prompt2 file for ${sectorId} from /sectors/:`, error);
     }
     
     try {
-      const rulesResponse = await fetch(`/sectors/${sectorId}_rules.txt`);
+      const rulesUrl = `/sectors/${sectorId}_rules.txt`;
+      console.log(`Attempting to fetch: ${rulesUrl}`);
+      const rulesResponse = await fetch(rulesUrl);
       if (rulesResponse.ok) {
         rulesContent = await rulesResponse.text();
-        console.log(`Successfully loaded rules for ${sectorId} from /sectors/`);
+        console.log(`Successfully loaded rules for ${sectorId} from /sectors/ (${rulesContent.length} chars)`);
       } else {
-        console.error(`Failed to load rules for ${sectorId} from /sectors/: ${rulesResponse.status}`);
+        console.error(`Failed to load rules for ${sectorId} from /sectors/: ${rulesResponse.status} ${rulesResponse.statusText}`);
       }
     } catch (error) {
       console.error(`Error loading rules file for ${sectorId} from /sectors/:`, error);
@@ -107,10 +111,10 @@ const loadSectorContent = async (sectorId: string): Promise<{ categories: Parsed
     console.log(`Final content loaded - prompt2: ${prompt2Content.length} chars, rules: ${rulesContent.length} chars`);
     
     if (prompt2Content.length === 0) {
-      console.error(`No prompt2 content found for sector: ${sectorId}`);
+      console.error(`No prompt2 content found for sector: ${sectorId}. File may not exist or be empty.`);
     }
     if (rulesContent.length === 0) {
-      console.error(`No rules content found for sector: ${sectorId}`);
+      console.error(`No rules content found for sector: ${sectorId}. File may not exist or be empty.`);
     }
     
     const categories = prompt2Content ? parsePrompt2File(prompt2Content) : [];
@@ -120,7 +124,7 @@ const loadSectorContent = async (sectorId: string): Promise<{ categories: Parsed
     if (categories.length > 0) {
       console.log('Categories found:', categories.map(c => c.name));
     } else {
-      console.error(`No categories parsed for sector: ${sectorId}`);
+      console.error(`No categories parsed for sector: ${sectorId}. Check if prompt2 file exists and has valid content.`);
     }
     
     return { categories, rules };
@@ -192,7 +196,21 @@ export default function CategoriesPage() {
   const loadSectorData = async (sectorId: string) => {
     setLoading(true);
     try {
+      console.log(`Starting to load sector data for: ${sectorId}`);
       const { categories: parsedCategories, rules } = await loadSectorContent(sectorId);
+      
+      console.log(`Received ${parsedCategories.length} parsed categories for ${sectorId}`);
+      
+      if (parsedCategories.length === 0) {
+        console.warn(`No categories found for sector: ${sectorId}`);
+        setCategories([]);
+        toast({
+          title: "No Services Found",
+          description: `No services are currently available for ${sectorId}. Please check back later.`,
+          variant: "destructive",
+        });
+        return;
+      }
       
       // Convert parsed categories to the expected format
       const formattedCategories: Category[] = parsedCategories.map(category => ({
@@ -213,9 +231,11 @@ export default function CategoriesPage() {
         }))
       }));
       
+      console.log(`Successfully formatted ${formattedCategories.length} categories for ${sectorId}`);
       setCategories(formattedCategories);
     } catch (error) {
       console.error('Error loading sector data:', error);
+      setCategories([]);
       toast({
         title: "Error",
         description: "Failed to load sector data. Please try again.",
