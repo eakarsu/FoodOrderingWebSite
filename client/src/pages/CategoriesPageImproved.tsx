@@ -205,6 +205,11 @@ export default function CategoriesPage() {
       if (parsedCategories.length === 0) {
         console.warn(`No categories found for sector: ${sectorId}`);
         setCategories([]);
+        toast({
+          title: "No Services Found",
+          description: `No services are currently available for ${sectorId}. The sector files may be missing or empty.`,
+          variant: "destructive",
+        });
         return;
       }
       
