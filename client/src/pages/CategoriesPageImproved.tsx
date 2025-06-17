@@ -177,12 +177,12 @@ export default function CategoriesPage() {
     const sectorParam = urlParams.get('sector');
     
     if (sectorParam) {
-      console.log(`Loading sector from URL parameter: ${sectorParam}`);
+      console.log(`🔄 Loading sector from URL parameter: ${sectorParam}`);
       setCurrentSector(sectorParam);
       loadSectorData(sectorParam);
     } else {
       // Default to auto_repair if no sector specified
-      console.log('No sector specified, defaulting to auto_repair');
+      console.log('🔄 No sector specified, defaulting to auto_repair');
       setCurrentSector('auto_repair');
       loadSectorData('auto_repair');
     }
@@ -336,7 +336,21 @@ export default function CategoriesPage() {
         {filteredCategories.length === 0 ? (
           <div className="text-center py-12">
             <h3 className="text-xl font-semibold text-gray-900 mb-2">No services found</h3>
-            <p className="text-gray-600">Try adjusting your search terms or check back later for new services.</p>
+            <p className="text-gray-600 mb-4">
+              {categories.length === 0 
+                ? `No services are currently available for ${currentSector}. The sector files may be missing or empty.`
+                : "Try adjusting your search terms or check back later for new services."
+              }
+            </p>
+            {categories.length === 0 && (
+              <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 max-w-md mx-auto">
+                <p className="text-sm text-yellow-800">
+                  <strong>Debug Info:</strong> Expected files at:
+                  <br />• /sectors/{currentSector}_prompt2.txt
+                  <br />• /sectors/{currentSector}_rules.txt
+                </p>
+              </div>
+            )}
           </div>
         ) : (
           <div className="space-y-6">
