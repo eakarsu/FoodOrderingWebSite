@@ -24,48 +24,49 @@ export default function HomePage() {
     sector.description.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  // NEW Function to load sector-specific content - SECTORS FOLDER ONLY
-  const loadSectorContentFromSectorsFolder = async (sectorId: string): Promise<{ categories: ParsedCategory[], rules: Record<string, ParsedRule[]> }> => {
-    console.log(`🏠 NEW HOME LOADER - LOADING SECTOR: ${sectorId} 🏠`);
+  // FINAL HOME SECTOR LOADER - NO CACHE
+  const loadSectorDataFinalHome = async (sectorId: string): Promise<{ categories: ParsedCategory[], rules: Record<string, ParsedRule[]> }> => {
+    console.log(`🏠🔥 FINAL HOME LOADER v2.0 - LOADING SECTOR: ${sectorId} 🔥🏠`);
     
     let prompt2Content = "";
     let rulesContent = "";
     
-    // ONLY load from /sectors/ directory - ABSOLUTELY NO FALLBACKS
-    const prompt2Url = `/sectors/${sectorId}_prompt2.txt`;
-    const rulesUrl = `/sectors/${sectorId}_rules.txt`;
+    // Add cache busting timestamp
+    const cacheBuster = Date.now();
+    const prompt2Url = `/sectors/${sectorId}_prompt2.txt?v=${cacheBuster}`;
+    const rulesUrl = `/sectors/${sectorId}_rules.txt?v=${cacheBuster}`;
     
-    console.log(`🏠 NEW HOME LOADER: Fetching prompt2 from: ${prompt2Url}`);
+    console.log(`🏠🔥 FINAL HOME: Fetching prompt2 from: ${prompt2Url}`);
     try {
-      const prompt2Response = await fetch(prompt2Url);
+      const prompt2Response = await fetch(prompt2Url, { cache: 'no-cache' });
       if (prompt2Response.ok) {
         prompt2Content = await prompt2Response.text();
-        console.log(`🏠 ✅ NEW HOME SUCCESS: Loaded prompt2 for ${sectorId} (${prompt2Content.length} chars)`);
+        console.log(`🏠🔥 ✅ FINAL HOME SUCCESS: Loaded prompt2 for ${sectorId} (${prompt2Content.length} chars)`);
       } else {
-        console.error(`🏠 ❌ NEW HOME FAILED: prompt2 for ${sectorId} - Status: ${prompt2Response.status}`);
+        console.error(`🏠🔥 ❌ FINAL HOME FAILED: prompt2 for ${sectorId} - Status: ${prompt2Response.status}`);
       }
     } catch (error) {
-      console.error(`🏠 ❌ NEW HOME ERROR: Loading prompt2 for ${sectorId}:`, error);
+      console.error(`🏠🔥 ❌ FINAL HOME ERROR: Loading prompt2 for ${sectorId}:`, error);
     }
     
-    console.log(`🏠 NEW HOME LOADER: Fetching rules from: ${rulesUrl}`);
+    console.log(`🏠🔥 FINAL HOME: Fetching rules from: ${rulesUrl}`);
     try {
-      const rulesResponse = await fetch(rulesUrl);
+      const rulesResponse = await fetch(rulesUrl, { cache: 'no-cache' });
       if (rulesResponse.ok) {
         rulesContent = await rulesResponse.text();
-        console.log(`🏠 ✅ NEW HOME SUCCESS: Loaded rules for ${sectorId} (${rulesContent.length} chars)`);
+        console.log(`🏠🔥 ✅ FINAL HOME SUCCESS: Loaded rules for ${sectorId} (${rulesContent.length} chars)`);
       } else {
-        console.error(`🏠 ❌ NEW HOME FAILED: rules for ${sectorId} - Status: ${rulesResponse.status}`);
+        console.error(`🏠🔥 ❌ FINAL HOME FAILED: rules for ${sectorId} - Status: ${rulesResponse.status}`);
       }
     } catch (error) {
-      console.error(`🏠 ❌ NEW HOME ERROR: Loading rules for ${sectorId}:`, error);
+      console.error(`🏠🔥 ❌ FINAL HOME ERROR: Loading rules for ${sectorId}:`, error);
     }
     
-    // Parse the content
+    // Parse using SAME logic as working sectors
     const categories = prompt2Content ? parsePrompt2File(prompt2Content) : [];
     const rules = rulesContent ? parseRulesFile(rulesContent) : {};
     
-    console.log(`🏠 NEW HOME: Parsed ${categories.length} categories for ${sectorId}`);
+    console.log(`🏠🔥 FINAL HOME: Parsed ${categories.length} categories for ${sectorId}`);
     
     return { categories, rules };
   };
