@@ -191,7 +191,7 @@ export default function SectorPage({ sectorId }: SectorPageProps) {
                       <Card key={item.id} className="overflow-hidden hover:shadow-lg transition-shadow">
                         <div className="relative">
                           <img 
-                            src={getServiceImage(item.name, category.name)}
+                            src={getSectorServiceImage(item.name, category.name, currentSectorId)}
                             alt={item.name}
                             className="w-full h-48 object-cover"
                             onError={(e) => {
