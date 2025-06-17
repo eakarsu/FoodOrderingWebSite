@@ -88,9 +88,7 @@ export default function HomePage() {
     // Store selected sector in localStorage for persistence
     localStorage.setItem('selectedSector', sector.id);
     
-    // Load sector content to verify it works
-    const { categories } = await loadSectorContent(sector.id);
-    console.log(`Sector ${sector.id} has ${categories.length} categories`);
+    console.log(`Navigating to sector: ${sector.id}`);
     
     // Navigate to categories page with sector parameter
     setLocation(`/categories?sector=${sector.id}`);

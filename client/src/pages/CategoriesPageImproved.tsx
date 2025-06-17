@@ -181,16 +181,27 @@ export default function CategoriesPage() {
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const sectorParam = urlParams.get('sector');
+    
+    // Also check if we're on a direct sector path like /categories/healthcare
+    const pathParts = window.location.pathname.split('/');
+    const sectorFromPath = pathParts[pathParts.length - 1];
+    
+    let targetSector = '';
+    
     if (sectorParam) {
-      console.log(`Loading sector from URL: ${sectorParam}`);
-      setCurrentSector(sectorParam);
-      loadSectorData(sectorParam);
+      targetSector = sectorParam;
+      console.log(`Loading sector from URL parameter: ${sectorParam}`);
+    } else if (sectorFromPath && sectorFromPath !== 'categories' && sectorFromPath !== '') {
+      targetSector = sectorFromPath;
+      console.log(`Loading sector from URL path: ${sectorFromPath}`);
     } else {
-      // Default to auto_repair if no sector specified (since it has working files)
+      // Default to auto_repair if no sector specified
+      targetSector = 'auto_repair';
       console.log('No sector specified, defaulting to auto_repair');
-      setCurrentSector('auto_repair');
-      loadSectorData('auto_repair');
     }
+    
+    setCurrentSector(targetSector);
+    loadSectorData(targetSector);
   }, [location]);
 
   const loadSectorData = async (sectorId: string) => {
