@@ -182,26 +182,16 @@ export default function CategoriesPage() {
     const urlParams = new URLSearchParams(window.location.search);
     const sectorParam = urlParams.get('sector');
     
-    // Also check if we're on a direct sector path like /categories/healthcare
-    const pathParts = window.location.pathname.split('/');
-    const sectorFromPath = pathParts[pathParts.length - 1];
-    
-    let targetSector = '';
-    
     if (sectorParam) {
-      targetSector = sectorParam;
       console.log(`Loading sector from URL parameter: ${sectorParam}`);
-    } else if (sectorFromPath && sectorFromPath !== 'categories' && sectorFromPath !== '') {
-      targetSector = sectorFromPath;
-      console.log(`Loading sector from URL path: ${sectorFromPath}`);
+      setCurrentSector(sectorParam);
+      loadSectorData(sectorParam);
     } else {
       // Default to auto_repair if no sector specified
-      targetSector = 'auto_repair';
       console.log('No sector specified, defaulting to auto_repair');
+      setCurrentSector('auto_repair');
+      loadSectorData('auto_repair');
     }
-    
-    setCurrentSector(targetSector);
-    loadSectorData(targetSector);
   }, [location]);
 
   const loadSectorData = async (sectorId: string) => {
@@ -215,11 +205,6 @@ export default function CategoriesPage() {
       if (parsedCategories.length === 0) {
         console.warn(`No categories found for sector: ${sectorId}`);
         setCategories([]);
-        toast({
-          title: "No Services Found",
-          description: `No services are currently available for ${sectorId}. Please check back later.`,
-          variant: "destructive",
-        });
         return;
       }
       
