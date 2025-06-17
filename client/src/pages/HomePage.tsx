@@ -83,7 +83,7 @@ export default function HomePage() {
     }
   };
 
-  const handleSectorSelect = async (sector: Sector) => {
+  const handleSectorSelect = (sector: Sector) => {
     setSelectedSector(sector);
     // Store selected sector in localStorage for persistence
     localStorage.setItem('selectedSector', sector.id);
