@@ -60,10 +60,15 @@ export default function HomePage() {
       console.log(`Final content loaded - prompt2: ${prompt2Content.length} chars, rules: ${rulesContent.length} chars`);
       
       if (prompt2Content.length === 0) {
-        console.error(`No prompt2 content found for sector: ${sectorId}`);
+        console.error(`No prompt2 content found for sector: ${sectorId}. Expected file path: /sectors/${sectorId}_prompt2.txt`);
+      } else {
+        console.log(`First 200 chars of prompt2 content:`, prompt2Content.substring(0, 200));
       }
+      
       if (rulesContent.length === 0) {
-        console.error(`No rules content found for sector: ${sectorId}`);
+        console.error(`No rules content found for sector: ${sectorId}. Expected file path: /sectors/${sectorId}_rules.txt`);
+      } else {
+        console.log(`First 200 chars of rules content:`, rulesContent.substring(0, 200));
       }
       
       const categories = prompt2Content ? parsePrompt2File(prompt2Content) : [];
@@ -74,6 +79,9 @@ export default function HomePage() {
         console.log('Categories found:', categories.map(c => c.name));
       } else {
         console.error(`No categories parsed for sector: ${sectorId}`);
+        if (prompt2Content.length > 0) {
+          console.error('Prompt2 content exists but parsing failed. Content preview:', prompt2Content.substring(0, 500));
+        }
       }
       
       return { categories, rules };
