@@ -24,52 +24,6 @@ export default function HomePage() {
     sector.description.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  // FINAL HOME SECTOR LOADER - NO CACHE
-  const loadSectorDataFinalHome = async (sectorId: string): Promise<{ categories: ParsedCategory[], rules: Record<string, ParsedRule[]> }> => {
-    console.log(`🏠🔥 FINAL HOME LOADER v2.0 - LOADING SECTOR: ${sectorId} 🔥🏠`);
-    
-    let prompt2Content = "";
-    let rulesContent = "";
-    
-    // Add cache busting timestamp
-    const cacheBuster = Date.now();
-    const prompt2Url = `/sectors/${sectorId}_prompt2.txt?v=${cacheBuster}`;
-    const rulesUrl = `/sectors/${sectorId}_rules.txt?v=${cacheBuster}`;
-    
-    console.log(`🏠🔥 FINAL HOME: Fetching prompt2 from: ${prompt2Url}`);
-    try {
-      const prompt2Response = await fetch(prompt2Url, { cache: 'no-cache' });
-      if (prompt2Response.ok) {
-        prompt2Content = await prompt2Response.text();
-        console.log(`🏠🔥 ✅ FINAL HOME SUCCESS: Loaded prompt2 for ${sectorId} (${prompt2Content.length} chars)`);
-      } else {
-        console.error(`🏠🔥 ❌ FINAL HOME FAILED: prompt2 for ${sectorId} - Status: ${prompt2Response.status}`);
-      }
-    } catch (error) {
-      console.error(`🏠🔥 ❌ FINAL HOME ERROR: Loading prompt2 for ${sectorId}:`, error);
-    }
-    
-    console.log(`🏠🔥 FINAL HOME: Fetching rules from: ${rulesUrl}`);
-    try {
-      const rulesResponse = await fetch(rulesUrl, { cache: 'no-cache' });
-      if (rulesResponse.ok) {
-        rulesContent = await rulesResponse.text();
-        console.log(`🏠🔥 ✅ FINAL HOME SUCCESS: Loaded rules for ${sectorId} (${rulesContent.length} chars)`);
-      } else {
-        console.error(`🏠🔥 ❌ FINAL HOME FAILED: rules for ${sectorId} - Status: ${rulesResponse.status}`);
-      }
-    } catch (error) {
-      console.error(`🏠🔥 ❌ FINAL HOME ERROR: Loading rules for ${sectorId}:`, error);
-    }
-    
-    // Parse using SAME logic as working sectors
-    const categories = prompt2Content ? parsePrompt2File(prompt2Content) : [];
-    const rules = rulesContent ? parseRulesFile(rulesContent) : {};
-    
-    console.log(`🏠🔥 FINAL HOME: Parsed ${categories.length} categories for ${sectorId}`);
-    
-    return { categories, rules };
-  };
 
   const handleSectorClick = (sector: Sector) => {
     // Sector click goes to sector overview page
@@ -77,7 +31,7 @@ export default function HomePage() {
   };
 
   const handleSelectService = (sector: Sector) => {
-    // Select service button goes to categories page
+    // Select service button goes directly to services with universal parser
     setSelectedSector(sector);
     localStorage.setItem('selectedSector', sector.id);
     setLocation(`/categories?sector=${sector.id}`);

@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { ChevronRight, ShoppingCart } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
 import { useToast } from "@/hooks/use-toast";
-import { parsePrompt2File } from "@/lib/sectors";
+import { parseUniversalSectorData, getSectorServiceImage, type UniversalSectorData } from "@/utils/universalSectorParser";
 
 // Helper function to get service image based on item name and category
 const getServiceImage = (itemName: string, categoryName: string, sectorId?: string): string => {
@@ -674,7 +674,7 @@ export default function CategoriesPage() {
     category?: Category;
   }>({ isOpen: false });
   const [loading, setLoading] = useState(true);
-  const [sectorData, setSectorData] = useState<Category[]>([]);
+  const [sectorData, setSectorData] = useState<UniversalSectorData | null>(null);
   const [currentSector, setCurrentSector] = useState<string>('food_delivery');
   const { dispatch } = useCart();
   const { toast } = useToast();
@@ -695,48 +695,41 @@ export default function CategoriesPage() {
   const loadSectorData = async (sectorId: string) => {
     setLoading(true);
     try {
-      console.log(`📋 CATEGORIES: Loading data for ${sectorId}`);
+      console.log(`📋 CATEGORIES: Loading data for ${sectorId} using universal parser`);
       
-      const cacheBuster = Date.now();
-      const prompt2Url = `/sectors/${sectorId}_prompt2.txt?v=${cacheBuster}`;
+      // Use universal parser
+      const data = await parseUniversalSectorData(sectorId);
+      setSectorData(data);
       
-      let prompt2Content = "";
-      
-      try {
-        const prompt2Response = await fetch(prompt2Url, { cache: 'no-cache' });
-        if (prompt2Response.ok) {
-          prompt2Content = await prompt2Response.text();
-          console.log(`✅ CATEGORIES: Loaded prompt2 for ${sectorId} (${prompt2Content.length} chars)`);
-        }
-      } catch (error) {
-        console.warn(`⚠️ CATEGORIES: Error loading prompt2 for ${sectorId}:`, error);
+      if (data.errorMessage) {
+        console.warn(`⚠️ CATEGORIES: ${data.errorMessage}`);
       }
       
-      // Parse data or use defaults
-      if (prompt2Content) {
-        const parsedCategories = parsePrompt2File(prompt2Content);
-        const convertedCategories = parsedCategories.map(cat => ({
-          name: cat.name,
-          image: "🔧", // Default icon
-          hasRules: cat.hasRules,
-          rules: cat.rules,
-          items: cat.items
-        }));
-        setSectorData(convertedCategories);
-      } else {
-        // Use default food delivery data if no sector-specific data
-        setSectorData(categoriesData);
-      }
+      console.log(`✅ CATEGORIES: Successfully loaded ${data.categories.length} categories for ${sectorId}`);
       
     } catch (error) {
       console.error(`❌ CATEGORIES: Error loading sector data for ${sectorId}:`, error);
-      setSectorData(categoriesData); // Fallback to default data
+      // Set empty data as fallback
+      setSectorData({
+        sectorId,
+        categories: [],
+        rules: {},
+        hasData: false,
+        errorMessage: "Failed to load sector data"
+      });
     } finally {
       setLoading(false);
     }
   };
 
-  const displayData = sectorParam ? sectorData : categoriesData;
+  // Convert universal sector data to display format
+  const displayData = sectorParam && sectorData ? sectorData.categories.map(cat => ({
+    name: cat.name,
+    image: "🔧", // Default icon
+    hasRules: cat.hasRules,
+    rules: cat.rules,
+    items: cat.items
+  })) : categoriesData;
 
   const handleCategoryClick = (categoryName: string) => {
     const category = categoriesData.find(cat => cat.name === categoryName);
@@ -859,7 +852,7 @@ export default function CategoriesPage() {
                   <Card key={item.id} className="overflow-hidden">
                     <div className="relative">
                       <img 
-                        src={getServiceImage(item.name, categoryModal.category!.name)}
+                        src={getSectorServiceImage(item.name, categoryModal.category!.name, currentSector)}
                         alt={item.name}
                         className="w-full h-32 object-cover"
                         onError={(e) => {
@@ -915,7 +908,7 @@ export default function CategoriesPage() {
                         id: customizationModal.item.id,
                         name: customizationModal.item.name,
                         price: customizationModal.item.price,
-                        image: getServiceImage(customizationModal.item.name, customizationModal.category.name)
+                        image: getSectorServiceImage(customizationModal.item.name, customizationModal.category.name, currentSector)
                       }
                     });
                     
