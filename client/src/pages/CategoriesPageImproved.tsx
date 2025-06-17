@@ -71,55 +71,55 @@ const getServiceImage = (itemName: string, categoryName: string, sectorId?: stri
   return "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=400&h=300&fit=crop&auto=format";
 };
 
-// Function to load sector-specific content - SECTORS FOLDER ONLY
-const loadSectorContent = async (sectorId: string): Promise<{ categories: ParsedCategory[], rules: Record<string, ParsedRule[]> }> => {
-  console.log(`=== LOADING SECTOR CONTENT FOR: ${sectorId} ===`);
+// NEW Function to load sector-specific content - SECTORS FOLDER ONLY
+const loadSectorContentFromSectorsFolder = async (sectorId: string): Promise<{ categories: ParsedCategory[], rules: Record<string, ParsedRule[]> }> => {
+  console.log(`🚀 NEW LOADER - LOADING SECTOR: ${sectorId} 🚀`);
   
   let prompt2Content = "";
   let rulesContent = "";
   
-  // ONLY load from /sectors/ directory - NO FALLBACKS
+  // ONLY load from /sectors/ directory - ABSOLUTELY NO FALLBACKS
   const prompt2Url = `/sectors/${sectorId}_prompt2.txt`;
   const rulesUrl = `/sectors/${sectorId}_rules.txt`;
   
-  console.log(`Fetching prompt2 from: ${prompt2Url}`);
+  console.log(`🔍 NEW LOADER - Fetching prompt2 from: ${prompt2Url}`);
   try {
     const prompt2Response = await fetch(prompt2Url);
     if (prompt2Response.ok) {
       prompt2Content = await prompt2Response.text();
-      console.log(`✅ SUCCESS: Loaded prompt2 for ${sectorId} (${prompt2Content.length} chars)`);
+      console.log(`✅ NEW LOADER SUCCESS: Loaded prompt2 for ${sectorId} (${prompt2Content.length} chars)`);
     } else {
-      console.error(`❌ FAILED: prompt2 for ${sectorId} - Status: ${prompt2Response.status}`);
+      console.error(`❌ NEW LOADER FAILED: prompt2 for ${sectorId} - Status: ${prompt2Response.status}`);
     }
   } catch (error) {
-    console.error(`❌ ERROR: Loading prompt2 for ${sectorId}:`, error);
+    console.error(`❌ NEW LOADER ERROR: Loading prompt2 for ${sectorId}:`, error);
   }
   
-  console.log(`Fetching rules from: ${rulesUrl}`);
+  console.log(`🔍 NEW LOADER - Fetching rules from: ${rulesUrl}`);
   try {
     const rulesResponse = await fetch(rulesUrl);
     if (rulesResponse.ok) {
       rulesContent = await rulesResponse.text();
-      console.log(`✅ SUCCESS: Loaded rules for ${sectorId} (${rulesContent.length} chars)`);
+      console.log(`✅ NEW LOADER SUCCESS: Loaded rules for ${sectorId} (${rulesContent.length} chars)`);
     } else {
-      console.error(`❌ FAILED: rules for ${sectorId} - Status: ${rulesResponse.status}`);
+      console.error(`❌ NEW LOADER FAILED: rules for ${sectorId} - Status: ${rulesResponse.status}`);
     }
   } catch (error) {
-    console.error(`❌ ERROR: Loading rules for ${sectorId}:`, error);
+    console.error(`❌ NEW LOADER ERROR: Loading rules for ${sectorId}:`, error);
   }
   
   // Parse the content
   const categories = prompt2Content ? parsePrompt2File(prompt2Content) : [];
   const rules = rulesContent ? parseRulesFile(rulesContent) : {};
   
-  console.log(`=== PARSING RESULTS FOR ${sectorId} ===`);
+  console.log(`🎯 NEW LOADER PARSING RESULTS FOR ${sectorId} 🎯`);
   console.log(`Categories parsed: ${categories.length}`);
   console.log(`Rules parsed: ${Object.keys(rules).length}`);
   
   if (categories.length > 0) {
     console.log(`Category names: ${categories.map(c => c.name).join(', ')}`);
   } else {
-    console.error(`❌ NO CATEGORIES PARSED for ${sectorId}`);
+    console.error(`❌ NEW LOADER - NO CATEGORIES PARSED for ${sectorId}`);
     if (prompt2Content.length > 0) {
       console.log(`Prompt2 content preview:`, prompt2Content.substring(0, 300));
     }
@@ -192,7 +192,7 @@ export default function CategoriesPage() {
     setLoading(true);
     try {
       console.log(`Starting to load sector data for: ${sectorId}`);
-      const { categories: parsedCategories, rules } = await loadSectorContent(sectorId);
+      const { categories: parsedCategories, rules } = await loadSectorContentFromSectorsFolder(sectorId);
       
       console.log(`Received ${parsedCategories.length} parsed categories for ${sectorId}`);
       
