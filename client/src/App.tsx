@@ -11,6 +11,7 @@ import HomePage from "@/pages/HomePage";
 import MenuPage from "@/pages/MenuPage";
 import BuildYourOwnPage from "@/pages/BuildYourOwnPage";
 import CategoriesPage from "@/pages/CategoriesPageImproved";
+import SectorPage from "@/pages/SectorPage";
 import SectorsPage from "@/pages/SectorsPage";
 import AboutPage from "@/pages/AboutPage";
 import ContactPage from "@/pages/ContactPage";
@@ -30,6 +31,7 @@ function Router() {
       <Route path="/menu" component={MenuPage} />
       <Route path="/services" component={CategoriesPage} />
       <Route path="/categories" component={CategoriesPage} />
+      <Route path="/sector" component={SectorPage} />
       <Route path="/sectors" component={SectorsPage} />
       <Route path="/build-your-own" component={BuildYourOwnPage} />
       <Route path="/about" component={AboutPage} />

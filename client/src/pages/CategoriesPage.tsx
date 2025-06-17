@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { ChevronRight, ShoppingCart } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
 import { useToast } from "@/hooks/use-toast";
+import { parsePrompt2File } from "@/lib/sectors";
 
 // Helper function to get service image based on item name and category
 const getServiceImage = (itemName: string, categoryName: string, sectorId?: string): string => {
@@ -672,8 +673,70 @@ export default function CategoriesPage() {
     item?: CategoryItem;
     category?: Category;
   }>({ isOpen: false });
+  const [loading, setLoading] = useState(true);
+  const [sectorData, setSectorData] = useState<Category[]>([]);
+  const [currentSector, setCurrentSector] = useState<string>('food_delivery');
   const { dispatch } = useCart();
   const { toast } = useToast();
+
+  // Get sector from URL params
+  const urlParams = new URLSearchParams(window.location.search);
+  const sectorParam = urlParams.get('sector');
+
+  useEffect(() => {
+    if (sectorParam) {
+      setCurrentSector(sectorParam);
+      loadSectorData(sectorParam);
+    } else {
+      setLoading(false);
+    }
+  }, [sectorParam]);
+
+  const loadSectorData = async (sectorId: string) => {
+    setLoading(true);
+    try {
+      console.log(`📋 CATEGORIES: Loading data for ${sectorId}`);
+      
+      const cacheBuster = Date.now();
+      const prompt2Url = `/sectors/${sectorId}_prompt2.txt?v=${cacheBuster}`;
+      
+      let prompt2Content = "";
+      
+      try {
+        const prompt2Response = await fetch(prompt2Url, { cache: 'no-cache' });
+        if (prompt2Response.ok) {
+          prompt2Content = await prompt2Response.text();
+          console.log(`✅ CATEGORIES: Loaded prompt2 for ${sectorId} (${prompt2Content.length} chars)`);
+        }
+      } catch (error) {
+        console.warn(`⚠️ CATEGORIES: Error loading prompt2 for ${sectorId}:`, error);
+      }
+      
+      // Parse data or use defaults
+      if (prompt2Content) {
+        const parsedCategories = parsePrompt2File(prompt2Content);
+        const convertedCategories = parsedCategories.map(cat => ({
+          name: cat.name,
+          image: "🔧", // Default icon
+          hasRules: cat.hasRules,
+          rules: cat.rules,
+          items: cat.items
+        }));
+        setSectorData(convertedCategories);
+      } else {
+        // Use default food delivery data if no sector-specific data
+        setSectorData(categoriesData);
+      }
+      
+    } catch (error) {
+      console.error(`❌ CATEGORIES: Error loading sector data for ${sectorId}:`, error);
+      setSectorData(categoriesData); // Fallback to default data
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const displayData = sectorParam ? sectorData : categoriesData;
 
   const handleCategoryClick = (categoryName: string) => {
     const category = categoriesData.find(cat => cat.name === categoryName);
@@ -724,8 +787,14 @@ export default function CategoriesPage() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {categoriesData.map((category) => (
+        {loading ? (
+          <div className="text-center py-12">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+            <p className="text-gray-600">Loading services...</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {displayData.map((category) => (
             <Card key={category.name} className="overflow-hidden hover:shadow-lg transition-shadow">
               <CardContent className="p-0">
                 <div 
