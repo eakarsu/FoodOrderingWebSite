@@ -178,12 +178,12 @@ export default function CategoriesPage() {
     const sectorParam = urlParams.get('sector');
     
     if (sectorParam) {
-      console.log(`🔄 Loading sector from URL parameter: ${sectorParam}`);
+      console.log(`🔄 FINAL LOADER - Loading sector from URL parameter: ${sectorParam}`);
       setCurrentSector(sectorParam);
       loadSectorData(sectorParam);
     } else {
       // Default to auto_repair if no sector specified
-      console.log('🔄 No sector specified, defaulting to auto_repair');
+      console.log('🔄 FINAL LOADER - No sector specified, defaulting to auto_repair');
       setCurrentSector('auto_repair');
       loadSectorData('auto_repair');
     }

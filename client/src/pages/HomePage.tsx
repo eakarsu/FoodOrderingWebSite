@@ -71,12 +71,15 @@ export default function HomePage() {
     return { categories, rules };
   };
 
-  const handleSectorSelect = (sector: Sector) => {
+  const handleSectorSelect = async (sector: Sector) => {
     setSelectedSector(sector);
     // Store selected sector in localStorage for persistence
     localStorage.setItem('selectedSector', sector.id);
     
-    console.log(`Navigating to sector: ${sector.id}`);
+    console.log(`🏠 Navigating to sector: ${sector.id}`);
+    
+    // Test load the sector data to verify it works
+    await loadSectorDataFinalHome(sector.id);
     
     // Navigate to categories page with sector parameter
     setLocation(`/categories?sector=${sector.id}`);
