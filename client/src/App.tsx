@@ -31,7 +31,6 @@ function Router() {
       <Route path="/menu" component={MenuPage} />
       <Route path="/services" component={CategoriesPage} />
       <Route path="/categories" component={CategoriesPage} />
-      <Route path="/c/:sector?" component={CategoriesPage} />
       <Route path="/sector" component={SectorPage} />
       <Route path="/sectors" component={SectorsPage} />
       <Route path="/build-your-own" component={BuildYourOwnPage} />
