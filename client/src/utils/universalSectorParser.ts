@@ -61,6 +61,7 @@ export const parseUniversalSectorData = async (sectorId: string): Promise<Univer
     const rules = rulesContent ? parseRulesFile(rulesContent) : {};
     
     console.log(`🎯 UNIVERSAL PARSER: Successfully parsed ${categories.length} categories for ${sectorId}`);
+    console.log(`🎯 UNIVERSAL PARSER: Categories for ${sectorId}:`, categories);
     
     return {
       sectorId,
@@ -275,7 +276,7 @@ export const generateDefaultSectorServices = (sectorId: string): ParsedCategory[
   // Generate generic services for sectors not yet defined
   const sectorDisplayNames: Record<string, string> = {
     event_planning: "Event Planning",
-    it_services: "IT Services",
+    it_services: "IT Services", 
     laundry_services: "Laundry Services",
     moving_services: "Moving Services",
     pet_services: "Pet Services",
@@ -283,29 +284,37 @@ export const generateDefaultSectorServices = (sectorId: string): ParsedCategory[
     real_estate: "Real Estate",
     transportation: "Transportation",
     travel_hotel: "Travel & Hotel",
-    insurance: "Insurance"
+    insurance: "Insurance",
+    food_delivery: "Food Delivery",
+    education_tutoring: "Education & Tutoring"
   };
 
   const displayName = sectorDisplayNames[sectorId] || sectorId.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
 
-  return [
+  console.log(`🎯 UNIVERSAL PARSER: Generating default services for ${sectorId} (${displayName})`);
+
+  const defaultServices = [
     {
       name: `${displayName} Services`,
       items: [
-        { id: 9001, name: `Basic ${displayName} Service`, price: 99.99, description: `Professional ${displayName.toLowerCase()} service` },
-        { id: 9002, name: `Premium ${displayName} Package`, price: 199.99, description: `Comprehensive ${displayName.toLowerCase()} solution` },
-        { id: 9003, name: `${displayName} Consultation`, price: 49.99, description: `Expert consultation for ${displayName.toLowerCase()}` },
-        { id: 9004, name: `Emergency ${displayName} Service`, price: 149.99, description: `Urgent ${displayName.toLowerCase()} assistance` }
+        { id: 9001 + Math.floor(Math.random() * 1000), name: `Basic ${displayName} Service`, price: 99.99, description: `Professional ${displayName.toLowerCase()} service` },
+        { id: 9002 + Math.floor(Math.random() * 1000), name: `Premium ${displayName} Package`, price: 199.99, description: `Comprehensive ${displayName.toLowerCase()} solution` },
+        { id: 9003 + Math.floor(Math.random() * 1000), name: `${displayName} Consultation`, price: 49.99, description: `Expert consultation for ${displayName.toLowerCase()}` },
+        { id: 9004 + Math.floor(Math.random() * 1000), name: `Emergency ${displayName} Service`, price: 149.99, description: `Urgent ${displayName.toLowerCase()} assistance` }
       ]
     },
     {
       name: `Advanced ${displayName}`,
       items: [
-        { id: 9005, name: `Custom ${displayName} Solution`, price: 299.99, description: `Tailored ${displayName.toLowerCase()} solution` },
-        { id: 9006, name: `${displayName} Maintenance`, price: 79.99, description: `Ongoing ${displayName.toLowerCase()} maintenance` }
+        { id: 9005 + Math.floor(Math.random() * 1000), name: `Custom ${displayName} Solution`, price: 299.99, description: `Tailored ${displayName.toLowerCase()} solution` },
+        { id: 9006 + Math.floor(Math.random() * 1000), name: `${displayName} Maintenance`, price: 79.99, description: `Ongoing ${displayName.toLowerCase()} maintenance` }
       ]
     }
   ];
+
+  console.log(`🎯 UNIVERSAL PARSER: Generated ${defaultServices.length} categories with ${defaultServices.reduce((total, cat) => total + cat.items.length, 0)} total services`);
+  
+  return defaultServices;
 };
 
 // Get sector-specific features based on sector type

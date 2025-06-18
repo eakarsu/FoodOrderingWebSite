@@ -49,6 +49,8 @@ export default function SectorPage({ sectorId }: SectorPageProps) {
       const data = await parseUniversalSectorData(currentSectorId);
       const features = getSectorFeatures(currentSectorId);
       
+      console.log(`🔍 SECTOR PAGE: Universal parser returned:`, data);
+      
       setSectorData(data);
       setSectorFeatures(features);
       
@@ -57,6 +59,7 @@ export default function SectorPage({ sectorId }: SectorPageProps) {
       }
       
       console.log(`🎯 SECTOR PAGE: Successfully loaded ${data.categories.length} categories for ${currentSectorId}`);
+      console.log(`🎯 SECTOR PAGE: Categories:`, data.categories);
       
     } catch (error) {
       console.error(`❌ SECTOR PAGE: Error loading sector data for ${currentSectorId}:`, error);
@@ -90,6 +93,15 @@ export default function SectorPage({ sectorId }: SectorPageProps) {
       item.description?.toLowerCase().includes(searchTerm.toLowerCase())
     )
   ) || [];
+
+  // Debug logging
+  console.log(`🔍 SECTOR PAGE DEBUG: ${currentSectorId}`, {
+    sectorData: sectorData,
+    hasData: sectorData?.hasData,
+    categoriesCount: sectorData?.categories.length,
+    filteredCount: filteredCategories.length,
+    searchTerm
+  });
 
   if (!sector) {
     return (
@@ -173,12 +185,34 @@ export default function SectorPage({ sectorId }: SectorPageProps) {
                 </Button>
               </div>
             </div>
-          ) : filteredCategories.length === 0 ? (
+          ) : !sectorData?.hasData || filteredCategories.length === 0 ? (
             <div className="text-center py-12">
-              <div className="bg-gray-50 rounded-lg p-8">
-                <Search className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-                <h3 className="text-xl font-semibold text-gray-800 mb-2">No services found</h3>
-                <p className="text-gray-600">Try adjusting your search terms.</p>
+              <div className="bg-gradient-to-br from-blue-50 to-purple-50 rounded-lg p-8">
+                <div className="text-6xl mb-4">{sector?.icon}</div>
+                <h3 className="text-xl font-semibold text-gray-800 mb-2">
+                  {searchTerm ? "No matching services found" : `${sector?.displayName} Services`}
+                </h3>
+                <p className="text-gray-600 mb-6">
+                  {searchTerm 
+                    ? "Try adjusting your search terms or browse all services below." 
+                    : `Browse our ${sector?.displayName.toLowerCase()} services below or contact us for custom solutions.`
+                  }
+                </p>
+                <div className="flex gap-4 justify-center">
+                  <Button 
+                    onClick={() => window.open('tel:+18043601129', '_self')}
+                    style={{ backgroundColor: sector?.primaryColor }}
+                  >
+                    <Phone className="mr-2 h-4 w-4" />
+                    Call for Service
+                  </Button>
+                  <Button 
+                    variant="outline"
+                    onClick={() => setLocation('/contact')}
+                  >
+                    Request Service
+                  </Button>
+                </div>
               </div>
             </div>
           ) : (
