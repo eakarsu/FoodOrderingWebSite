@@ -15,10 +15,10 @@ export default defineConfig({
       "@shared": path.resolve(__dirname, "shared"),
     },
   },
-  root: "public",
-  publicDir: false,
+  root: __dirname,
+  publicDir: "public",
   build: {
-    outDir: path.resolve(__dirname, "dist"),
+    outDir: "dist",
     emptyOutDir: true,
     rollupOptions: {
       input: path.resolve(__dirname, "public/index.html"),
