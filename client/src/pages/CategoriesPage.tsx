@@ -6,7 +6,6 @@ import { useCart } from "@/contexts/CartContext";
 import { useToast } from "@/hooks/use-toast";
 import { parseUniversalSectorData, getSectorServiceImage, type UniversalSectorData } from "@/utils/universalSectorParser";
 
-
 interface CategoryItem {
   id: number;
   name: string;
@@ -34,8 +33,6 @@ interface Category {
   rules?: Rule[];
   items: CategoryItem[];
 }
-
-
 
 export default function CategoriesPage() {
   const [categoryModal, setCategoryModal] = useState<{
