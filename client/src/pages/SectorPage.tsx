@@ -185,18 +185,15 @@ export default function SectorPage({ sectorId }: SectorPageProps) {
                 </Button>
               </div>
             </div>
-          ) : !sectorData?.hasData || filteredCategories.length === 0 ? (
+          ) : filteredCategories.length === 0 ? (
             <div className="text-center py-12">
               <div className="bg-gradient-to-br from-blue-50 to-purple-50 rounded-lg p-8">
                 <div className="text-6xl mb-4">{sector?.icon}</div>
                 <h3 className="text-xl font-semibold text-gray-800 mb-2">
-                  {searchTerm ? "No matching services found" : `${sector?.displayName} Services`}
+                  No matching services found
                 </h3>
                 <p className="text-gray-600 mb-6">
-                  {searchTerm 
-                    ? "Try adjusting your search terms or browse all services below." 
-                    : `Browse our ${sector?.displayName.toLowerCase()} services below or contact us for custom solutions.`
-                  }
+                  Try adjusting your search terms or browse all services below.
                 </p>
                 <div className="flex gap-4 justify-center">
                   <Button 

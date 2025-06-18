@@ -74,9 +74,12 @@ export const parseUniversalSectorData = async (sectorId: string): Promise<Univer
     console.error(`❌ UNIVERSAL PARSER: Critical error for ${sectorId}:`, error);
     
     // Return fallback data instead of failing
+    const fallbackCategories = generateDefaultSectorServices(sectorId);
+    console.log(`🔄 UNIVERSAL PARSER: Generated fallback services for ${sectorId}:`, fallbackCategories);
+    
     return {
       sectorId,
-      categories: generateDefaultSectorServices(sectorId),
+      categories: fallbackCategories,
       rules: {},
       hasData: true,
       errorMessage: `Using default services for ${sectorId}`,
