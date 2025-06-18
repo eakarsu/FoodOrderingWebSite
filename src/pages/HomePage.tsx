@@ -285,14 +285,14 @@ export default function HomePage() {
                     <p className="text-gray-600 text-sm leading-relaxed mb-4">
                       {sector.description}
                     </p>
-                    <div className="flex flex-wrap gap-1 mt-2">
+                    <div className="flex flex-wrap gap-2 mt-3">
                       <div 
-                        className="text-xs px-2 py-1 rounded-full inline-block"
-                        style={{ backgroundColor: `${sector.primaryColor}10`, color: sector.primaryColor }}
+                        className="text-xs px-3 py-1 rounded-full inline-block font-medium"
+                        style={{ backgroundColor: `${sector.primaryColor}20`, color: sector.primaryColor }}
                       >
                         AI-Enabled
                       </div>
-                      <div className="text-xs px-2 py-1 rounded-full inline-block bg-gray-100 text-gray-600">
+                      <div className="text-xs px-3 py-1 rounded-full inline-block bg-blue-100 text-blue-700 font-medium">
                         {sector.sectorType === 'immediate' ? '⚡ Immediate' :
                          sector.sectorType === 'consultation' ? '💼 Consultation' :
                          sector.sectorType === 'product' ? '📦 Product' :
