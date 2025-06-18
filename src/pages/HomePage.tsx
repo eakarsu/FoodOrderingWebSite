@@ -26,12 +26,7 @@ export default function HomePage() {
 
 
   const handleSectorClick = (sector: Sector) => {
-    // Sector click goes to sector overview page
-    setLocation(`/sector?sector=${sector.id}`);
-  };
-
-  const handleSelectService = (sector: Sector) => {
-    // Select service button goes directly to services with universal parser
+    // Direct to categories page with universal parser
     setSelectedSector(sector);
     localStorage.setItem('selectedSector', sector.id);
     setLocation(`/categories?sector=${sector.id}`);
@@ -64,7 +59,13 @@ export default function HomePage() {
               <strong>Try the Demo:</strong> Send real SMS messages, make actual voice calls, and explore AI recommendations across all service sectors. This platform adapts to any service industry.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
-              <Button size="lg" className="bg-primary hover:bg-primary/90 text-white">
+              <Button 
+                size="lg" 
+                className="bg-primary hover:bg-primary/90 text-white"
+                onClick={() => {
+                  document.getElementById('sectors-section')?.scrollIntoView({ behavior: 'smooth' });
+                }}
+              >
                 Choose Your Service Sector
               </Button>
               <Link href="/contact">
@@ -106,36 +107,33 @@ export default function HomePage() {
           {/* Sectors Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {filteredSectors.map((sector) => (
-              <Card 
-                key={sector.id} 
-                className="hover:shadow-lg transition-all duration-300 cursor-pointer border-2 hover:border-primary/50"
-                onClick={() => handleSectorSelect(sector)}
-              >
-                <CardContent className="p-6 text-center">
-                  <div 
-                    className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl"
-                    style={{ backgroundColor: `${sector.primaryColor}20` }}
-                  >
-                    {sector.icon}
-                  </div>
-                  <h3 className="text-lg font-semibold mb-2" style={{ color: sector.primaryColor }}>
-                    {sector.displayName}
-                  </h3>
-                  <p className="text-gray-600 text-sm mb-4">
-                    {sector.description}
-                  </p>
-                  <Button 
-                    className="w-full"
-                    style={{ 
-                      backgroundColor: sector.primaryColor,
-                      borderColor: sector.primaryColor 
-                    }}
-                  >
-                    Select Service
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </Button>
-                </CardContent>
-              </Card>
+              <Link key={sector.id} href={`/categories?sector=${sector.id}`}>
+                <Card className="group hover:shadow-xl transition-all duration-300 hover:-translate-y-2 cursor-pointer h-full border-2 hover:border-primary/50">
+                  <CardContent className="p-6">
+                    <div className="flex items-center justify-between mb-3">
+                      <div 
+                        className="text-3xl p-3 rounded-lg shadow-sm"
+                        style={{ backgroundColor: `${sector.primaryColor}20`, color: sector.primaryColor }}
+                      >
+                        {sector.icon}
+                      </div>
+                      <ArrowRight className="h-5 w-5 text-gray-400 group-hover:text-primary transition-colors" />
+                    </div>
+                    <h3 className="text-lg font-bold text-gray-900 group-hover:text-primary transition-colors mb-2">
+                      {sector.displayName}
+                    </h3>
+                    <p className="text-gray-600 text-sm leading-relaxed mb-4">
+                      {sector.description}
+                    </p>
+                    <div 
+                      className="text-xs px-2 py-1 rounded-full inline-block"
+                      style={{ backgroundColor: `${sector.primaryColor}10`, color: sector.primaryColor }}
+                    >
+                      AI-Enabled
+                    </div>
+                  </CardContent>
+                </Card>
+              </Link>
             ))}
           </div>
 
