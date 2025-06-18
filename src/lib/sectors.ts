@@ -159,7 +159,19 @@ export const SECTORS: Sector[] = [
     icon: "💪",
     primaryColor: "#FF4500",
     secondaryColor: "#1C1C1C",
-    heroImage: "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080"
+    heroImage: "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080",
+    sectorType: 'experience',
+    features: {
+      hasBooking: true,
+      hasRatings: true,
+      hasGallery: true,
+      hasInventory: false,
+      hasConsultation: false,
+      hasScheduling: true,
+      hasEventScheduling: true,
+      hasProgressTracking: true,
+      hasCommunityFeatures: true
+    }
   },
   {
     id: "food_delivery",
@@ -169,7 +181,19 @@ export const SECTORS: Sector[] = [
     icon: "🍽️",
     primaryColor: "#E74C3C",
     secondaryColor: "#2C3E50",
-    heroImage: "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080"
+    heroImage: "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080",
+    sectorType: 'product',
+    features: {
+      hasBooking: false,
+      hasRatings: true,
+      hasGallery: true,
+      hasInventory: true,
+      hasConsultation: false,
+      hasScheduling: false,
+      hasProductCatalog: true,
+      hasInventoryManagement: true,
+      hasOrderProcessing: true
+    }
   },
   {
     id: "healthcare",
@@ -179,7 +203,19 @@ export const SECTORS: Sector[] = [
     icon: "🏥",
     primaryColor: "#2E8B57",
     secondaryColor: "#4682B4",
-    heroImage: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080"
+    heroImage: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080",
+    sectorType: 'immediate',
+    features: {
+      hasBooking: true,
+      hasRatings: true,
+      hasGallery: false,
+      hasInventory: false,
+      hasConsultation: true,
+      hasScheduling: true,
+      hasRealTimeBooking: true,
+      hasServiceDuration: true,
+      hasEmergencyFlag: true
+    }
   },
   {
     id: "home_services",
@@ -189,7 +225,19 @@ export const SECTORS: Sector[] = [
     icon: "🏠",
     primaryColor: "#8B4513",
     secondaryColor: "#556B2F",
-    heroImage: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080"
+    heroImage: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080",
+    sectorType: 'immediate',
+    features: {
+      hasBooking: true,
+      hasRatings: true,
+      hasGallery: true,
+      hasInventory: false,
+      hasConsultation: false,
+      hasScheduling: true,
+      hasRealTimeBooking: true,
+      hasServiceDuration: true,
+      hasEmergencyFlag: true
+    }
   },
   {
     id: "insurance",
@@ -199,7 +247,19 @@ export const SECTORS: Sector[] = [
     icon: "🛡️",
     primaryColor: "#4169E1",
     secondaryColor: "#191970",
-    heroImage: "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080"
+    heroImage: "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080",
+    sectorType: 'consultation',
+    features: {
+      hasBooking: true,
+      hasRatings: true,
+      hasGallery: false,
+      hasInventory: false,
+      hasConsultation: true,
+      hasScheduling: true,
+      hasAppointmentScheduling: true,
+      hasDocumentUpload: true,
+      hasSecureCommunication: true
+    }
   },
   {
     id: "it_services",
@@ -209,7 +269,19 @@ export const SECTORS: Sector[] = [
     icon: "💻",
     primaryColor: "#6A5ACD",
     secondaryColor: "#2F4F4F",
-    heroImage: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080"
+    heroImage: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080",
+    sectorType: 'consultation',
+    features: {
+      hasBooking: true,
+      hasRatings: true,
+      hasGallery: false,
+      hasInventory: false,
+      hasConsultation: true,
+      hasScheduling: true,
+      hasAppointmentScheduling: true,
+      hasDocumentUpload: false,
+      hasSecureCommunication: true
+    }
   },
   {
     id: "laundry_services",
@@ -219,7 +291,19 @@ export const SECTORS: Sector[] = [
     icon: "👔",
     primaryColor: "#20B2AA",
     secondaryColor: "#708090",
-    heroImage: "https://images.unsplash.com/photo-1517677129300-07b130802f46?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080"
+    heroImage: "https://images.unsplash.com/photo-1517677129300-07b130802f46?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080",
+    sectorType: 'product',
+    features: {
+      hasBooking: true,
+      hasRatings: true,
+      hasGallery: false,
+      hasInventory: true,
+      hasConsultation: false,
+      hasScheduling: true,
+      hasProductCatalog: true,
+      hasInventoryManagement: true,
+      hasOrderProcessing: true
+    }
   },
   {
     id: "legal_services",
@@ -229,7 +313,19 @@ export const SECTORS: Sector[] = [
     icon: "⚖️",
     primaryColor: "#8B0000",
     secondaryColor: "#2F4F4F",
-    heroImage: "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080"
+    heroImage: "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080",
+    sectorType: 'consultation',
+    features: {
+      hasBooking: true,
+      hasRatings: true,
+      hasGallery: false,
+      hasInventory: false,
+      hasConsultation: true,
+      hasScheduling: true,
+      hasAppointmentScheduling: true,
+      hasDocumentUpload: true,
+      hasSecureCommunication: true
+    }
   },
   {
     id: "moving_services",
@@ -239,7 +335,19 @@ export const SECTORS: Sector[] = [
     icon: "📦",
     primaryColor: "#FF8C00",
     secondaryColor: "#8B4513",
-    heroImage: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080"
+    heroImage: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080",
+    sectorType: 'immediate',
+    features: {
+      hasBooking: true,
+      hasRatings: true,
+      hasGallery: false,
+      hasInventory: false,
+      hasConsultation: false,
+      hasScheduling: true,
+      hasRealTimeBooking: true,
+      hasServiceDuration: true,
+      hasEmergencyFlag: false
+    }
   },
   {
     id: "pet_services",
@@ -249,7 +357,19 @@ export const SECTORS: Sector[] = [
     icon: "🐕",
     primaryColor: "#32CD32",
     secondaryColor: "#228B22",
-    heroImage: "https://images.unsplash.com/photo-1601758228041-f3b2795255f1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080"
+    heroImage: "https://images.unsplash.com/photo-1601758228041-f3b2795255f1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080",
+    sectorType: 'immediate',
+    features: {
+      hasBooking: true,
+      hasRatings: true,
+      hasGallery: true,
+      hasInventory: false,
+      hasConsultation: false,
+      hasScheduling: true,
+      hasRealTimeBooking: true,
+      hasServiceDuration: true,
+      hasEmergencyFlag: true
+    }
   },
   {
     id: "photography",
@@ -259,7 +379,19 @@ export const SECTORS: Sector[] = [
     icon: "📸",
     primaryColor: "#FF1493",
     secondaryColor: "#483D8B",
-    heroImage: "https://images.unsplash.com/photo-1502920917128-1aa500764cbd?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080"
+    heroImage: "https://images.unsplash.com/photo-1502920917128-1aa500764cbd?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080",
+    sectorType: 'experience',
+    features: {
+      hasBooking: true,
+      hasRatings: true,
+      hasGallery: true,
+      hasInventory: false,
+      hasConsultation: true,
+      hasScheduling: true,
+      hasEventScheduling: true,
+      hasProgressTracking: false,
+      hasCommunityFeatures: false
+    }
   },
   {
     id: "real_estate",
@@ -269,7 +401,19 @@ export const SECTORS: Sector[] = [
     icon: "🏡",
     primaryColor: "#B8860B",
     secondaryColor: "#8B4513",
-    heroImage: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080"
+    heroImage: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080",
+    sectorType: 'consultation',
+    features: {
+      hasBooking: true,
+      hasRatings: true,
+      hasGallery: true,
+      hasInventory: true,
+      hasConsultation: true,
+      hasScheduling: true,
+      hasAppointmentScheduling: true,
+      hasDocumentUpload: true,
+      hasSecureCommunication: true
+    }
   },
   {
     id: "transportation",
@@ -279,7 +423,19 @@ export const SECTORS: Sector[] = [
     icon: "🚛",
     primaryColor: "#1E90FF",
     secondaryColor: "#2F4F4F",
-    heroImage: "https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080"
+    heroImage: "https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080",
+    sectorType: 'immediate',
+    features: {
+      hasBooking: true,
+      hasRatings: true,
+      hasGallery: false,
+      hasInventory: false,
+      hasConsultation: false,
+      hasScheduling: true,
+      hasRealTimeBooking: true,
+      hasServiceDuration: true,
+      hasEmergencyFlag: false
+    }
   },
   {
     id: "travel_hotel",
@@ -289,7 +445,19 @@ export const SECTORS: Sector[] = [
     icon: "✈️",
     primaryColor: "#FF6347",
     secondaryColor: "#4682B4",
-    heroImage: "https://images.unsplash.com/photo-1488646953014-85cb44e25828?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080"
+    heroImage: "https://images.unsplash.com/photo-1488646953014-85cb44e25828?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080",
+    sectorType: 'experience',
+    features: {
+      hasBooking: true,
+      hasRatings: true,
+      hasGallery: true,
+      hasInventory: true,
+      hasConsultation: false,
+      hasScheduling: true,
+      hasEventScheduling: true,
+      hasProgressTracking: false,
+      hasCommunityFeatures: true
+    }
   }
 ];
 

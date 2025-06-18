@@ -285,11 +285,23 @@ export default function HomePage() {
                     <p className="text-gray-600 text-sm leading-relaxed mb-4">
                       {sector.description}
                     </p>
-                    <div 
-                      className="text-xs px-2 py-1 rounded-full inline-block"
-                      style={{ backgroundColor: `${sector.primaryColor}10`, color: sector.primaryColor }}
-                    >
-                      AI-Enabled
+                    <div className="flex flex-wrap gap-1 mt-2">
+                      <div 
+                        className="text-xs px-2 py-1 rounded-full inline-block"
+                        style={{ backgroundColor: `${sector.primaryColor}10`, color: sector.primaryColor }}
+                      >
+                        AI-Enabled
+                      </div>
+                      {sector.sectorType && (
+                        <div 
+                          className="text-xs px-2 py-1 rounded-full inline-block bg-gray-100 text-gray-600"
+                        >
+                          {sector.sectorType === 'immediate' && '⚡ Immediate'}
+                          {sector.sectorType === 'consultation' && '💼 Consultation'}
+                          {sector.sectorType === 'product' && '📦 Product'}
+                          {sector.sectorType === 'experience' && '🎯 Experience'}
+                        </div>
+                      )}
                     </div>
                   </CardContent>
                 </Card>
