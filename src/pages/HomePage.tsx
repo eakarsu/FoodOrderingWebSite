@@ -311,7 +311,7 @@ export default function HomePage() {
                           onClick={(e) => {
                             e.preventDefault();
                             e.stopPropagation();
-                            alert(`🕐 Real-time booking for ${sector.displayName}\n\n✅ Available time slots:\n• Today 2:00 PM\n• Today 4:30 PM\n• Tomorrow 9:00 AM\n\nFeature: Live calendar integration with instant confirmation`);
+                            setLocation(`/booking?sector=${sector.id}&feature=booking`);
                           }}
                         >
                           📅 Real-Time Booking
@@ -323,7 +323,7 @@ export default function HomePage() {
                           onClick={(e) => {
                             e.preventDefault();
                             e.stopPropagation();
-                            alert(`⏱️ Service Duration for ${sector.displayName}\n\n• Basic Service: 30-45 min\n• Standard Service: 60-90 min\n• Premium Service: 2-3 hours\n\nFeature: AI-powered time estimation based on service complexity`);
+                            setLocation(`/booking?sector=${sector.id}&feature=booking&type=duration`);
                           }}
                         >
                           ⏱️ Service Duration
@@ -336,7 +336,7 @@ export default function HomePage() {
                             onClick={(e) => {
                               e.preventDefault();
                               e.stopPropagation();
-                              alert(`🚨 Emergency Service for ${sector.displayName}\n\n📞 24/7 Hotline: (555) 911-HELP\n🚗 Mobile unit dispatched\n⚡ Average response: 15 minutes\n\nFeature: GPS tracking and priority queue system`);
+                              setLocation(`/booking?sector=${sector.id}&feature=emergency`);
                             }}
                           >
                             🚨 Emergency Service
@@ -355,7 +355,7 @@ export default function HomePage() {
                           onClick={(e) => {
                             e.preventDefault();
                             e.stopPropagation();
-                            alert(`📋 Schedule Consultation for ${sector.displayName}\n\n📅 Available slots:\n• This week: 3 slots\n• Next week: 8 slots\n• Video/Phone/In-person options\n\nFeature: Calendar integration with automated reminders`);
+                            setLocation(`/booking?sector=${sector.id}&feature=consultation`);
                           }}
                         >
                           📋 Schedule Consultation
@@ -367,7 +367,7 @@ export default function HomePage() {
                           onClick={(e) => {
                             e.preventDefault();
                             e.stopPropagation();
-                            alert(`📄 Document Upload for ${sector.displayName}\n\n📁 Supported formats:\n• PDF, DOC, DOCX\n• Images (JPG, PNG)\n• Spreadsheets (XLS, CSV)\n\nFeature: 256-bit encryption and secure cloud storage`);
+                            setLocation(`/booking?sector=${sector.id}&feature=document`);
                           }}
                         >
                           📄 Upload Documents
@@ -379,7 +379,7 @@ export default function HomePage() {
                           onClick={(e) => {
                             e.preventDefault();
                             e.stopPropagation();
-                            alert(`🔒 Secure Communication for ${sector.displayName}\n\n💬 Encrypted messaging\n📞 Secure voice calls\n🎥 Protected video chat\n\nFeature: End-to-end encryption with attorney-client privilege protection`);
+                            setLocation(`/booking?sector=${sector.id}&feature=chat`);
                           }}
                         >
                           🔒 Start Secure Chat
@@ -397,7 +397,7 @@ export default function HomePage() {
                           onClick={(e) => {
                             e.preventDefault();
                             e.stopPropagation();
-                            alert(`📦 Product Catalog for ${sector.displayName}\n\n🛍️ Available items:\n• 150+ products in stock\n• New arrivals weekly\n• Bulk pricing available\n\nFeature: AI-powered product recommendations`);
+                            setLocation(`/booking?sector=${sector.id}&feature=catalog`);
                           }}
                         >
                           📦 View Catalog
@@ -409,7 +409,7 @@ export default function HomePage() {
                           onClick={(e) => {
                             e.preventDefault();
                             e.stopPropagation();
-                            alert(`📊 Inventory Status for ${sector.displayName}\n\n✅ In Stock: 89%\n⚠️ Low Stock: 8%\n❌ Out of Stock: 3%\n\nFeature: Real-time inventory tracking with auto-reorder`);
+                            setLocation(`/booking?sector=${sector.id}&feature=inventory`);
                           }}
                         >
                           📊 Inventory Status
@@ -421,7 +421,7 @@ export default function HomePage() {
                           onClick={(e) => {
                             e.preventDefault();
                             e.stopPropagation();
-                            alert(`🛒 Order Processing for ${sector.displayName}\n\n🚚 Delivery options:\n• Same-day delivery\n• Standard shipping (2-3 days)\n• Express shipping (next day)\n\nFeature: Order tracking with SMS updates`);
+                            setLocation(`/booking?sector=${sector.id}&feature=order`);
                           }}
                         >
                           🛒 Place Order
@@ -439,7 +439,7 @@ export default function HomePage() {
                           onClick={(e) => {
                             e.preventDefault();
                             e.stopPropagation();
-                            alert(`📅 Event Scheduling for ${sector.displayName}\n\n🎯 Upcoming events:\n• Group sessions available\n• Private bookings\n• Recurring schedules\n\nFeature: Smart scheduling with conflict detection`);
+                            setLocation(`/booking?sector=${sector.id}&feature=event`);
                           }}
                         >
                           📅 Schedule Event
@@ -452,7 +452,7 @@ export default function HomePage() {
                             onClick={(e) => {
                               e.preventDefault();
                               e.stopPropagation();
-                              alert(`📈 Progress Tracking for ${sector.displayName}\n\n📊 Your stats:\n• Sessions completed: 12\n• Goals achieved: 75%\n• Next milestone: 2 weeks\n\nFeature: AI-powered progress analytics and recommendations`);
+                              setLocation(`/booking?sector=${sector.id}&feature=progress`);
                             }}
                           >
                             📈 Track Progress
@@ -466,7 +466,7 @@ export default function HomePage() {
                             onClick={(e) => {
                               e.preventDefault();
                               e.stopPropagation();
-                              alert(`👥 Community Features for ${sector.displayName}\n\n🌟 Connect with:\n• 250+ active members\n• Study groups & forums\n• Peer support network\n\nFeature: Gamified learning with leaderboards and achievements`);
+                              setLocation(`/booking?sector=${sector.id}&feature=community`);
                             }}
                           >
                             👥 Join Community
