@@ -1,4 +1,4 @@
-# Docker Setup for Orderly Bite
+#  Docker Setup for Orderly Bite
 
 This guide explains how to run the Orderly Bite application using Docker.
 
