@@ -192,10 +192,10 @@ export default function HomePage() {
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-secondary mb-4">
-              Choose Your Service Sector
+              Choose Your Service Category
             </h2>
             <p className="text-gray-600 max-w-2xl mx-auto">
-              Select from our comprehensive range of service industries. Each sector is powered by AI with SMS integration and voice call capabilities.
+              Select from our 4 main service categories. Each category contains multiple sectors powered by AI with SMS integration and voice call capabilities.
             </p>
           </div>
 

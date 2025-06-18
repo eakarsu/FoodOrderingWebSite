@@ -11,6 +11,7 @@ import ShoppingCart from "./components/ShoppingCart";
 import HomePage from "./pages/HomePage";
 import MenuPage from "./pages/MenuPage";
 import BookingPage from "./pages/BookingPage";
+import SectorClassificationPage from "./pages/SectorClassificationPage";
 
 import CategoriesPage from "./pages/CategoriesPage";
 import SectorPage from "./pages/SectorPage";
@@ -32,6 +33,7 @@ function Router() {
       <Route path="/" component={HomePage} />
       <Route path="/menu" component={MenuPage} />
       <Route path="/booking" component={BookingPage} />
+      <Route path="/sector-classification" component={SectorClassificationPage} />
       <Route path="/categories" component={CategoriesPage} />
       <Route path="/sectors" component={SectorsPage} />
       <Route path="/sectors/:sectorId">
