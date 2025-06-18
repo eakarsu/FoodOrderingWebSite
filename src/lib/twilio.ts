@@ -18,7 +18,7 @@ interface SMSResponse {
 
 // Get Twilio access token from your API
 export async function getTwilioToken(): Promise<TwilioToken> {
-  const tokenUrl = process.env.TOKEN_WEBHOOK_URL || 'https://omniassistai.com/token';
+  const tokenUrl = import.meta.env.VITE_TOKEN_WEBHOOK_URL || 'https://omniassistai.com/token';
   try { 
     const response = await fetch(tokenUrl, {
       method: 'POST',
@@ -41,7 +41,7 @@ export async function getTwilioToken(): Promise<TwilioToken> {
 // Send SMS via your API
 export async function sendSMS(to: string, message: string): Promise<SMSResponse> {
     console.log(`sendSMS sending ${message} to ${to}`)
-    const smsUrl = process.env.SMS_WEBHOOK_URL || 'https://omniassistai.com/sms';
+    const smsUrl = import.meta.env.VITE_SMS_WEBHOOK_URL || 'https://omniassistai.com/sms';
     try {
         // ✅ Send form data directly to Python backend
         const formData = new URLSearchParams();
@@ -87,7 +87,7 @@ export async function sendSMS(to: string, message: string): Promise<SMSResponse>
 // Send SMS via your API
 export async function sendSMS_backup(to: string, message: string): Promise<SMSResponse> {
   console.log (` sendSMS sending 2 ${message} to ${to}`)
-  const smsUrl = process.env.SMS_WEBHOOK_URL || 'https://omniassistai.com/sms';
+  const smsUrl = import.meta.env.VITE_SMS_WEBHOOK_URL || 'https://omniassistai.com/sms';
   try { 
     const response = await fetch(smsUrl, {
       method: 'POST',
