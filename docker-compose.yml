@@ -1,15 +1,79 @@
 version: '3.8'
 
 services:
-  orderly-bite:
-    build: .
+  servicehub-ai:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
     ports:
-      - "${HOST_PORT:-3000}:${CONTAINER_PORT:-5000}"
+      - "${HOST_PORT:-5000}:5000"
     environment:
-      - PORT=${CONTAINER_PORT:-5000}
       - NODE_ENV=production
-      # Add any other environment variables here
+      - PORT=5000
+      - HOST=0.0.0.0
+      # Add your environment variables here
       # - OPENAI_API_KEY=${OPENAI_API_KEY}
       # - TWILIO_ACCOUNT_SID=${TWILIO_ACCOUNT_SID}
       # - TWILIO_AUTH_TOKEN=${TWILIO_AUTH_TOKEN}
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:5000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+          cpus: '0.5'
+        reservations:
+          memory: 512M
+          cpus: '0.25'
+    networks:
+      - servicehub-network
+
+  # Optional: Add a reverse proxy for production
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./ssl:/etc/nginx/ssl:ro
+    depends_on:
+      - servicehub-ai
+    restart: unless-stopped
+    networks:
+      - servicehub-network
+    profiles:
+      - production
+
+networks:
+  servicehub-network:
+    driver: bridge
+
+# Development configuration
+---
+version: '3.8'
+
+services:
+  servicehub-ai-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: builder
+    ports:
+      - "5173:5173"  # Vite dev server
+      - "5000:5000"  # Express server
+    environment:
+      - NODE_ENV=development
+    volumes:
+      - .:/app
+      - /app/node_modules
+    command: npm run dev
+    restart: unless-stopped
+    profiles:
+      - development
