@@ -11,9 +11,6 @@ const openai = new OpenAI({
 });
 
 export async function registerRoutes(app: Express): Promise<Server> {
-  // Serve attached_assets as static files
-  app.use('/attached_assets', express.static(path.resolve(process.cwd(), 'attached_assets')));
-  
   // Serve sectors directory as static files
   app.use('/sectors', express.static(path.resolve(process.cwd(), 'sectors')));
 
