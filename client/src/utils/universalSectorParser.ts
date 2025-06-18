@@ -56,11 +56,31 @@ export const parseUniversalSectorData = async (sectorId: string): Promise<Univer
       console.warn(`⚠️ UNIVERSAL PARSER: Error loading rules for ${sectorId}:`, error);
     }
     
-    // Parse data using existing functions
-    const categories = prompt2Content ? parsePrompt2File(prompt2Content) : generateDefaultSectorServices(sectorId);
+    // Parse data using existing functions with fallback
+    let categories: ParsedCategory[] = [];
+    
+    if (prompt2Content) {
+      try {
+        categories = parsePrompt2File(prompt2Content);
+        console.log(`✅ UNIVERSAL PARSER: Parsed ${categories.length} categories from prompt2 for ${sectorId}`);
+      } catch (error) {
+        console.warn(`⚠️ UNIVERSAL PARSER: Failed to parse prompt2 for ${sectorId}, using defaults:`, error);
+        categories = generateDefaultSectorServices(sectorId);
+      }
+    } else {
+      console.log(`📝 UNIVERSAL PARSER: No prompt2 content for ${sectorId}, generating defaults`);
+      categories = generateDefaultSectorServices(sectorId);
+    }
+    
+    // If parsing resulted in empty categories, use defaults
+    if (categories.length === 0) {
+      console.log(`🔄 UNIVERSAL PARSER: Empty categories for ${sectorId}, generating defaults`);
+      categories = generateDefaultSectorServices(sectorId);
+    }
+    
     const rules = rulesContent ? parseRulesFile(rulesContent) : {};
     
-    console.log(`🎯 UNIVERSAL PARSER: Successfully parsed ${categories.length} categories for ${sectorId}`);
+    console.log(`🎯 UNIVERSAL PARSER: Final result for ${sectorId}: ${categories.length} categories`);
     console.log(`🎯 UNIVERSAL PARSER: Categories for ${sectorId}:`, categories);
     
     return {
