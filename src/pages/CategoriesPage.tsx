@@ -5,6 +5,8 @@ import { ChevronRight, ShoppingCart } from "lucide-react";
 import { useCart } from "../contexts/CartContext";
 import { useToast } from "../hooks/use-toast";
 import { parseUniversalSectorData, getSectorServiceImage, type UniversalSectorData } from "../utils/universalSectorParser";
+import { SECTORS } from "../lib/sectors";
+import SectorFeatures from "../components/SectorFeatures";
 
 interface CategoryItem {
   id: number;
