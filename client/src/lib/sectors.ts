@@ -239,25 +239,36 @@ export interface ParsedRuleOption {
 }
 
 export function parsePrompt2File(content: string): ParsedCategory[] {
+  console.log(`🔍 PARSE_PROMPT2: Starting to parse content (${content.length} chars)`);
+  console.log(`🔍 PARSE_PROMPT2: Content preview:`, content.substring(0, 200));
+  
   const categories: ParsedCategory[] = [];
   const lines = content.split('\n');
   let currentCategory: ParsedCategory | null = null;
   let itemId = 1;
 
-  for (const line of lines) {
+  console.log(`🔍 PARSE_PROMPT2: Split into ${lines.length} lines`);
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
     const trimmedLine = line.trim();
+    
+    console.log(`🔍 PARSE_PROMPT2: Line ${i + 1}: "${trimmedLine}"`);
     
     if (trimmedLine.startsWith('[Begin Category]')) {
       const categoryName = trimmedLine.replace('[Begin Category]', '').trim();
+      console.log(`📂 PARSE_PROMPT2: Found category: "${categoryName}"`);
       currentCategory = {
         name: categoryName,
         items: []
       };
       categories.push(currentCategory);
     } else if (trimmedLine.startsWith('[End Category]')) {
+      console.log(`📂 PARSE_PROMPT2: End category, items found: ${currentCategory?.items.length || 0}`);
       currentCategory = null;
     } else if (currentCategory && trimmedLine.startsWith('-') && trimmedLine.includes(':')) {
       // Parse item line
+      console.log(`🔍 PARSE_PROMPT2: Parsing item line: "${trimmedLine}"`);
       const itemMatch = trimmedLine.match(/^- (.+?): \$(.+?)(?:, select rules (.+?))?(?:\s+(.*))?$/);
       if (itemMatch) {
         const [, name, priceStr, rulesStr, description] = itemMatch;
@@ -269,15 +280,24 @@ export function parsePrompt2File(content: string): ParsedCategory[] {
           rules: rulesStr ? rulesStr.split(',').map(r => r.trim()) : undefined
         };
         currentCategory.items.push(item);
+        console.log(`✅ PARSE_PROMPT2: Added item: ${item.name} - $${item.price}`);
+      } else {
+        console.warn(`⚠️ PARSE_PROMPT2: Failed to match item pattern: "${trimmedLine}"`);
       }
     } else if (currentCategory && trimmedLine && !trimmedLine.startsWith('[') && trimmedLine.includes(' ')) {
       // Parse item description on separate line
       const lastItem = currentCategory.items[currentCategory.items.length - 1];
       if (lastItem && !lastItem.description) {
         lastItem.description = trimmedLine;
+        console.log(`📝 PARSE_PROMPT2: Added description to ${lastItem.name}: "${trimmedLine}"`);
       }
     }
   }
+
+  console.log(`🎯 PARSE_PROMPT2: Finished parsing. Found ${categories.length} categories`);
+  categories.forEach((cat, index) => {
+    console.log(`📂 PARSE_PROMPT2: Category ${index + 1}: "${cat.name}" with ${cat.items.length} items`);
+  });
 
   return categories;
 }
