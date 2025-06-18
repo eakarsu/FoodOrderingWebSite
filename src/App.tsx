@@ -10,6 +10,7 @@ import Footer from "./components/Footer";
 import ShoppingCart from "./components/ShoppingCart";
 import HomePage from "./pages/HomePage";
 import MenuPage from "./pages/MenuPage";
+import BookingPage from "./pages/BookingPage";
 
 import CategoriesPage from "./pages/CategoriesPage";
 import SectorPage from "./pages/SectorPage";
@@ -30,6 +31,7 @@ function Router() {
     <Switch>
       <Route path="/" component={HomePage} />
       <Route path="/menu" component={MenuPage} />
+      <Route path="/booking" component={BookingPage} />
       <Route path="/categories" component={CategoriesPage} />
       <Route path="/sectors" component={SectorsPage} />
       <Route path="/sectors/:sectorId">
