@@ -20,12 +20,10 @@ export interface SectorFeatures {
 
 // Universal sector data parser that works for ALL sectors
 export const parseUniversalSectorData = async (sectorId: string): Promise<UniversalSectorData> => {
-  console.log(`🚨🚨🚨 NEW UNIVERSAL PARSER RUNNING FOR ${sectorId} 🚨🚨🚨`);
   console.log(`🔄 UNIVERSAL PARSER: Starting parse for sector ${sectorId}`);
   
   // Always generate default services first as a fallback
   const defaultCategories = generateDefaultSectorServices(sectorId);
-  console.log(`🎯 UNIVERSAL PARSER: Generated ${defaultCategories.length} default categories for ${sectorId}`);
   
   try {
     const cacheBuster = Date.now();
@@ -48,31 +46,23 @@ export const parseUniversalSectorData = async (sectorId: string): Promise<Univer
       
       if (prompt2Response.ok) {
         prompt2Content = await prompt2Response.text();
-        console.log(`✅ UNIVERSAL PARSER: Loaded prompt2 for ${sectorId} from /sectors/${sectorId}_prompt2.txt`);
-        console.log(`📄 UNIVERSAL PARSER: Prompt2 content length: ${prompt2Content.length} chars`);
-        console.log(`📄 UNIVERSAL PARSER: Prompt2 content preview:`, prompt2Content.substring(0, 500));
-        console.log(`📄 UNIVERSAL PARSER: Full prompt2 content:`, prompt2Content);
+        console.log(`✅ UNIVERSAL PARSER: Loaded prompt2 for ${sectorId}`);
         
         // Try to parse the loaded content
         try {
           const parsedCategories = parsePrompt2File(prompt2Content);
-          console.log(`🔍 UNIVERSAL PARSER: parsePrompt2File returned:`, parsedCategories);
           if (parsedCategories && parsedCategories.length > 0) {
             categories = parsedCategories;
             console.log(`✅ UNIVERSAL PARSER: Successfully parsed ${categories.length} categories from prompt2`);
-            console.log(`📋 UNIVERSAL PARSER: Parsed categories:`, categories);
           } else {
-            console.warn(`⚠️ UNIVERSAL PARSER: parsePrompt2File returned empty or null, keeping defaults`);
+            console.warn(`⚠️ UNIVERSAL PARSER: parsePrompt2File returned empty, keeping defaults`);
           }
         } catch (parseError) {
-          console.warn(`⚠️ UNIVERSAL PARSER: Failed to parse prompt2 content, keeping defaults:`, parseError);
-          console.warn(`⚠️ UNIVERSAL PARSER: Error details:`, parseError.message, parseError.stack);
+          console.warn(`⚠️ UNIVERSAL PARSER: Failed to parse prompt2 content:`, parseError.message);
         }
-      } else {
-        console.log(`📝 UNIVERSAL PARSER: No prompt2 file for ${sectorId} (Status: ${prompt2Response.status}), using defaults`);
       }
     } catch (fetchError) {
-      console.log(`📝 UNIVERSAL PARSER: Could not fetch prompt2 for ${sectorId}, using defaults:`, fetchError);
+      console.log(`📝 UNIVERSAL PARSER: Could not fetch prompt2 for ${sectorId}, using defaults`);
     }
     
     // Try to load rules file with error handling
@@ -87,19 +77,13 @@ export const parseUniversalSectorData = async (sectorId: string): Promise<Univer
       
       if (rulesResponse.ok) {
         rulesContent = await rulesResponse.text();
-        console.log(`✅ UNIVERSAL PARSER: Loaded rules for ${sectorId} from /sectors/${sectorId}_rules.txt`);
-        console.log(`📄 UNIVERSAL PARSER: Rules content length: ${rulesContent.length} chars`);
-        console.log(`📄 UNIVERSAL PARSER: Rules content preview:`, rulesContent.substring(0, 500));
-        console.log(`📄 UNIVERSAL PARSER: Full rules content:`, rulesContent);
-      } else {
-        console.log(`📝 UNIVERSAL PARSER: No rules file for ${sectorId} (Status: ${rulesResponse.status})`);
+        console.log(`✅ UNIVERSAL PARSER: Loaded rules for ${sectorId}`);
       }
     } catch (fetchError) {
-      console.log(`📝 UNIVERSAL PARSER: Could not fetch rules for ${sectorId}:`, fetchError);
+      console.log(`📝 UNIVERSAL PARSER: Could not fetch rules for ${sectorId}`);
     }
     
     const rules = rulesContent ? parseRulesFile(rulesContent) : {};
-    console.log(`🔍 UNIVERSAL PARSER: Parsed rules:`, rules);
     
     // Ensure we always have valid categories
     if (!categories || categories.length === 0) {
@@ -107,8 +91,7 @@ export const parseUniversalSectorData = async (sectorId: string): Promise<Univer
       categories = defaultCategories;
     }
     
-    console.log(`🎯 UNIVERSAL PARSER: Final result for ${sectorId}: ${categories.length} categories with ${categories.reduce((total, cat) => total + cat.items.length, 0)} total items`);
-    console.log(`🎯 UNIVERSAL PARSER: Final categories data:`, categories);
+    console.log(`✅ UNIVERSAL PARSER: Completed for ${sectorId}: ${categories.length} categories with ${categories.reduce((total, cat) => total + cat.items.length, 0)} total items`);
     
     return {
       sectorId,
@@ -361,8 +344,6 @@ export const generateDefaultSectorServices = (sectorId: string): ParsedCategory[
       ]
     }
   ];
-
-  console.log(`🎯 UNIVERSAL PARSER: Generated ${defaultServices.length} categories with ${defaultServices.reduce((total, cat) => total + cat.items.length, 0)} total services`);
   
   return defaultServices;
 };
