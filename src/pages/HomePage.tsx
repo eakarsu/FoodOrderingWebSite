@@ -292,16 +292,15 @@ export default function HomePage() {
                       >
                         AI-Enabled
                       </div>
-                      {sector.sectorType && (
-                        <div 
-                          className="text-xs px-2 py-1 rounded-full inline-block bg-gray-100 text-gray-600"
-                        >
-                          {sector.sectorType === 'immediate' && '⚡ Immediate'}
-                          {sector.sectorType === 'consultation' && '💼 Consultation'}
-                          {sector.sectorType === 'product' && '📦 Product'}
-                          {sector.sectorType === 'experience' && '🎯 Experience'}
-                        </div>
-                      )}
+                      <div 
+                        className="text-xs px-2 py-1 rounded-full inline-block bg-gray-100 text-gray-600"
+                      >
+                        {sector.sectorType === 'immediate' && '⚡ Immediate'}
+                        {sector.sectorType === 'consultation' && '💼 Consultation'}
+                        {sector.sectorType === 'product' && '📦 Product'}
+                        {sector.sectorType === 'experience' && '🎯 Experience'}
+                        {!sector.sectorType && '🔧 Service'}
+                      </div>
                     </div>
                   </CardContent>
                 </Card>
