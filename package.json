@@ -4,10 +4,10 @@
   "type": "module",
   "license": "MIT",
   "scripts": {
-    "start": "FAST_REFRESH=false react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "dev": "vite",
+    "start": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",

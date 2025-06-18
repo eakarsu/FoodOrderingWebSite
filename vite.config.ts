@@ -11,15 +11,15 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
-      "@": path.resolve(__dirname, "client", "src"),
+      "@": path.resolve(__dirname, "src"),
       "@shared": path.resolve(__dirname, "shared"),
     },
   },
-  root: path.resolve(__dirname, "client"),
+  root: __dirname,
+  publicDir: "public",
   build: {
-    outDir: path.resolve(__dirname, "dist/public"),
+    outDir: "dist",
     emptyOutDir: true,
-    watch: false,
     rollupOptions: {
       onwarn(warning, warn) {
         if (warning.code === 'MODULE_LEVEL_DIRECTIVE') return;
@@ -27,4 +27,8 @@ export default defineConfig({
       }
     }
   },
+  server: {
+    port: 3000,
+    host: true
+  }
 });
