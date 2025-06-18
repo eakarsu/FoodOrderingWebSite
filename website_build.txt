@@ -1,0 +1,148 @@
+Create a complete, production-ready web application with NO missing links, NO unclickable elements, and ALL pages fully implemented. Every navigation item, button, and sector link must lead to working functionality with real content parsed from data files.
+
+## CRITICAL REQUIREMENTS - NO MISSING FUNCTIONALITY
+
+### 1. Complete Sector Implementation
+- Fix all 19 sectors on the home page to display actual services instead of "No services found" message
+- Parse data from corresponding files in the `sectors` folder (NOT attached_assets folder)
+- Each sector must have unique services loaded from their respective data files
+- Auto repair and beauty salon sectors are working - replicate this pattern for ALL other sectors
+- Implement proper data parsing logic for each sector's service files
+
+### 2. Sector Navigation Optimization
+- Differentiate between "sector click" and "select service" button functionality
+- Sector click should show sector overview/landing page with service categories
+- "Select service" button should show detailed service listings for that specific sector
+- Create distinct user flows for these two different actions
+- Ensure each of the 19 sectors has unique, meaningful content
+
+### 3. Data Parsing Architecture
+Replace current parsing logic to:
+- Read service data from `sectors/[sector-name]/` folder structure
+- Parse JSON, CSV, or text files containing service information
+- Create dynamic service cards/listings based on parsed data
+- Implement search and filtering functionality for services within each sector
+- Add service details, pricing, descriptions, and contact information
+
+### 4. Complete Navigation Structure
+Ensure every link is functional:
+- All header navigation links work and lead to complete pages
+- All footer links are functional with real content
+- Breadcrumb navigation for deep pages
+- Search functionality across all sectors and services
+- User authentication pages (if applicable)
+- Contact forms with proper validation and submission handling
+
+### 5. Website Optimization for Readability
+Implement comprehensive UI/UX improvements:
+- Consistent typography and spacing across all pages
+- Mobile-responsive design for all components
+- Loading states for data fetching operations
+- Error handling with user-friendly messages
+- Accessibility compliance (WCAG 2.1 guidelines)
+- Fast loading times with optimized images and code
+- Clear visual hierarchy and intuitive navigation patterns
+
+## TECHNICAL IMPLEMENTATION REQUIREMENTS
+
+### 1. File Structure Organization
+src/
+├── components/
+│ ├── Sectors/
+│ │ ├── SectorCard.jsx
+│ │ ├── SectorDetail.jsx
+│ │ ├── ServiceListing.jsx
+│ │ └── ServiceCard.jsx
+│ ├── Navigation/
+│ └── Common/
+├── pages/
+│ ├── HomePage.jsx
+│ ├── SectorPages/
+│ └── ServicePages/
+├── services/
+│ ├── dataParser.js
+│ ├── sectorService.js
+│ └── searchService.js
+├── data/
+│ └── sectors/
+│ ├── auto-repair/
+│ ├── beauty-salon/
+│ ├── [other-sectors]/
+└── utils/
+
+### 2. Data Parsing Implementation
+Create robust data parsing system:
+- Dynamic file reader for different data formats (JSON, CSV, XML)
+- Error handling for missing or corrupted data files
+- Caching mechanism for frequently accessed sector data
+- Real-time data updates without page refresh
+- Fallback content for sectors with missing data files
+
+### 3. Sector-Specific Functionality
+For each of the 19 sectors, implement:
+- Unique service categories and subcategories
+- Sector-specific search filters (price range, location, ratings, etc.)
+- Service provider profiles with contact information
+- Booking/inquiry forms for each service
+- Reviews and ratings system
+- Image galleries for services
+- Pricing tables and service packages
+
+### 4. Performance Optimization
+- Lazy loading for sector data and images
+- Code splitting for different sector modules
+- Optimized bundle sizes
+- SEO-friendly URLs and meta tags
+- Fast search with debounced input
+- Efficient state management (Redux/Context API)
+
+## SPECIFIC FIXES REQUIRED
+
+### 1. Replace "No Services Found" Logic
+Current issue: Other sectors show "No services found" message
+Solution needed:
+- Identify why auto-repair and beauty-salon work correctly
+- Replicate the working data parsing pattern for all other sectors
+- Ensure each sector has corresponding data files in sectors folder
+- Implement proper error handling and loading states
+
+### 2. Differentiate Sector Actions
+Current issue: Sector click and "select service" button do the same thing
+Solution needed:
+- Sector click → Navigate to sector overview page with categories
+- "Select service" button → Navigate to detailed service listings
+- Create separate routing and components for these different actions
+- Add breadcrumb navigation to show user location
+
+### 3. Exclude attached_assets Folder
+- Do NOT use any files from attached_assets folder for operations
+- All data parsing must use files from sectors folder only
+- Remove any dependencies on attached_assets folder
+- Ensure all images and assets are properly organized in public/assets
+
+## QUALITY ASSURANCE CHECKLIST
+
+Before considering complete, verify:
+- [ ] All 19 sectors display real services from their data files
+- [ ] Every navigation link works and leads to complete pages
+- [ ] Sector click vs "select service" button have different behaviors
+- [ ] No "No services found" messages appear (unless legitimately no data)
+- [ ] All forms submit properly with validation
+- [ ] Mobile responsive design works on all screen sizes
+- [ ] Search functionality works across all sectors
+- [ ] Loading states and error handling are implemented
+- [ ] No broken links or 404 errors exist
+- [ ] Website loads quickly and performs well
+
+## TESTING REQUIREMENTS
+- Test all 19 sectors individually for data loading
+- Verify navigation flows between home page, sector pages, and service pages
+- Test search and filtering functionality
+- Validate form submissions and error handling
+- Test responsive design on mobile, tablet, and desktop
+- Verify accessibility with screen readers
+- Performance testing for page load times
+
+Create a complete, professional web application where every sector works perfectly, all navigation is functional, and the user experience is optimized for readability and usability. No shortcuts, no placeholders, no missing functionality.
+
+
