@@ -1,9 +1,10 @@
-import { parsePrompt2File, parseRulesFile, type ParsedCategory, type ParsedRule } from "../lib/sectors";
+import { parsePrompt2File, parseRulesFile, type ParsedCategory, type ParsedRule, SECTORS } from "../lib/sectors";
 
 export interface UniversalSectorData {
   sectorId: string;
   categories: ParsedCategory[];
   rules: Record<string, ParsedRule[]>;
+  features: SectorFeatures;
   hasData: boolean;
   errorMessage?: string;
 }
@@ -15,7 +16,27 @@ export interface SectorFeatures {
   hasInventory: boolean;
   hasConsultation: boolean;
   hasScheduling: boolean;
-  sectorType: 'service' | 'product' | 'professional' | 'experience';
+  sectorType: 'immediate' | 'consultation' | 'product' | 'experience';
+  
+  // Immediate service features
+  hasRealTimeBooking?: boolean;
+  hasServiceDuration?: boolean;
+  hasEmergencyFlag?: boolean;
+  
+  // Consultation-based features
+  hasAppointmentScheduling?: boolean;
+  hasDocumentUpload?: boolean;
+  hasSecureCommunication?: boolean;
+  
+  // Product/retail features
+  hasProductCatalog?: boolean;
+  hasInventoryManagement?: boolean;
+  hasOrderProcessing?: boolean;
+  
+  // Experience-based features
+  hasEventScheduling?: boolean;
+  hasProgressTracking?: boolean;
+  hasCommunityFeatures?: boolean;
 }
 
 // Universal sector data parser that works for ALL sectors
@@ -107,10 +128,22 @@ export const parseUniversalSectorData = async (sectorId: string): Promise<Univer
     // Always return valid data, even in case of critical error
     console.log(`🔄 UNIVERSAL PARSER: Returning fallback data for ${sectorId}`);
     
+    const sector = SECTORS.find(s => s.id === sectorId);
+    const fallbackFeatures: SectorFeatures = sector?.features || {
+      hasBooking: true,
+      hasRatings: true,
+      hasGallery: true,
+      hasInventory: false,
+      hasConsultation: false,
+      hasScheduling: true,
+      sectorType: 'immediate'
+    };
+    
     return {
       sectorId,
       categories: defaultCategories,
       rules: {},
+      features: fallbackFeatures,
       hasData: true,
       errorMessage: `Using default services for ${sectorId} (error occurred)`,
     };
@@ -350,25 +383,21 @@ export const generateDefaultSectorServices = (sectorId: string): ParsedCategory[
 
 // Get sector-specific features based on sector type
 export const getSectorFeatures = (sectorId: string): SectorFeatures => {
-  const serviceBasedSectors = ['auto_repair', 'beauty_salon', 'home_services', 'healthcare', 'fitness_gym'];
-  const productBasedSectors = ['food_delivery', 'laundry_services', 'pet_services'];
-  const professionalSectors = ['legal_services', 'financial_services', 'real_estate', 'it_services'];
-  const experienceBasedSectors = ['education_tutoring', 'event_planning', 'photography', 'travel_hotel'];
-
-  let sectorType: 'service' | 'product' | 'professional' | 'experience' = 'service';
+  const sector = SECTORS.find(s => s.id === sectorId);
   
-  if (productBasedSectors.includes(sectorId)) sectorType = 'product';
-  else if (professionalSectors.includes(sectorId)) sectorType = 'professional';
-  else if (experienceBasedSectors.includes(sectorId)) sectorType = 'experience';
-
+  if (sector?.features) {
+    return sector.features;
+  }
+  
+  // Fallback for sectors not yet configured
   return {
-    hasBooking: serviceBasedSectors.includes(sectorId) || professionalSectors.includes(sectorId),
-    hasRatings: true, // All sectors can have ratings
-    hasGallery: ['beauty_salon', 'photography', 'event_planning', 'home_services'].includes(sectorId),
-    hasInventory: productBasedSectors.includes(sectorId),
-    hasConsultation: professionalSectors.includes(sectorId),
-    hasScheduling: !productBasedSectors.includes(sectorId),
-    sectorType
+    hasBooking: true,
+    hasRatings: true,
+    hasGallery: true,
+    hasInventory: false,
+    hasConsultation: false,
+    hasScheduling: true,
+    sectorType: 'immediate'
   };
 };
 
