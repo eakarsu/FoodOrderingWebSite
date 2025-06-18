@@ -50,9 +50,15 @@ export default function CategoriesPage() {
   const { dispatch } = useCart();
   const { toast } = useToast();
 
-  // Get sector from URL params
+  // Get sector from URL params (both path and query string)
   const urlParams = new URLSearchParams(window.location.search);
-  const sectorParam = urlParams.get('sector');
+  const querySector = urlParams.get('sector');
+  
+  // Also check for sector in the URL path (for /c/sector_name format)
+  const pathParts = window.location.pathname.split('/');
+  const pathSector = pathParts[2]; // /c/sector_name -> sector_name
+  
+  const sectorParam = pathSector || querySector;
 
   useEffect(() => {
     if (sectorParam) {
