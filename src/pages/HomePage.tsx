@@ -267,41 +267,227 @@ export default function HomePage() {
           {/* Sectors Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {filteredSectors.map((sector) => (
-              <Link key={sector.id} href={`/categories?sector=${sector.id}`}>
-                <Card className="group hover:shadow-xl transition-all duration-300 hover:-translate-y-2 cursor-pointer h-full border-2 hover:border-primary/50">
-                  <CardContent className="p-6">
-                    <div className="flex items-center justify-between mb-3">
-                      <div 
-                        className="text-3xl p-3 rounded-lg shadow-sm"
-                        style={{ backgroundColor: `${sector.primaryColor}20`, color: sector.primaryColor }}
-                      >
-                        {sector.icon}
-                      </div>
-                      <ArrowRight className="h-5 w-5 text-gray-400 group-hover:text-primary transition-colors" />
+              <Card key={sector.id} className="group hover:shadow-xl transition-all duration-300 hover:-translate-y-2 h-full border-2 hover:border-primary/50">
+                <CardContent className="p-6">
+                  <div className="flex items-center justify-between mb-3">
+                    <div 
+                      className="text-3xl p-3 rounded-lg shadow-sm"
+                      style={{ backgroundColor: `${sector.primaryColor}20`, color: sector.primaryColor }}
+                    >
+                      {sector.icon}
                     </div>
-                    <h3 className="text-lg font-bold text-gray-900 group-hover:text-primary transition-colors mb-2">
-                      {sector.displayName}
-                    </h3>
-                    <p className="text-gray-600 text-sm leading-relaxed mb-4">
-                      {sector.description}
-                    </p>
-                    <div className="flex flex-wrap gap-2 mt-3">
-                      <div 
-                        className="text-xs px-3 py-1 rounded-full inline-block font-medium"
-                        style={{ backgroundColor: `${sector.primaryColor}20`, color: sector.primaryColor }}
-                      >
-                        AI-Enabled
-                      </div>
-                      <div className="text-xs px-3 py-1 rounded-full inline-block bg-blue-100 text-blue-700 font-medium">
-                        {sector.sectorType === 'immediate' ? '⚡ Immediate' :
-                         sector.sectorType === 'consultation' ? '💼 Consultation' :
-                         sector.sectorType === 'product' ? '📦 Product' :
-                         sector.sectorType === 'experience' ? '🎯 Experience' : '🔧 Service'}
-                      </div>
+                    <ArrowRight className="h-5 w-5 text-gray-400 group-hover:text-primary transition-colors" />
+                  </div>
+                  <h3 className="text-lg font-bold text-gray-900 group-hover:text-primary transition-colors mb-2">
+                    {sector.displayName}
+                  </h3>
+                  <p className="text-gray-600 text-sm leading-relaxed mb-4">
+                    {sector.description}
+                  </p>
+                  <div className="flex flex-wrap gap-2 mt-3 mb-4">
+                    <div 
+                      className="text-xs px-3 py-1 rounded-full inline-block font-medium"
+                      style={{ backgroundColor: `${sector.primaryColor}20`, color: sector.primaryColor }}
+                    >
+                      AI-Enabled
                     </div>
-                  </CardContent>
-                </Card>
-              </Link>
+                    <div className="text-xs px-3 py-1 rounded-full inline-block bg-blue-100 text-blue-700 font-medium">
+                      {sector.sectorType === 'immediate' ? '⚡ Immediate' :
+                       sector.sectorType === 'consultation' ? '💼 Consultation' :
+                       sector.sectorType === 'product' ? '📦 Product' :
+                       sector.sectorType === 'experience' ? '🎯 Experience' : '🔧 Service'}
+                    </div>
+                  </div>
+
+                  {/* Sector-Specific Action Buttons */}
+                  <div className="space-y-2">
+                    {/* Immediate Service Buttons */}
+                    {sector.sectorType === 'immediate' && (
+                      <div className="grid grid-cols-1 gap-2">
+                        <Button 
+                          size="sm" 
+                          className="w-full text-xs"
+                          style={{ backgroundColor: sector.primaryColor }}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            alert(`🕐 Real-time booking for ${sector.displayName}\n\n✅ Available time slots:\n• Today 2:00 PM\n• Today 4:30 PM\n• Tomorrow 9:00 AM\n\nFeature: Live calendar integration with instant confirmation`);
+                          }}
+                        >
+                          📅 Real-Time Booking
+                        </Button>
+                        <Button 
+                          size="sm" 
+                          variant="outline"
+                          className="w-full text-xs"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            alert(`⏱️ Service Duration for ${sector.displayName}\n\n• Basic Service: 30-45 min\n• Standard Service: 60-90 min\n• Premium Service: 2-3 hours\n\nFeature: AI-powered time estimation based on service complexity`);
+                          }}
+                        >
+                          ⏱️ Service Duration
+                        </Button>
+                        {(sector.id === 'auto_repair' || sector.id === 'healthcare' || sector.id === 'home_services' || sector.id === 'pet_services') && (
+                          <Button 
+                            size="sm" 
+                            variant="destructive"
+                            className="w-full text-xs"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              alert(`🚨 Emergency Service for ${sector.displayName}\n\n📞 24/7 Hotline: (555) 911-HELP\n🚗 Mobile unit dispatched\n⚡ Average response: 15 minutes\n\nFeature: GPS tracking and priority queue system`);
+                            }}
+                          >
+                            🚨 Emergency Service
+                          </Button>
+                        )}
+                      </div>
+                    )}
+
+                    {/* Consultation Service Buttons */}
+                    {sector.sectorType === 'consultation' && (
+                      <div className="grid grid-cols-1 gap-2">
+                        <Button 
+                          size="sm" 
+                          className="w-full text-xs"
+                          style={{ backgroundColor: sector.primaryColor }}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            alert(`📋 Schedule Consultation for ${sector.displayName}\n\n📅 Available slots:\n• This week: 3 slots\n• Next week: 8 slots\n• Video/Phone/In-person options\n\nFeature: Calendar integration with automated reminders`);
+                          }}
+                        >
+                          📋 Schedule Consultation
+                        </Button>
+                        <Button 
+                          size="sm" 
+                          variant="outline"
+                          className="w-full text-xs"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            alert(`📄 Document Upload for ${sector.displayName}\n\n📁 Supported formats:\n• PDF, DOC, DOCX\n• Images (JPG, PNG)\n• Spreadsheets (XLS, CSV)\n\nFeature: 256-bit encryption and secure cloud storage`);
+                          }}
+                        >
+                          📄 Upload Documents
+                        </Button>
+                        <Button 
+                          size="sm" 
+                          variant="outline"
+                          className="w-full text-xs"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            alert(`🔒 Secure Communication for ${sector.displayName}\n\n💬 Encrypted messaging\n📞 Secure voice calls\n🎥 Protected video chat\n\nFeature: End-to-end encryption with attorney-client privilege protection`);
+                          }}
+                        >
+                          🔒 Start Secure Chat
+                        </Button>
+                      </div>
+                    )}
+
+                    {/* Product/Retail Buttons */}
+                    {sector.sectorType === 'product' && (
+                      <div className="grid grid-cols-1 gap-2">
+                        <Button 
+                          size="sm" 
+                          className="w-full text-xs"
+                          style={{ backgroundColor: sector.primaryColor }}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            alert(`📦 Product Catalog for ${sector.displayName}\n\n🛍️ Available items:\n• 150+ products in stock\n• New arrivals weekly\n• Bulk pricing available\n\nFeature: AI-powered product recommendations`);
+                          }}
+                        >
+                          📦 View Catalog
+                        </Button>
+                        <Button 
+                          size="sm" 
+                          variant="outline"
+                          className="w-full text-xs"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            alert(`📊 Inventory Status for ${sector.displayName}\n\n✅ In Stock: 89%\n⚠️ Low Stock: 8%\n❌ Out of Stock: 3%\n\nFeature: Real-time inventory tracking with auto-reorder`);
+                          }}
+                        >
+                          📊 Inventory Status
+                        </Button>
+                        <Button 
+                          size="sm" 
+                          variant="outline"
+                          className="w-full text-xs"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            alert(`🛒 Order Processing for ${sector.displayName}\n\n🚚 Delivery options:\n• Same-day delivery\n• Standard shipping (2-3 days)\n• Express shipping (next day)\n\nFeature: Order tracking with SMS updates`);
+                          }}
+                        >
+                          🛒 Place Order
+                        </Button>
+                      </div>
+                    )}
+
+                    {/* Experience Service Buttons */}
+                    {sector.sectorType === 'experience' && (
+                      <div className="grid grid-cols-1 gap-2">
+                        <Button 
+                          size="sm" 
+                          className="w-full text-xs"
+                          style={{ backgroundColor: sector.primaryColor }}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            alert(`📅 Event Scheduling for ${sector.displayName}\n\n🎯 Upcoming events:\n• Group sessions available\n• Private bookings\n• Recurring schedules\n\nFeature: Smart scheduling with conflict detection`);
+                          }}
+                        >
+                          📅 Schedule Event
+                        </Button>
+                        {(sector.id === 'education_tutoring' || sector.id === 'fitness_gym') && (
+                          <Button 
+                            size="sm" 
+                            variant="outline"
+                            className="w-full text-xs"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              alert(`📈 Progress Tracking for ${sector.displayName}\n\n📊 Your stats:\n• Sessions completed: 12\n• Goals achieved: 75%\n• Next milestone: 2 weeks\n\nFeature: AI-powered progress analytics and recommendations`);
+                            }}
+                          >
+                            📈 Track Progress
+                          </Button>
+                        )}
+                        {(sector.id === 'education_tutoring' || sector.id === 'fitness_gym' || sector.id === 'travel_hotel') && (
+                          <Button 
+                            size="sm" 
+                            variant="outline"
+                            className="w-full text-xs"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              alert(`👥 Community Features for ${sector.displayName}\n\n🌟 Connect with:\n• 250+ active members\n• Study groups & forums\n• Peer support network\n\nFeature: Gamified learning with leaderboards and achievements`);
+                            }}
+                          >
+                            👥 Join Community
+                          </Button>
+                        )}
+                      </div>
+                    )}
+
+                    {/* View Services Button */}
+                    <Link href={`/categories?sector=${sector.id}`} className="block">
+                      <Button 
+                        variant="ghost" 
+                        size="sm" 
+                        className="w-full text-xs mt-2 border hover:bg-gray-50"
+                      >
+                        View All Services →
+                      </Button>
+                    </Link>
+                  </div>
+                </CardContent>
+              </Card>
             ))}
           </div>
 
