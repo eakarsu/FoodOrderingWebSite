@@ -7,6 +7,37 @@ export interface Sector {
   primaryColor: string;
   secondaryColor: string;
   heroImage: string;
+  sectorType: 'immediate' | 'consultation' | 'product' | 'experience';
+  features: SectorFeatures;
+}
+
+export interface SectorFeatures {
+  hasBooking: boolean;
+  hasRatings: boolean;
+  hasGallery: boolean;
+  hasInventory: boolean;
+  hasConsultation: boolean;
+  hasScheduling: boolean;
+  
+  // Immediate service features
+  hasRealTimeBooking?: boolean;
+  hasServiceDuration?: boolean;
+  hasEmergencyFlag?: boolean;
+  
+  // Consultation-based features
+  hasAppointmentScheduling?: boolean;
+  hasDocumentUpload?: boolean;
+  hasSecureCommunication?: boolean;
+  
+  // Product/retail features
+  hasProductCatalog?: boolean;
+  hasInventoryManagement?: boolean;
+  hasOrderProcessing?: boolean;
+  
+  // Experience-based features
+  hasEventScheduling?: boolean;
+  hasProgressTracking?: boolean;
+  hasCommunityFeatures?: boolean;
 }
 
 export const SECTORS: Sector[] = [
@@ -18,7 +49,19 @@ export const SECTORS: Sector[] = [
     icon: "🚗",
     primaryColor: "#FF6B35",
     secondaryColor: "#1A1A1A",
-    heroImage: "https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080"
+    heroImage: "https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080",
+    sectorType: 'immediate',
+    features: {
+      hasBooking: true,
+      hasRatings: true,
+      hasGallery: true,
+      hasInventory: false,
+      hasConsultation: false,
+      hasScheduling: true,
+      hasRealTimeBooking: true,
+      hasServiceDuration: true,
+      hasEmergencyFlag: true
+    }
   },
   {
     id: "beauty_salon",
@@ -28,7 +71,19 @@ export const SECTORS: Sector[] = [
     icon: "💄",
     primaryColor: "#FF69B4",
     secondaryColor: "#8B4B8C",
-    heroImage: "https://images.unsplash.com/photo-1560066984-138dadb4c035?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080"
+    heroImage: "https://images.unsplash.com/photo-1560066984-138dadb4c035?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080",
+    sectorType: 'immediate',
+    features: {
+      hasBooking: true,
+      hasRatings: true,
+      hasGallery: true,
+      hasInventory: false,
+      hasConsultation: false,
+      hasScheduling: true,
+      hasRealTimeBooking: true,
+      hasServiceDuration: true,
+      hasEmergencyFlag: false
+    }
   },
   {
     id: "education_tutoring",
@@ -38,7 +93,19 @@ export const SECTORS: Sector[] = [
     icon: "📚",
     primaryColor: "#4A90E2",
     secondaryColor: "#2C5F2D",
-    heroImage: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080"
+    heroImage: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080",
+    sectorType: 'experience',
+    features: {
+      hasBooking: true,
+      hasRatings: true,
+      hasGallery: false,
+      hasInventory: false,
+      hasConsultation: true,
+      hasScheduling: true,
+      hasEventScheduling: true,
+      hasProgressTracking: true,
+      hasCommunityFeatures: true
+    }
   },
   {
     id: "event_planning",
@@ -48,7 +115,19 @@ export const SECTORS: Sector[] = [
     icon: "🎉",
     primaryColor: "#FFD700",
     secondaryColor: "#8B4513",
-    heroImage: "https://images.unsplash.com/photo-1511578314322-379afb476865?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080"
+    heroImage: "https://images.unsplash.com/photo-1511578314322-379afb476865?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080",
+    sectorType: 'experience',
+    features: {
+      hasBooking: true,
+      hasRatings: true,
+      hasGallery: true,
+      hasInventory: false,
+      hasConsultation: true,
+      hasScheduling: true,
+      hasEventScheduling: true,
+      hasProgressTracking: false,
+      hasCommunityFeatures: false
+    }
   },
   {
     id: "financial_services",
@@ -58,7 +137,19 @@ export const SECTORS: Sector[] = [
     icon: "💰",
     primaryColor: "#228B22",
     secondaryColor: "#2F4F4F",
-    heroImage: "https://images.unsplash.com/photo-1554224155-6726b3ff858f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080"
+    heroImage: "https://images.unsplash.com/photo-1554224155-6726b3ff858f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080",
+    sectorType: 'consultation',
+    features: {
+      hasBooking: true,
+      hasRatings: true,
+      hasGallery: false,
+      hasInventory: false,
+      hasConsultation: true,
+      hasScheduling: true,
+      hasAppointmentScheduling: true,
+      hasDocumentUpload: true,
+      hasSecureCommunication: true
+    }
   },
   {
     id: "fitness_gym",
