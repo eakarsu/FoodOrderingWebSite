@@ -31,8 +31,7 @@ RUN npm ci --only=production --frozen-lockfile && \
 
 # Copy built application and server files
 COPY --from=builder --chown=appuser:nodejs /app/dist ./dist
-COPY --chown=appuser:nodejs ./server ./server
-COPY --chown=appuser:nodejs ./shared ./shared
+COPY --chown=appuser:nodejs ./server.js ./server.js
 
 # Switch to non-root user
 USER appuser
