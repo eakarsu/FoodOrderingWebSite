@@ -277,13 +277,16 @@ export default function HomePage() {
                   Immediate Services
                 </h3>
                 <p className="text-gray-600 text-sm leading-relaxed mb-4">
-                  Real-time booking, quick response, and immediate assistance for urgent service needs.
+                  AI-powered predictive scheduling, emergency triage, and real-time optimization for urgent service needs.
                 </p>
                 <div className="text-xs px-3 py-1 rounded-full inline-block bg-orange-100 text-orange-700 font-medium mb-4">
-                  {SECTORS.filter(s => s.sectorType === 'immediate').length} Sectors
+                  {SECTORS.filter(s => s.sectorType === 'immediate').length} Sectors • AI-Enhanced
                 </div>
-                <div className="text-xs text-gray-500">
+                <div className="text-xs text-gray-500 mb-3">
                   Auto Repair • Healthcare • Beauty • Home Services
+                </div>
+                <div className="text-xs bg-orange-50 p-2 rounded-lg text-orange-800 mb-3">
+                  🤖 Smart Scheduling • 🚨 Emergency Triage • 📊 Predictive Analytics
                 </div>
                 <ArrowRight className="h-5 w-5 text-gray-400 group-hover:text-orange-600 transition-colors mx-auto mt-4" />
               </CardContent>
@@ -300,13 +303,16 @@ export default function HomePage() {
                   Consultation Services
                 </h3>
                 <p className="text-gray-600 text-sm leading-relaxed mb-4">
-                  Professional consultation with appointment scheduling and secure communication.
+                  AI document analysis, automated compliance checking, and intelligent case management with multilingual support.
                 </p>
                 <div className="text-xs px-3 py-1 rounded-full inline-block bg-blue-100 text-blue-700 font-medium mb-4">
-                  {SECTORS.filter(s => s.sectorType === 'consultation').length} Sectors
+                  {SECTORS.filter(s => s.sectorType === 'consultation').length} Sectors • AI-Enhanced
                 </div>
-                <div className="text-xs text-gray-500">
+                <div className="text-xs text-gray-500 mb-3">
                   Legal • Financial • Insurance • IT Services
+                </div>
+                <div className="text-xs bg-blue-50 p-2 rounded-lg text-blue-800 mb-3">
+                  📄 Document AI • 🌐 Translation • ⚖️ Compliance Automation
                 </div>
                 <ArrowRight className="h-5 w-5 text-gray-400 group-hover:text-blue-600 transition-colors mx-auto mt-4" />
               </CardContent>
@@ -323,13 +329,16 @@ export default function HomePage() {
                   Product & Retail
                 </h3>
                 <p className="text-gray-600 text-sm leading-relaxed mb-4">
-                  Product catalog browsing, inventory management, and order processing systems.
+                  Intelligent inventory management, automated email processing, and AI-powered sales optimization systems.
                 </p>
                 <div className="text-xs px-3 py-1 rounded-full inline-block bg-green-100 text-green-700 font-medium mb-4">
-                  {SECTORS.filter(s => s.sectorType === 'product').length} Sectors
+                  {SECTORS.filter(s => s.sectorType === 'product').length} Sectors • AI-Enhanced
                 </div>
-                <div className="text-xs text-gray-500">
+                <div className="text-xs text-gray-500 mb-3">
                   Food Delivery • Laundry Services
+                </div>
+                <div className="text-xs bg-green-50 p-2 rounded-lg text-green-800 mb-3">
+                  📧 Email AI • 💰 Revenue Intelligence • 🔄 Workflow Automation
                 </div>
                 <ArrowRight className="h-5 w-5 text-gray-400 group-hover:text-green-600 transition-colors mx-auto mt-4" />
               </CardContent>
@@ -346,13 +355,16 @@ export default function HomePage() {
                   Experience Services
                 </h3>
                 <p className="text-gray-600 text-sm leading-relaxed mb-4">
-                  Event scheduling, progress tracking, and community-based service experiences.
+                  Collaborative AI agents, multi-modal interactions, and autonomous task execution for enhanced experiences.
                 </p>
                 <div className="text-xs px-3 py-1 rounded-full inline-block bg-purple-100 text-purple-700 font-medium mb-4">
-                  {SECTORS.filter(s => s.sectorType === 'experience').length} Sectors
+                  {SECTORS.filter(s => s.sectorType === 'experience').length} Sectors • AI-Enhanced
                 </div>
-                <div className="text-xs text-gray-500">
+                <div className="text-xs text-gray-500 mb-3">
                   Education • Events • Photography • Travel
+                </div>
+                <div className="text-xs bg-purple-50 p-2 rounded-lg text-purple-800 mb-3">
+                  🤝 Collaborative AI • 🎭 Multi-Modal • 🧠 Self-Learning
                 </div>
                 <ArrowRight className="h-5 w-5 text-gray-400 group-hover:text-purple-600 transition-colors mx-auto mt-4" />
               </CardContent>
@@ -390,50 +402,134 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Features Section */}
+      {/* Advanced AI Features Section */}
       <section className="py-16 bg-white">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-secondary mb-4">
-              Why Choose Our Platform?
+              Advanced AI-Powered Features
             </h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">
-              Discover the features that make our multi-sector service platform stand out across all industries.
+            <p className="text-gray-600 max-w-3xl mx-auto">
+              Experience next-generation AI capabilities that transform how businesses operate and serve customers across all sectors.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            <div className="text-center">
-              <div className="bg-primary/10 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
-                <MessageSquare className="h-8 w-8 text-primary" />
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="text-center p-6 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-lg">
+              <div className="bg-blue-500 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                <Clock className="h-8 w-8 text-white" />
               </div>
-              <h3 className="text-xl font-semibold mb-2">SMS Integration</h3>
-              <p className="text-gray-600">Real SMS messaging capabilities across all service sectors.</p>
+              <h3 className="text-xl font-semibold mb-2">Predictive Scheduling</h3>
+              <p className="text-gray-600 text-sm">AI learns preferences to optimize scheduling, reducing conflicts by 16% and improving efficiency.</p>
             </div>
 
-            <div className="text-center">
-              <div className="bg-primary/10 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
-                <Phone className="h-8 w-8 text-primary" />
+            <div className="text-center p-6 bg-gradient-to-br from-green-50 to-emerald-50 rounded-lg">
+              <div className="bg-green-500 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                <MessageSquare className="h-8 w-8 text-white" />
               </div>
-              <h3 className="text-xl font-semibold mb-2">Voice Calls</h3>
-              <p className="text-gray-600">Direct voice communication with service providers.</p>
+              <h3 className="text-xl font-semibold mb-2">Automated Email Management</h3>
+              <p className="text-gray-600 text-sm">AI categorizes, prioritizes, and responds to emails, saving 30+ minutes daily.</p>
             </div>
 
-            <div className="text-center">
-              <div className="bg-primary/10 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
-                <Brain className="h-8 w-8 text-primary" />
+            <div className="text-center p-6 bg-gradient-to-br from-purple-50 to-violet-50 rounded-lg">
+              <div className="bg-purple-500 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                <Brain className="h-8 w-8 text-white" />
               </div>
-              <h3 className="text-xl font-semibold mb-2">AI Recommendations</h3>
-              <p className="text-gray-600">Smart suggestions tailored to each service industry.</p>
+              <h3 className="text-xl font-semibold mb-2">Multi-Modal AI</h3>
+              <p className="text-gray-600 text-sm">Visual, spatial, and gestural inputs with real-time translation across 50+ languages.</p>
             </div>
 
-            <div className="text-center">
-              <div className="bg-primary/10 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
-                <Settings className="h-8 w-8 text-primary" />
+            <div className="text-center p-6 bg-gradient-to-br from-orange-50 to-red-50 rounded-lg">
+              <div className="bg-orange-500 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                <Phone className="h-8 w-8 text-white" />
               </div>
-              <h3 className="text-xl font-semibold mb-2">Customizable</h3>
-              <p className="text-gray-600">Fully adaptable to any service industry requirements.</p>
+              <h3 className="text-xl font-semibold mb-2">Intelligent Call Handling</h3>
+              <p className="text-gray-600 text-sm">AI answers every call, handles inquiries, books appointments, and converts leads automatically.</p>
             </div>
+
+            <div className="text-center p-6 bg-gradient-to-br from-teal-50 to-cyan-50 rounded-lg">
+              <div className="bg-teal-500 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                <Settings className="h-8 w-8 text-white" />
+              </div>
+              <h3 className="text-xl font-semibold mb-2">Workflow Automation</h3>
+              <p className="text-gray-600 text-sm">Multi-step process automation for approvals, submissions, and complex business workflows.</p>
+            </div>
+
+            <div className="text-center p-6 bg-gradient-to-br from-pink-50 to-rose-50 rounded-lg">
+              <div className="bg-pink-500 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                <Star className="h-8 w-8 text-white" />
+              </div>
+              <h3 className="text-xl font-semibold mb-2">Predictive Analytics</h3>
+              <p className="text-gray-600 text-sm">Advanced insights into customer behavior, service efficiency, and business optimization.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Sector-Specific AI Enhancements */}
+      <section className="py-16 bg-gray-50">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-secondary mb-4">
+              Sector-Specific AI Intelligence
+            </h2>
+            <p className="text-gray-600 max-w-3xl mx-auto">
+              Specialized AI capabilities tailored for each industry sector, providing deep domain expertise and automation.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <Card className="p-6 hover:shadow-lg transition-shadow">
+              <div className="text-center">
+                <div className="text-4xl mb-3">🏥</div>
+                <h3 className="font-bold text-lg mb-3 text-green-700">Healthcare AI</h3>
+                <ul className="text-sm text-gray-600 space-y-1">
+                  <li>• Patient triage & symptom assessment</li>
+                  <li>• Medical appointment optimization</li>
+                  <li>• Insurance verification automation</li>
+                  <li>• Prescription refill management</li>
+                </ul>
+              </div>
+            </Card>
+
+            <Card className="p-6 hover:shadow-lg transition-shadow">
+              <div className="text-center">
+                <div className="text-4xl mb-3">⚖️</div>
+                <h3 className="font-bold text-lg mb-3 text-blue-700">Legal AI</h3>
+                <ul className="text-sm text-gray-600 space-y-1">
+                  <li>• Case research & document analysis</li>
+                  <li>• Automated billing & time tracking</li>
+                  <li>• Client intake automation</li>
+                  <li>• Court date management</li>
+                </ul>
+              </div>
+            </Card>
+
+            <Card className="p-6 hover:shadow-lg transition-shadow">
+              <div className="text-center">
+                <div className="text-4xl mb-3">💰</div>
+                <h3 className="font-bold text-lg mb-3 text-purple-700">Financial AI</h3>
+                <ul className="text-sm text-gray-600 space-y-1">
+                  <li>• Portfolio analysis & recommendations</li>
+                  <li>• Compliance checking automation</li>
+                  <li>• Risk assessment for applications</li>
+                  <li>• Personalized financial planning</li>
+                </ul>
+              </div>
+            </Card>
+
+            <Card className="p-6 hover:shadow-lg transition-shadow">
+              <div className="text-center">
+                <div className="text-4xl mb-3">🔧</div>
+                <h3 className="font-bold text-lg mb-3 text-orange-700">Service AI</h3>
+                <ul className="text-sm text-gray-600 space-y-1">
+                  <li>• Emergency response prioritization</li>
+                  <li>• Resource optimization</li>
+                  <li>• Quality assurance automation</li>
+                  <li>• Performance monitoring</li>
+                </ul>
+              </div>
+            </Card>
           </div>
         </div>
       </section>
