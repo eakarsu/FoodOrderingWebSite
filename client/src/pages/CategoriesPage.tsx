@@ -168,32 +168,33 @@ export default function CategoriesPage() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {displayData.map((category) => (
-            <Card key={category.name} className="overflow-hidden hover:shadow-lg transition-shadow">
-              <CardContent className="p-0">
-                <div 
-                  className="cursor-pointer p-6 hover:bg-gray-50 transition-colors"
-                  onClick={() => handleCategoryClick(category.name)}
-                >
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-4">
-                      <div className="text-4xl">{category.image}</div>
-                      <div>
-                        <h3 className="text-xl font-bold text-secondary">{category.name}</h3>
-                        <p className="text-gray-600 text-sm">
-                          {category.items.length} item{category.items.length !== 1 ? 's' : ''}
-                          {category.hasRules && " • Customizable"}
-                        </p>
+              <Card key={category.name} className="overflow-hidden hover:shadow-lg transition-shadow">
+                <CardContent className="p-0">
+                  <div 
+                    className="cursor-pointer p-6 hover:bg-gray-50 transition-colors"
+                    onClick={() => handleCategoryClick(category.name)}
+                  >
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-4">
+                        <div className="text-4xl">{category.image}</div>
+                        <div>
+                          <h3 className="text-xl font-bold text-secondary">{category.name}</h3>
+                          <p className="text-gray-600 text-sm">
+                            {category.items.length} item{category.items.length !== 1 ? 's' : ''}
+                            {category.hasRules && " • Customizable"}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="text-gray-400">
+                        <ChevronRight size={24} />
                       </div>
                     </div>
-                    <div className="text-gray-400">
-                      <ChevronRight size={24} />
-                    </div>
                   </div>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Category Modal */}
