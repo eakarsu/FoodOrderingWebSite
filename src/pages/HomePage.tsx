@@ -264,231 +264,99 @@ export default function HomePage() {
             )}
           </div>
 
-          {/* Sectors Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {filteredSectors.map((sector) => (
-              <Card key={sector.id} className="group hover:shadow-xl transition-all duration-300 hover:-translate-y-2 h-full border-2 hover:border-primary/50">
-                <CardContent className="p-6">
-                  <div className="flex items-center justify-between mb-3">
-                    <div 
-                      className="text-3xl p-3 rounded-lg shadow-sm"
-                      style={{ backgroundColor: `${sector.primaryColor}20`, color: sector.primaryColor }}
-                    >
-                      {sector.icon}
-                    </div>
-                    <ArrowRight className="h-5 w-5 text-gray-400 group-hover:text-primary transition-colors" />
-                  </div>
-                  <h3 className="text-lg font-bold text-gray-900 group-hover:text-primary transition-colors mb-2">
-                    {sector.displayName}
-                  </h3>
-                  <p className="text-gray-600 text-sm leading-relaxed mb-4">
-                    {sector.description}
-                  </p>
-                  <div className="flex flex-wrap gap-2 mt-3 mb-4">
-                    <div 
-                      className="text-xs px-3 py-1 rounded-full inline-block font-medium"
-                      style={{ backgroundColor: `${sector.primaryColor}20`, color: sector.primaryColor }}
-                    >
-                      AI-Enabled
-                    </div>
-                    <div className="text-xs px-3 py-1 rounded-full inline-block bg-blue-100 text-blue-700 font-medium">
-                      {sector.sectorType === 'immediate' ? '⚡ Immediate' :
-                       sector.sectorType === 'consultation' ? '💼 Consultation' :
-                       sector.sectorType === 'product' ? '📦 Product' :
-                       sector.sectorType === 'experience' ? '🎯 Experience' : '🔧 Service'}
-                    </div>
-                  </div>
+          {/* Service Classifications Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {/* Immediate Services */}
+            <Card 
+              className="group hover:shadow-xl transition-all duration-300 hover:-translate-y-2 cursor-pointer h-full border-2 hover:border-orange-500/50"
+              onClick={() => setLocation('/sector-classification?type=immediate')}
+            >
+              <CardContent className="p-8 text-center">
+                <div className="text-6xl mb-4">⚡</div>
+                <h3 className="text-xl font-bold text-gray-900 group-hover:text-orange-600 transition-colors mb-3">
+                  Immediate Services
+                </h3>
+                <p className="text-gray-600 text-sm leading-relaxed mb-4">
+                  Real-time booking, quick response, and immediate assistance for urgent service needs.
+                </p>
+                <div className="text-xs px-3 py-1 rounded-full inline-block bg-orange-100 text-orange-700 font-medium mb-4">
+                  {SECTORS.filter(s => s.sectorType === 'immediate').length} Sectors
+                </div>
+                <div className="text-xs text-gray-500">
+                  Auto Repair • Healthcare • Beauty • Home Services
+                </div>
+                <ArrowRight className="h-5 w-5 text-gray-400 group-hover:text-orange-600 transition-colors mx-auto mt-4" />
+              </CardContent>
+            </Card>
 
-                  {/* Sector-Specific Action Buttons */}
-                  <div className="space-y-2">
-                    {/* Immediate Service Buttons */}
-                    {sector.sectorType === 'immediate' && (
-                      <div className="grid grid-cols-1 gap-2">
-                        <Button 
-                          size="sm" 
-                          className="w-full text-xs"
-                          style={{ backgroundColor: sector.primaryColor }}
-                          onClick={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            setLocation(`/booking?sector=${sector.id}&feature=booking`);
-                          }}
-                        >
-                          📅 Real-Time Booking
-                        </Button>
-                        <Button 
-                          size="sm" 
-                          variant="outline"
-                          className="w-full text-xs"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            setLocation(`/booking?sector=${sector.id}&feature=booking&type=duration`);
-                          }}
-                        >
-                          ⏱️ Service Duration
-                        </Button>
-                        {(sector.id === 'auto_repair' || sector.id === 'healthcare' || sector.id === 'home_services' || sector.id === 'pet_services') && (
-                          <Button 
-                            size="sm" 
-                            variant="destructive"
-                            className="w-full text-xs"
-                            onClick={(e) => {
-                              e.preventDefault();
-                              e.stopPropagation();
-                              setLocation(`/booking?sector=${sector.id}&feature=emergency`);
-                            }}
-                          >
-                            🚨 Emergency Service
-                          </Button>
-                        )}
-                      </div>
-                    )}
+            {/* Consultation Services */}
+            <Card 
+              className="group hover:shadow-xl transition-all duration-300 hover:-translate-y-2 cursor-pointer h-full border-2 hover:border-blue-500/50"
+              onClick={() => setLocation('/sector-classification?type=consultation')}
+            >
+              <CardContent className="p-8 text-center">
+                <div className="text-6xl mb-4">💼</div>
+                <h3 className="text-xl font-bold text-gray-900 group-hover:text-blue-600 transition-colors mb-3">
+                  Consultation Services
+                </h3>
+                <p className="text-gray-600 text-sm leading-relaxed mb-4">
+                  Professional consultation with appointment scheduling and secure communication.
+                </p>
+                <div className="text-xs px-3 py-1 rounded-full inline-block bg-blue-100 text-blue-700 font-medium mb-4">
+                  {SECTORS.filter(s => s.sectorType === 'consultation').length} Sectors
+                </div>
+                <div className="text-xs text-gray-500">
+                  Legal • Financial • Insurance • IT Services
+                </div>
+                <ArrowRight className="h-5 w-5 text-gray-400 group-hover:text-blue-600 transition-colors mx-auto mt-4" />
+              </CardContent>
+            </Card>
 
-                    {/* Consultation Service Buttons */}
-                    {sector.sectorType === 'consultation' && (
-                      <div className="grid grid-cols-1 gap-2">
-                        <Button 
-                          size="sm" 
-                          className="w-full text-xs"
-                          style={{ backgroundColor: sector.primaryColor }}
-                          onClick={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            setLocation(`/booking?sector=${sector.id}&feature=consultation`);
-                          }}
-                        >
-                          📋 Schedule Consultation
-                        </Button>
-                        <Button 
-                          size="sm" 
-                          variant="outline"
-                          className="w-full text-xs"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            setLocation(`/booking?sector=${sector.id}&feature=document`);
-                          }}
-                        >
-                          📄 Upload Documents
-                        </Button>
-                        <Button 
-                          size="sm" 
-                          variant="outline"
-                          className="w-full text-xs"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            setLocation(`/booking?sector=${sector.id}&feature=chat`);
-                          }}
-                        >
-                          🔒 Start Secure Chat
-                        </Button>
-                      </div>
-                    )}
+            {/* Product & Retail */}
+            <Card 
+              className="group hover:shadow-xl transition-all duration-300 hover:-translate-y-2 cursor-pointer h-full border-2 hover:border-green-500/50"
+              onClick={() => setLocation('/sector-classification?type=product')}
+            >
+              <CardContent className="p-8 text-center">
+                <div className="text-6xl mb-4">📦</div>
+                <h3 className="text-xl font-bold text-gray-900 group-hover:text-green-600 transition-colors mb-3">
+                  Product & Retail
+                </h3>
+                <p className="text-gray-600 text-sm leading-relaxed mb-4">
+                  Product catalog browsing, inventory management, and order processing systems.
+                </p>
+                <div className="text-xs px-3 py-1 rounded-full inline-block bg-green-100 text-green-700 font-medium mb-4">
+                  {SECTORS.filter(s => s.sectorType === 'product').length} Sectors
+                </div>
+                <div className="text-xs text-gray-500">
+                  Food Delivery • Laundry Services
+                </div>
+                <ArrowRight className="h-5 w-5 text-gray-400 group-hover:text-green-600 transition-colors mx-auto mt-4" />
+              </CardContent>
+            </Card>
 
-                    {/* Product/Retail Buttons */}
-                    {sector.sectorType === 'product' && (
-                      <div className="grid grid-cols-1 gap-2">
-                        <Button 
-                          size="sm" 
-                          className="w-full text-xs"
-                          style={{ backgroundColor: sector.primaryColor }}
-                          onClick={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            setLocation(`/booking?sector=${sector.id}&feature=catalog`);
-                          }}
-                        >
-                          📦 View Catalog
-                        </Button>
-                        <Button 
-                          size="sm" 
-                          variant="outline"
-                          className="w-full text-xs"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            setLocation(`/booking?sector=${sector.id}&feature=inventory`);
-                          }}
-                        >
-                          📊 Inventory Status
-                        </Button>
-                        <Button 
-                          size="sm" 
-                          variant="outline"
-                          className="w-full text-xs"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            setLocation(`/booking?sector=${sector.id}&feature=order`);
-                          }}
-                        >
-                          🛒 Place Order
-                        </Button>
-                      </div>
-                    )}
-
-                    {/* Experience Service Buttons */}
-                    {sector.sectorType === 'experience' && (
-                      <div className="grid grid-cols-1 gap-2">
-                        <Button 
-                          size="sm" 
-                          className="w-full text-xs"
-                          style={{ backgroundColor: sector.primaryColor }}
-                          onClick={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            setLocation(`/booking?sector=${sector.id}&feature=event`);
-                          }}
-                        >
-                          📅 Schedule Event
-                        </Button>
-                        {(sector.id === 'education_tutoring' || sector.id === 'fitness_gym') && (
-                          <Button 
-                            size="sm" 
-                            variant="outline"
-                            className="w-full text-xs"
-                            onClick={(e) => {
-                              e.preventDefault();
-                              e.stopPropagation();
-                              setLocation(`/booking?sector=${sector.id}&feature=progress`);
-                            }}
-                          >
-                            📈 Track Progress
-                          </Button>
-                        )}
-                        {(sector.id === 'education_tutoring' || sector.id === 'fitness_gym' || sector.id === 'travel_hotel') && (
-                          <Button 
-                            size="sm" 
-                            variant="outline"
-                            className="w-full text-xs"
-                            onClick={(e) => {
-                              e.preventDefault();
-                              e.stopPropagation();
-                              setLocation(`/booking?sector=${sector.id}&feature=community`);
-                            }}
-                          >
-                            👥 Join Community
-                          </Button>
-                        )}
-                      </div>
-                    )}
-
-                    {/* View Services Button */}
-                    <Link href={`/categories?sector=${sector.id}`} className="block">
-                      <Button 
-                        variant="ghost" 
-                        size="sm" 
-                        className="w-full text-xs mt-2 border hover:bg-gray-50"
-                      >
-                        View All Services →
-                      </Button>
-                    </Link>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
+            {/* Experience Services */}
+            <Card 
+              className="group hover:shadow-xl transition-all duration-300 hover:-translate-y-2 cursor-pointer h-full border-2 hover:border-purple-500/50"
+              onClick={() => setLocation('/sector-classification?type=experience')}
+            >
+              <CardContent className="p-8 text-center">
+                <div className="text-6xl mb-4">🎯</div>
+                <h3 className="text-xl font-bold text-gray-900 group-hover:text-purple-600 transition-colors mb-3">
+                  Experience Services
+                </h3>
+                <p className="text-gray-600 text-sm leading-relaxed mb-4">
+                  Event scheduling, progress tracking, and community-based service experiences.
+                </p>
+                <div className="text-xs px-3 py-1 rounded-full inline-block bg-purple-100 text-purple-700 font-medium mb-4">
+                  {SECTORS.filter(s => s.sectorType === 'experience').length} Sectors
+                </div>
+                <div className="text-xs text-gray-500">
+                  Education • Events • Photography • Travel
+                </div>
+                <ArrowRight className="h-5 w-5 text-gray-400 group-hover:text-purple-600 transition-colors mx-auto mt-4" />
+              </CardContent>
+            </Card>
           </div>
 
           {searchTerm.trim() && filteredSectors.length === 0 && !isSearching && (
