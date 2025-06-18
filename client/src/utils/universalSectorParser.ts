@@ -20,6 +20,7 @@ export interface SectorFeatures {
 
 // Universal sector data parser that works for ALL sectors
 export const parseUniversalSectorData = async (sectorId: string): Promise<UniversalSectorData> => {
+  console.log(`🚨🚨🚨 NEW UNIVERSAL PARSER RUNNING FOR ${sectorId} 🚨🚨🚨`);
   console.log(`🔄 UNIVERSAL PARSER: Starting parse for sector ${sectorId}`);
   
   // Always generate default services first as a fallback
