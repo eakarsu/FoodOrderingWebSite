@@ -59,9 +59,8 @@ export default function CategoriesPage() {
       setCurrentSector(sectorParam);
       loadSectorData(sectorParam);
     } else {
-      // Default to education_tutoring if no sector specified
-      setCurrentSector('education_tutoring');
-      loadSectorData('education_tutoring');
+      setLoading(false);
+      // Don't load any sector data if no sector is specified
     }
   }, [sectorParam]);
 
@@ -146,10 +145,13 @@ export default function CategoriesPage() {
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
           <h1 className="text-4xl md:text-5xl font-bold text-secondary mb-4">
-            Menu Categories
+            {sectorParam ? `${sectorParam.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())} Services` : 'Service Categories'}
           </h1>
           <p className="text-gray-600 max-w-2xl mx-auto">
-            Explore our complete menu organized by categories. Click on any category to see all available items.
+            {sectorParam 
+              ? `Explore our ${sectorParam.replace(/_/g, ' ')} services organized by categories. Click on any category to see all available items.`
+              : 'Select a sector to view available services and categories.'
+            }
           </p>
         </div>
 
@@ -157,6 +159,17 @@ export default function CategoriesPage() {
           <div className="text-center py-12">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
             <p className="text-gray-600">Loading services...</p>
+          </div>
+        ) : !sectorParam ? (
+          <div className="text-center py-12">
+            <h2 className="text-2xl font-bold text-gray-800 mb-4">Select a Sector</h2>
+            <p className="text-gray-600 mb-6">Please choose a sector from the home page to view available services.</p>
+            <Button 
+              onClick={() => window.location.href = '/'}
+              className="bg-primary hover:bg-primary/90"
+            >
+              Go to Home Page
+            </Button>
           </div>
         ) : displayData.length === 0 ? (
           <div className="text-center py-12">
