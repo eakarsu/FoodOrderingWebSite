@@ -22,6 +22,10 @@ export interface SectorFeatures {
 export const parseUniversalSectorData = async (sectorId: string): Promise<UniversalSectorData> => {
   console.log(`🔄 UNIVERSAL PARSER: Starting parse for sector ${sectorId}`);
   
+  // Always generate default services first as a fallback
+  const defaultCategories = generateDefaultSectorServices(sectorId);
+  console.log(`🎯 UNIVERSAL PARSER: Generated ${defaultCategories.length} default categories for ${sectorId}`);
+  
   try {
     const cacheBuster = Date.now();
     const prompt2Url = `/sectors/${sectorId}_prompt2.txt?v=${cacheBuster}`;
@@ -29,80 +33,89 @@ export const parseUniversalSectorData = async (sectorId: string): Promise<Univer
     
     let prompt2Content = "";
     let rulesContent = "";
+    let categories: ParsedCategory[] = defaultCategories; // Start with defaults
     
-    // Load prompt2 file with error handling
+    // Try to load prompt2 file with error handling
     try {
-      const prompt2Response = await fetch(prompt2Url, { cache: 'no-cache' });
+      const prompt2Response = await fetch(prompt2Url, { 
+        cache: 'no-cache',
+        method: 'GET',
+        headers: {
+          'Accept': 'text/plain'
+        }
+      });
+      
       if (prompt2Response.ok) {
         prompt2Content = await prompt2Response.text();
         console.log(`✅ UNIVERSAL PARSER: Loaded prompt2 for ${sectorId} (${prompt2Content.length} chars)`);
+        
+        // Try to parse the loaded content
+        try {
+          const parsedCategories = parsePrompt2File(prompt2Content);
+          if (parsedCategories && parsedCategories.length > 0) {
+            categories = parsedCategories;
+            console.log(`✅ UNIVERSAL PARSER: Successfully parsed ${categories.length} categories from prompt2`);
+          }
+        } catch (parseError) {
+          console.warn(`⚠️ UNIVERSAL PARSER: Failed to parse prompt2 content, keeping defaults:`, parseError);
+        }
       } else {
-        console.warn(`⚠️ UNIVERSAL PARSER: No prompt2 file for ${sectorId} - Status: ${prompt2Response.status}`);
+        console.log(`📝 UNIVERSAL PARSER: No prompt2 file for ${sectorId} (Status: ${prompt2Response.status}), using defaults`);
       }
-    } catch (error) {
-      console.warn(`⚠️ UNIVERSAL PARSER: Error loading prompt2 for ${sectorId}:`, error);
+    } catch (fetchError) {
+      console.log(`📝 UNIVERSAL PARSER: Could not fetch prompt2 for ${sectorId}, using defaults:`, fetchError);
     }
     
-    // Load rules file with error handling
+    // Try to load rules file with error handling
     try {
-      const rulesResponse = await fetch(rulesUrl, { cache: 'no-cache' });
+      const rulesResponse = await fetch(rulesUrl, { 
+        cache: 'no-cache',
+        method: 'GET',
+        headers: {
+          'Accept': 'text/plain'
+        }
+      });
+      
       if (rulesResponse.ok) {
         rulesContent = await rulesResponse.text();
         console.log(`✅ UNIVERSAL PARSER: Loaded rules for ${sectorId} (${rulesContent.length} chars)`);
       } else {
-        console.warn(`⚠️ UNIVERSAL PARSER: No rules file for ${sectorId} - Status: ${rulesResponse.status}`);
+        console.log(`📝 UNIVERSAL PARSER: No rules file for ${sectorId} (Status: ${rulesResponse.status})`);
       }
-    } catch (error) {
-      console.warn(`⚠️ UNIVERSAL PARSER: Error loading rules for ${sectorId}:`, error);
-    }
-    
-    // Parse data using existing functions with fallback
-    let categories: ParsedCategory[] = [];
-    
-    if (prompt2Content) {
-      try {
-        categories = parsePrompt2File(prompt2Content);
-        console.log(`✅ UNIVERSAL PARSER: Parsed ${categories.length} categories from prompt2 for ${sectorId}`);
-      } catch (error) {
-        console.warn(`⚠️ UNIVERSAL PARSER: Failed to parse prompt2 for ${sectorId}, using defaults:`, error);
-        categories = generateDefaultSectorServices(sectorId);
-      }
-    } else {
-      console.log(`📝 UNIVERSAL PARSER: No prompt2 content for ${sectorId}, generating defaults`);
-      categories = generateDefaultSectorServices(sectorId);
-    }
-    
-    // If parsing resulted in empty categories, use defaults
-    if (categories.length === 0) {
-      console.log(`🔄 UNIVERSAL PARSER: Empty categories for ${sectorId}, generating defaults`);
-      categories = generateDefaultSectorServices(sectorId);
+    } catch (fetchError) {
+      console.log(`📝 UNIVERSAL PARSER: Could not fetch rules for ${sectorId}:`, fetchError);
     }
     
     const rules = rulesContent ? parseRulesFile(rulesContent) : {};
     
-    console.log(`🎯 UNIVERSAL PARSER: Final result for ${sectorId}: ${categories.length} categories`);
-    console.log(`🎯 UNIVERSAL PARSER: Categories for ${sectorId}:`, categories);
+    // Ensure we always have valid categories
+    if (!categories || categories.length === 0) {
+      console.log(`🔄 UNIVERSAL PARSER: No valid categories, using defaults for ${sectorId}`);
+      categories = defaultCategories;
+    }
+    
+    console.log(`🎯 UNIVERSAL PARSER: Final result for ${sectorId}: ${categories.length} categories with ${categories.reduce((total, cat) => total + cat.items.length, 0)} total items`);
     
     return {
       sectorId,
       categories,
       rules,
-      hasData: categories.length > 0,
+      hasData: true, // Always true since we have defaults
+      errorMessage: categories === defaultCategories ? `Using default services for ${sectorId}` : undefined,
     };
     
   } catch (error) {
     console.error(`❌ UNIVERSAL PARSER: Critical error for ${sectorId}:`, error);
     
-    // Return fallback data instead of failing
-    const fallbackCategories = generateDefaultSectorServices(sectorId);
-    console.log(`🔄 UNIVERSAL PARSER: Generated fallback services for ${sectorId}:`, fallbackCategories);
+    // Always return valid data, even in case of critical error
+    console.log(`🔄 UNIVERSAL PARSER: Returning fallback data for ${sectorId}`);
     
     return {
       sectorId,
-      categories: fallbackCategories,
+      categories: defaultCategories,
       rules: {},
       hasData: true,
-      errorMessage: `Using default services for ${sectorId}`,
+      errorMessage: `Using default services for ${sectorId} (error occurred)`,
     };
   }
 };
