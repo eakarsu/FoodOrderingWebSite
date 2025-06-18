@@ -10,7 +10,7 @@ import Footer from "./components/Footer";
 import ShoppingCart from "./components/ShoppingCart";
 import HomePage from "./pages/HomePage";
 import MenuPage from "./pages/MenuPage";
-import BuildYourOwnPage from "./pages/BuildYourOwnPage";
+
 import CategoriesPage from "./pages/CategoriesPage";
 import SectorPage from "./pages/SectorPage";
 import SectorsPage from "./pages/SectorsPage";
