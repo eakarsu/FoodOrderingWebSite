@@ -32,7 +32,9 @@ function Router() {
       <Route path="/menu" component={MenuPage} />
       <Route path="/categories" component={CategoriesPage} />
       <Route path="/sectors" component={SectorsPage} />
-      <Route path="/sectors/:sectorId" component={SectorPage} />
+      <Route path="/sectors/:sectorId">
+        {(params) => <SectorPage sectorId={params.sectorId} />}
+      </Route>
       <Route path="/about" component={AboutPage} />
       <Route path="/contact" component={ContactPage} />
       <Route path="/checkout" component={CheckoutPage} />

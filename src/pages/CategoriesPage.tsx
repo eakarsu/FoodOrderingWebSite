@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
-import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "../components/ui/card";
+import { Button } from "../components/ui/button";
 import { ChevronRight, ShoppingCart } from "lucide-react";
-import { useCart } from "@/contexts/CartContext";
-import { useToast } from "@/hooks/use-toast";
-import { parseUniversalSectorData, getSectorServiceImage, type UniversalSectorData } from "@/utils/universalSectorParser";
+import { useCart } from "../contexts/CartContext";
+import { useToast } from "../hooks/use-toast";
+import { parseUniversalSectorData, getSectorServiceImage, type UniversalSectorData } from "../utils/universalSectorParser";
 
 interface CategoryItem {
   id: number;

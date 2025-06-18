@@ -1,6 +1,6 @@
 import { X, Plus, Minus, Trash2, ShoppingBag } from "lucide-react";
-import { useCart, getTotalPrice } from "@/contexts/CartContext";
-import { Button } from "@/components/ui/button";
+import { useCart, getTotalPrice } from "../contexts/CartContext";
+import { Button } from "./ui/button";
 import { useLocation } from "wouter";
 
 export default function ShoppingCart() {

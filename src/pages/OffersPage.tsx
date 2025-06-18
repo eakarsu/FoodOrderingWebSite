@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { Clock, Star, Gift, Percent, Users, Calendar, Tag, Trophy } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { useCart } from "@/contexts/CartContext";
+import { Button } from "../components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card";
+import { Badge } from "../components/ui/badge";
+import { useCart } from "../contexts/CartContext";
 
 export default function OffersPage() {
   const { dispatch } = useCart();

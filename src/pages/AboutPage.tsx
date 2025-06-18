@@ -1,5 +1,5 @@
 import { Leaf, Heart, Users, Lightbulb } from "lucide-react";
-import { Card } from "@/components/ui/card";
+import { Card } from "../components/ui/card";
 
 export default function AboutPage() {
   const teamMembers = [

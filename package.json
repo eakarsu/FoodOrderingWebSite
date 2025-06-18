@@ -4,15 +4,10 @@
   "type": "module",
   "license": "MIT",
   "scripts": {
-    "start": "FAST_REFRESH=false react-app-rewired start",
-    "build": "react-app-rewired build",
-    "test": "react-app-rewired test",
-    "test:coverage": "react-app-rewired test --coverage --watchAll=false",
-    "eject": "react-scripts eject",
-    "lint": "eslint src/**/*.{js,jsx,ts,tsx}",
-    "lint:fix": "eslint src/**/*.{js,jsx,ts,tsx} --fix",
-    "format": "prettier --write src/**/*.{js,jsx,ts,tsx,json,css,md}",
-    "serve": "serve -s build"
+    "start": "FAST_REFRESH=false react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
@@ -83,6 +78,7 @@
     "zod-validation-error": "^3.4.0"
   },
   "devDependencies": {
+    "@craco/craco": "^7.1.0",
     "@replit/vite-plugin-cartographer": "^0.2.5",
     "@replit/vite-plugin-runtime-error-modal": "^0.0.3",
     "@tailwindcss/typography": "^0.5.15",

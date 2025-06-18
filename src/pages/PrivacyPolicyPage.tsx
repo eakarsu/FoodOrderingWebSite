@@ -1,6 +1,6 @@
 import { Shield, Eye, Lock, Users, Database, Phone, Mail } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card";
+import { Alert, AlertDescription } from "../components/ui/alert";
 
 export default function PrivacyPolicyPage() {
   return (

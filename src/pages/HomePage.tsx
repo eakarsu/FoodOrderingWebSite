@@ -2,15 +2,15 @@ import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Link, useLocation } from "wouter";
 import { Clock, Award, Heart, Brain, Leaf, Star, MessageSquare, Phone, Settings, Search, ArrowRight } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Input } from "@/components/ui/input";
-import { useCart } from "@/contexts/CartContext";
-import { getAIRecommendations, type AIRecommendation } from "@/lib/openai";
-import { SECTORS, type Sector, parsePrompt2File, parseRulesFile, type ParsedCategory, type ParsedRule } from "@/lib/sectors";
+import { Button } from "../components/ui/button";
+import { Card, CardContent } from "../components/ui/card";
+import { Skeleton } from "../components/ui/skeleton";
+import { Input } from "../components/ui/input";
+import { useCart } from "../contexts/CartContext";
+import { getAIRecommendations, type AIRecommendation } from "../lib/openai";
+import { SECTORS, type Sector, parsePrompt2File, parseRulesFile, type ParsedCategory, type ParsedRule } from "../lib/sectors";
 import type { MenuItem } from "@shared/schema";
-import ContactUsDirectly from "@/components/ContactUsDirectly";
+import ContactUsDirectly from "../components/ContactUsDirectly";
 
 export default function HomePage() {
   const { dispatch } = useCart();

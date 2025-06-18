@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Link, useLocation } from "wouter";
 import { ShoppingCart, Menu, X, Settings } from "lucide-react";
-import { useCart, getTotalItems } from "@/contexts/CartContext";
-import { Button } from "@/components/ui/button";
+import { useCart, getTotalItems } from "../contexts/CartContext";
+import { Button } from "./ui/button";
 
 export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);

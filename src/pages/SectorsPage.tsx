@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { Link } from "wouter";
-import { SECTORS, getSectorById } from "@/lib/sectors";
+import { SECTORS, getSectorById } from "../lib/sectors";
 import { Search, ArrowRight, Building2, Users, Zap } from "lucide-react";
-import { Input } from "@/components/ui/input";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import { Input } from "../components/ui/input";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../components/ui/card";
+import { Badge } from "../components/ui/badge";
 
 export default function SectorsPage() {
   const [searchTerm, setSearchTerm] = useState("");

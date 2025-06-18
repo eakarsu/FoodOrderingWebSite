@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
 import { useLocation } from "wouter";
-import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { Card, CardContent } from "../components/ui/card";
+import { Button } from "../components/ui/button";
+import { Input } from "../components/ui/input";
 import { Search, ArrowLeft, Phone, MessageSquare, Star, Calendar, Clock, Award } from "lucide-react";
-import { getSectorById, type Sector, type ParsedCategory } from "@/lib/sectors";
-import { useCart } from "@/contexts/CartContext";
-import { useToast } from "@/hooks/use-toast";
-import { parseUniversalSectorData, getSectorFeatures, getSectorServiceImage, type UniversalSectorData, type SectorFeatures } from "@/utils/universalSectorParser";
+import { getSectorById, type Sector, type ParsedCategory } from "../lib/sectors";
+import { useCart } from "../contexts/CartContext";
+import { useToast } from "../hooks/use-toast";
+import { parseUniversalSectorData, getSectorFeatures, getSectorServiceImage, type UniversalSectorData, type SectorFeatures } from "../utils/universalSectorParser";
 
 interface SectorPageProps {
   sectorId?: string;

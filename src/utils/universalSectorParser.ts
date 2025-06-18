@@ -1,4 +1,4 @@
-import { parsePrompt2File, parseRulesFile, type ParsedCategory, type ParsedRule } from "@/lib/sectors";
+import { parsePrompt2File, parseRulesFile, type ParsedCategory, type ParsedRule } from "../lib/sectors";
 
 export interface UniversalSectorData {
   sectorId: string;

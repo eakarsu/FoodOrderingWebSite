@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { Search, Package, Truck, CheckCircle, Clock, MapPin } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import { Button } from "../components/ui/button";
+import { Input } from "../components/ui/input";
+import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card";
+import { Badge } from "../components/ui/badge";
 
 export default function OrderTrackingPage() {
   const [orderNumber, setOrderNumber] = useState("");
