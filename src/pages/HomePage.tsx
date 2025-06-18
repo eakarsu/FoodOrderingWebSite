@@ -395,6 +395,93 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Live AI Features Demo Section */}
+      <section className="py-16 bg-gradient-to-r from-purple-600 to-blue-600 text-white">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">
+              🚀 Try Our AI Features Live
+            </h2>
+            <p className="text-xl text-purple-100 max-w-3xl mx-auto mb-8">
+              Experience the power of our AI-driven platform with real-time demos and interactive features
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+            <Card className="bg-white/10 backdrop-blur-sm border-white/20 hover:bg-white/20 transition-all duration-300">
+              <CardContent className="p-6 text-center">
+                <Brain className="h-12 w-12 text-yellow-300 mx-auto mb-4" />
+                <h3 className="text-xl font-bold mb-3">AI Features Dashboard</h3>
+                <p className="text-purple-100 mb-4">
+                  Explore predictive scheduling, email automation, document processing, and more
+                </p>
+                <Link href="/ai-features">
+                  <Button className="bg-white text-purple-600 hover:bg-purple-50">
+                    Try AI Features →
+                  </Button>
+                </Link>
+              </CardContent>
+            </Card>
+
+            <Card className="bg-white/10 backdrop-blur-sm border-white/20 hover:bg-white/20 transition-all duration-300">
+              <CardContent className="p-6 text-center">
+                <Star className="h-12 w-12 text-green-300 mx-auto mb-4" />
+                <h3 className="text-xl font-bold mb-3">Analytics Dashboard</h3>
+                <p className="text-purple-100 mb-4">
+                  View real-time metrics, predictive analytics, and business intelligence
+                </p>
+                <Link href="/analytics">
+                  <Button className="bg-white text-purple-600 hover:bg-purple-50">
+                    View Analytics →
+                  </Button>
+                </Link>
+              </CardContent>
+            </Card>
+
+            <Card className="bg-white/10 backdrop-blur-sm border-white/20 hover:bg-white/20 transition-all duration-300">
+              <CardContent className="p-6 text-center">
+                <Settings className="h-12 w-12 text-blue-300 mx-auto mb-4" />
+                <h3 className="text-xl font-bold mb-3">Workflow Automation</h3>
+                <p className="text-purple-100 mb-4">
+                  Create and manage automated workflows with collaborative AI agents
+                </p>
+                <Link href="/workflows">
+                  <Button className="bg-white text-purple-600 hover:bg-purple-50">
+                    Manage Workflows →
+                  </Button>
+                </Link>
+              </CardContent>
+            </Card>
+          </div>
+
+          <div className="text-center">
+            <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6 max-w-4xl mx-auto">
+              <h3 className="text-2xl font-bold mb-4">🎯 What You Can Do Right Now:</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-left">
+                <div>
+                  <h4 className="font-semibold mb-2">✨ AI-Powered Features:</h4>
+                  <ul className="space-y-1 text-sm text-purple-100">
+                    <li>• Test predictive scheduling algorithms</li>
+                    <li>• Try automated email categorization</li>
+                    <li>• Experience real-time translation</li>
+                    <li>• Interact with collaborative AI agents</li>
+                  </ul>
+                </div>
+                <div>
+                  <h4 className="font-semibold mb-2">📊 Live Analytics:</h4>
+                  <ul className="space-y-1 text-sm text-purple-100">
+                    <li>• View real-time performance metrics</li>
+                    <li>• Generate predictive business reports</li>
+                    <li>• Analyze customer behavior patterns</li>
+                    <li>• Monitor workflow automation status</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Contact Us Directly Section */}
       <section className="py-16 bg-gray-50">
         <div className="container mx-auto px-4">

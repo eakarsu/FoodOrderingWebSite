@@ -11,6 +11,9 @@ export default function Header() {
 
   const navigation = [
     { name: "Home", path: "/" },
+    { name: "AI Features", path: "/ai-features" },
+    { name: "Analytics", path: "/analytics" },
+    { name: "Workflows", path: "/workflows" },
     { name: "About", path: "/about" },
     { name: "Contact", path: "/contact" },
   ];

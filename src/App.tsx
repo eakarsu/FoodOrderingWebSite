@@ -27,6 +27,12 @@ import SupportPage from "./pages/SupportPage";
 import PrivacyPolicyPage from "./pages/PrivacyPolicyPage";
 import NotFound from "./pages/not-found";
 
+// Lazy load AI feature pages
+import { lazy, Suspense } from "react";
+const AIFeaturesPage = lazy(() => import("./pages/AIFeaturesPage"));
+const AnalyticsDashboard = lazy(() => import("./pages/AnalyticsDashboard"));
+const WorkflowManager = lazy(() => import("./pages/WorkflowManager"));
+
 function Router() {
   return (
     <Switch>
@@ -48,6 +54,24 @@ function Router() {
       <Route path="/faq" component={FAQPage} />
       <Route path="/support" component={SupportPage} />
       <Route path="/privacy-policy" component={PrivacyPolicyPage} />
+      
+      {/* AI Features Routes */}
+      <Route path="/ai-features">
+        <Suspense fallback={<div className="flex items-center justify-center min-h-screen">Loading AI Features...</div>}>
+          <AIFeaturesPage />
+        </Suspense>
+      </Route>
+      <Route path="/analytics">
+        <Suspense fallback={<div className="flex items-center justify-center min-h-screen">Loading Analytics...</div>}>
+          <AnalyticsDashboard />
+        </Suspense>
+      </Route>
+      <Route path="/workflows">
+        <Suspense fallback={<div className="flex items-center justify-center min-h-screen">Loading Workflows...</div>}>
+          <WorkflowManager />
+        </Suspense>
+      </Route>
+      
       <Route component={NotFound} />
     </Switch>
   );
