@@ -46,7 +46,7 @@ export default function CategoriesPage() {
   }>({ isOpen: false });
   const [loading, setLoading] = useState(true);
   const [sectorData, setSectorData] = useState<UniversalSectorData | null>(null);
-  const [currentSector, setCurrentSector] = useState<string>('food_delivery');
+  const [currentSector, setCurrentSector] = useState<string>('');
   const { dispatch } = useCart();
   const { toast } = useToast();
 
