@@ -31,6 +31,6 @@ export default defineConfig({
   server: {
     port: parseInt(process.env.PORT) || 5007,
     host: true,
-    allowedHosts: ["www.omniassistai.com"]
+    allowedHosts: ["omniassistai.com","www.omniassistai.com"]
   }
 });
