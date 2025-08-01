@@ -1,5 +1,5 @@
 # Use Node.js runtime
-FROM node:18-alpine
+FROM node:22-alpine
 
 # Set working directory
 WORKDIR /app
@@ -8,10 +8,13 @@ WORKDIR /app
 COPY package*.json ./
 
 # Install dependencies
-RUN npm ci
+RUN npm install
 
 # Copy source code
 COPY . .
+
+# Build the production bundle
+RUN npm run build
 
 # Expose port
 
