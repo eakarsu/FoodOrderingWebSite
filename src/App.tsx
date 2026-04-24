@@ -5,6 +5,9 @@ import { queryClient } from "./lib/queryClient";
 import { Toaster } from "./components/ui/toaster";
 import { TooltipProvider } from "./components/ui/tooltip";
 import { CartProvider } from "./contexts/CartContext";
+import { AuthProvider } from "./contexts/AuthContext";
+import ErrorBoundary from "./components/ErrorBoundary";
+import ProtectedRoute from "./components/ProtectedRoute";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import ShoppingCart from "./components/ShoppingCart";
@@ -26,6 +29,14 @@ import FAQPage from "./pages/FAQPage";
 import SupportPage from "./pages/SupportPage";
 import PrivacyPolicyPage from "./pages/PrivacyPolicyPage";
 import NotFound from "./pages/not-found";
+
+// Auth pages
+import LoginPage from "./pages/LoginPage";
+import RegisterPage from "./pages/RegisterPage";
+import ForgotPasswordPage from "./pages/ForgotPasswordPage";
+import ResetPasswordPage from "./pages/ResetPasswordPage";
+import ProfilePage from "./pages/ProfilePage";
+import AdminDashboardPage from "./pages/AdminDashboardPage";
 
 // Lazy load AI feature pages
 import { lazy, Suspense } from "react";
@@ -54,7 +65,25 @@ function Router() {
       <Route path="/faq" component={FAQPage} />
       <Route path="/support" component={SupportPage} />
       <Route path="/privacy-policy" component={PrivacyPolicyPage} />
-      
+
+      {/* Auth Routes */}
+      <Route path="/login" component={LoginPage} />
+      <Route path="/register" component={RegisterPage} />
+      <Route path="/forgot-password" component={ForgotPasswordPage} />
+      <Route path="/reset-password/:token" component={ResetPasswordPage} />
+      <Route path="/profile">
+        <ProtectedRoute>
+          <ProfilePage />
+        </ProtectedRoute>
+      </Route>
+
+      {/* Admin Route */}
+      <Route path="/admin">
+        <ProtectedRoute roles={["admin", "manager"]}>
+          <AdminDashboardPage />
+        </ProtectedRoute>
+      </Route>
+
       {/* AI Features Routes */}
       <Route path="/ai-features">
         <Suspense fallback={<div className="flex items-center justify-center min-h-screen">Loading AI Features...</div>}>
@@ -71,7 +100,7 @@ function Router() {
           <WorkflowManager />
         </Suspense>
       </Route>
-      
+
       <Route component={NotFound} />
     </Switch>
   );
@@ -81,21 +110,24 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
-        <CartProvider>
-          <div className="min-h-screen flex flex-col">
-            <Header />
-            <main className="flex-1">
-              <Router />
-            </main>
-            <Footer />
-            <ShoppingCart />
-            <Toaster />
-          </div>
-        </CartProvider>
+        <AuthProvider>
+          <CartProvider>
+            <ErrorBoundary>
+              <div className="min-h-screen flex flex-col">
+                <Header />
+                <main className="flex-1">
+                  <Router />
+                </main>
+                <Footer />
+                <ShoppingCart />
+                <Toaster />
+              </div>
+            </ErrorBoundary>
+          </CartProvider>
+        </AuthProvider>
       </TooltipProvider>
     </QueryClientProvider>
   );
 }
 
 export default App;
-
