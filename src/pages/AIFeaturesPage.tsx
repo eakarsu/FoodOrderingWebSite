@@ -33,6 +33,11 @@ export default function AIFeaturesPage() {
   const [translationText, setTranslationText] = useState('');
   const [documentText, setDocumentText] = useState('');
   const [callTranscript, setCallTranscript] = useState('');
+  const [preferencesUserId, setPreferencesUserId] = useState('demo_user');
+  const [preferencesPast, setPreferencesPast] = useState('');
+  const [emailBatch, setEmailBatch] = useState('');
+  const [sectorId, setSectorId] = useState('restaurant');
+  const [sectorData, setSectorData] = useState('');
 
   const demoSections = [
     {
@@ -76,6 +81,27 @@ export default function AIFeaturesPage() {
       icon: Brain,
       description: 'Collaborative AI agents working together',
       color: 'indigo'
+    },
+    {
+      id: 'preferences',
+      title: 'Scheduling Preferences',
+      icon: Settings,
+      description: 'Analyze a user\'s past appointments to extract scheduling preferences',
+      color: 'cyan'
+    },
+    {
+      id: 'email-batch',
+      title: 'Email Categorizer',
+      icon: Eye,
+      description: 'Bulk-categorize a batch of emails',
+      color: 'teal'
+    },
+    {
+      id: 'sector',
+      title: 'Sector Insights',
+      icon: AlertCircle,
+      description: 'Sector-specific AI analysis on free-form input data',
+      color: 'amber'
     }
   ];
 
@@ -296,6 +322,97 @@ export default function AIFeaturesPage() {
       });
     } catch (error) {
       console.error('Call analysis error:', error);
+    }
+    setIsLoading(false);
+  };
+
+  const handleAnalyzePreferences = async () => {
+    if (!preferencesUserId.trim()) {
+      toast({ title: 'User ID Required', description: 'Please enter a user ID' });
+      return;
+    }
+    setIsLoading(true);
+    try {
+      let pastAppointments: any[] = [];
+      if (preferencesPast.trim()) {
+        try { pastAppointments = JSON.parse(preferencesPast); } catch { pastAppointments = []; }
+      }
+      const response = await fetch('/api/ai/scheduling/analyze-preferences', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId: preferencesUserId, pastAppointments })
+      });
+      if (response.status === 503) {
+        toast({ title: 'AI Unavailable', description: 'AI service not configured on server.', variant: 'destructive' });
+      } else if (response.ok) {
+        const result = await response.json();
+        setDemoResults(result);
+        toast({ title: 'Preferences Analyzed', description: 'User scheduling preferences extracted.' });
+      } else {
+        setDemoResults({ preferredTimes: [], avoidedTimes: [], duration: 60, frequency: 'unknown' });
+      }
+    } catch (error) {
+      console.error('Preferences analysis error:', error);
+    }
+    setIsLoading(false);
+  };
+
+  const handleCategorizeEmails = async () => {
+    if (!emailBatch.trim()) {
+      toast({ title: 'Email Batch Required', description: 'Paste a JSON array of emails to categorize' });
+      return;
+    }
+    setIsLoading(true);
+    try {
+      let emails: any[] = [];
+      try { emails = JSON.parse(emailBatch); } catch {
+        emails = emailBatch.split(/\n\n+/).filter(Boolean).map((body, i) => ({ id: i + 1, body }));
+      }
+      const response = await fetch('/api/ai/email/categorize', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ emails })
+      });
+      if (response.status === 503) {
+        toast({ title: 'AI Unavailable', description: 'AI service not configured on server.', variant: 'destructive' });
+      } else if (response.ok) {
+        const result = await response.json();
+        setDemoResults(result);
+        toast({ title: 'Emails Categorized', description: 'Batch categorization complete.' });
+      } else {
+        setDemoResults({ categorized: emails.map((e: any) => ({ ...e, category: 'normal', priority: 3 })) });
+      }
+    } catch (error) {
+      console.error('Email categorize error:', error);
+    }
+    setIsLoading(false);
+  };
+
+  const handleSectorAnalyze = async () => {
+    if (!sectorId.trim()) {
+      toast({ title: 'Sector Required', description: 'Please enter a sector id' });
+      return;
+    }
+    setIsLoading(true);
+    try {
+      let data: any = sectorData;
+      try { data = JSON.parse(sectorData); } catch { /* keep as string */ }
+      const response = await fetch('/api/ai/sector/analyze', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ sectorId, data })
+      });
+      if (response.status === 503) {
+        toast({ title: 'AI Unavailable', description: 'AI service not configured on server.', variant: 'destructive' });
+      } else if (response.ok) {
+        const result = await response.json();
+        setDemoResults(result);
+        toast({ title: 'Sector Analysis Complete', description: 'AI insights generated for sector.' });
+      } else {
+        setDemoResults({ sectorId, insights: ['No live result; showing demo placeholder.'] });
+      }
+    } catch (error) {
+      console.error('Sector analyze error:', error);
     }
     setIsLoading(false);
   };
@@ -688,6 +805,132 @@ export default function AIFeaturesPage() {
                   </Card>
                 ))}
               </div>
+            )}
+          </div>
+        );
+
+      case 'preferences':
+        return (
+          <div className="space-y-6">
+            <div>
+              <h3 className="text-lg font-semibold mb-4">Scheduling Preferences Analyzer</h3>
+              <p className="text-gray-600 mb-4">
+                Extracts a user's preferred times, avoided times, typical duration, and frequency from past appointment history.
+              </p>
+              <Input
+                placeholder="User ID"
+                value={preferencesUserId}
+                onChange={(e) => setPreferencesUserId(e.target.value)}
+                className="mb-4"
+              />
+              <Textarea
+                placeholder='Past appointments as JSON array, e.g. [{"start":"2024-01-15T10:00:00","durationMin":60}]'
+                value={preferencesPast}
+                onChange={(e) => setPreferencesPast(e.target.value)}
+                className="mb-4"
+                rows={5}
+              />
+              <Button onClick={handleAnalyzePreferences} disabled={isLoading}>
+                {isLoading ? 'Analyzing...' : 'Analyze Preferences'}
+              </Button>
+            </div>
+
+            {demoResults && (
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Settings className="h-5 w-5 text-cyan-500" />
+                    Preferences
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <pre className="bg-gray-50 p-3 rounded text-sm overflow-auto">
+                    {JSON.stringify(demoResults, null, 2)}
+                  </pre>
+                </CardContent>
+              </Card>
+            )}
+          </div>
+        );
+
+      case 'email-batch':
+        return (
+          <div className="space-y-6">
+            <div>
+              <h3 className="text-lg font-semibold mb-4">Email Categorizer (Batch)</h3>
+              <p className="text-gray-600 mb-4">
+                Paste a JSON array of emails (or one body per blank-line block) and the AI will categorize the batch.
+              </p>
+              <Textarea
+                placeholder='[{"id":1,"subject":"Quote request","body":"..."}]'
+                value={emailBatch}
+                onChange={(e) => setEmailBatch(e.target.value)}
+                className="mb-4"
+                rows={6}
+              />
+              <Button onClick={handleCategorizeEmails} disabled={isLoading || !emailBatch.trim()}>
+                {isLoading ? 'Categorizing...' : 'Categorize Batch'}
+              </Button>
+            </div>
+
+            {demoResults && (
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Eye className="h-5 w-5 text-teal-500" />
+                    Categorization Results
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <pre className="bg-gray-50 p-3 rounded text-sm overflow-auto">
+                    {JSON.stringify(demoResults, null, 2)}
+                  </pre>
+                </CardContent>
+              </Card>
+            )}
+          </div>
+        );
+
+      case 'sector':
+        return (
+          <div className="space-y-6">
+            <div>
+              <h3 className="text-lg font-semibold mb-4">Sector-Specific Analysis</h3>
+              <p className="text-gray-600 mb-4">
+                Run sector-tuned AI analysis. Provide a sector ID and a free-form data payload (text or JSON).
+              </p>
+              <Input
+                placeholder='Sector ID (e.g. restaurant, healthcare, retail)'
+                value={sectorId}
+                onChange={(e) => setSectorId(e.target.value)}
+                className="mb-4"
+              />
+              <Textarea
+                placeholder='Data to analyze (text, metrics, or JSON)'
+                value={sectorData}
+                onChange={(e) => setSectorData(e.target.value)}
+                className="mb-4"
+                rows={6}
+              />
+              <Button onClick={handleSectorAnalyze} disabled={isLoading}>
+                {isLoading ? 'Analyzing...' : 'Run Sector Analysis'}
+              </Button>
+            </div>
+
+            {demoResults && (
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <AlertCircle className="h-5 w-5 text-amber-500" />
+                    Sector Analysis
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <pre className="bg-gray-50 p-3 rounded text-sm overflow-auto">
+                    {JSON.stringify(demoResults, null, 2)}
+                  </pre>
+                </CardContent>
+              </Card>
             )}
           </div>
         );

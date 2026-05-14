@@ -72,7 +72,7 @@ app.use((req, res, next) => {
 });
 
 (async () => {
-  const server = await registerRoutes(app);
+  const server = await registerRoutes(app); app.use('/api/kitchen-display', (await import('./routes/kitchenDisplay.js')).default); (await import('./routes/kitchenDisplay.js')).attachSockets(server); app.use('/api/stripe-delivery', (await import('./routes/stripeDelivery.js')).default); app.use('/api/loyalty', (await import('./routes/loyaltyOffers.js')).default); app.use('/api/vision-menu', (await import('./routes/visionMenuIntake.js')).default); app.use('/api/tenancy', (await import('./routes/tenancy.js')).default);
 
   // Global error handler
   app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
