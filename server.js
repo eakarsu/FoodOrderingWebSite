@@ -65,6 +65,30 @@ app.get('/api/status', (req, res) => {
   });
 });
 
+app.post('/api/kitchen-capacity/score', (req, res) => {
+  const body = req.body || {};
+  const orders = Number(body.open_orders || 0);
+  const prep = Number(body.avg_prep_minutes || 10);
+  const cooks = Number(body.active_cooks || 1);
+  const backlog = Number(body.delivery_backlog || 0);
+  const windowMinutes = Number(body.rush_window_minutes || 60);
+  const requiredCookMinutes = orders * prep;
+  const availableCookMinutes = cooks * windowMinutes;
+  const utilization = requiredCookMinutes / Math.max(availableCookMinutes, 1);
+  const score = Math.max(0, Math.min(100, Math.round(100 - utilization * 45 - backlog * 2)));
+  res.json({
+    capacity_score: score,
+    band: score >= 75 ? 'open' : score >= 50 ? 'throttle' : 'pause new orders',
+    utilization: Number(utilization.toFixed(2)),
+    actions: [
+      utilization > 1 ? 'Pause low-margin items until rush clears.' : 'Keep menu availability open.',
+      backlog > 8 ? 'Move driver handoff to priority queue.' : 'Delivery backlog is manageable.',
+      cooks < 3 ? 'Call in cross-trained prep support.' : 'Cook coverage is adequate.',
+    ],
+    generated_at: new Date().toISOString(),
+  });
+});
+
 // Serve static files from the dist directory with proper MIME types
 app.use(express.static(path.join(__dirname, 'dist'), {
   maxAge: process.env.NODE_ENV === 'production' ? '1y' : '0',

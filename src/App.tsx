@@ -37,9 +37,13 @@ import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 import ResetPasswordPage from "./pages/ResetPasswordPage";
 import ProfilePage from "./pages/ProfilePage";
 import AdminDashboardPage from "./pages/AdminDashboardPage";
+import KitchenCapacityPage from "./pages/KitchenCapacityPage";
 
 // Lazy load AI feature pages
 import { lazy, Suspense } from "react";
+import CodexCustomVizFeature from "./pages/CodexCustomVizFeature";
+import CodexOperationsFeature from "./pages/CodexOperationsFeature";
+
 const AIFeaturesPage = lazy(() => import("./pages/AIFeaturesPage"));
 const AnalyticsDashboard = lazy(() => import("./pages/AnalyticsDashboard"));
 const WorkflowManager = lazy(() => import("./pages/WorkflowManager"));
@@ -47,6 +51,8 @@ const WorkflowManager = lazy(() => import("./pages/WorkflowManager"));
 function Router() {
   return (
     <Switch>
+      <Route path="/codex/custom-viz" component={CodexCustomVizFeature} />
+      <Route path="/codex/operations" component={CodexOperationsFeature} />
       <Route path="/" component={HomePage} />
       <Route path="/menu" component={MenuPage} />
       <Route path="/booking" component={BookingPage} />
@@ -95,6 +101,7 @@ function Router() {
           <AnalyticsDashboard />
         </Suspense>
       </Route>
+      <Route path="/kitchen-capacity" component={KitchenCapacityPage} />
       <Route path="/workflows">
         <Suspense fallback={<div className="flex items-center justify-center min-h-screen">Loading Workflows...</div>}>
           <WorkflowManager />
