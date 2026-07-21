@@ -39,7 +39,7 @@ export default function MenuPage() {
       matchesSearch = item.name.toLowerCase().includes(searchLower) ||
                      item.description.toLowerCase().includes(searchLower) ||
                      item.category.toLowerCase().includes(searchLower) ||
-                     (item.tags && item.tags.some(tag => tag.toLowerCase().includes(searchLower)));
+                     Boolean(item.tags?.some(tag => tag.toLowerCase().includes(searchLower)));
     }
     
     // If searching, only apply search filter, ignore category filter to show all relevant results

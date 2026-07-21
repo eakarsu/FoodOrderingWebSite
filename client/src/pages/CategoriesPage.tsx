@@ -755,7 +755,7 @@ export default function CategoriesPage() {
                           />
                           <div className="flex-1">
                             <h4 className="font-semibold text-secondary">{item.name}</h4>
-                            {item.description && (
+                            {"description" in item && item.description && (
                               <p className="text-gray-600 text-sm mt-1">{item.description}</p>
                             )}
                             <p className="text-primary font-bold mt-2">${item.price.toFixed(2)}</p>

@@ -226,7 +226,7 @@ export default function CustomizationModal({
                     {rule.options.map((option) => {
                       const isSelected = selections[rule.name]?.includes(option.name) || false;
                       const currentCount = selections[rule.name]?.length || 0;
-                      const maxReached = rule.max_selections && currentCount >= rule.max_selections;
+                      const maxReached = Boolean(rule.max_selections && currentCount >= rule.max_selections);
                       const isDisabled = !isSelected && maxReached;
 
                       return (
