@@ -102,6 +102,56 @@ app.get("/api/auth/me", signedAccess, async (req, res) => {
   return res.json({ user: result.rows[0] });
 });
 
+const requiredOpenRouterBase = "https://openrouter.ai/api/v1";
+app.post("/api/ai/order-advice", signedAccess, async (req, res, next) => {
+  const prompt = typeof req.body?.prompt === "string" ? req.body.prompt.trim() : "";
+  if (prompt.length < 10 || prompt.length > 5000) return res.status(400).json({ message: "prompt length is invalid" });
+  try {
+    if (!process.env.OPENROUTER_API_KEY) throw new Error("OPENROUTER_API_KEY is required");
+    if (!process.env.OPENROUTER_MODEL) throw new Error("OPENROUTER_MODEL is required");
+    if (process.env.OPENROUTER_BASE_URL !== requiredOpenRouterBase) throw new Error("OPENROUTER_BASE_URL must use the configured OpenRouter API");
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), Number(process.env.OPENROUTER_TIMEOUT_MS || 120000));
+    let providerResponse: globalThis.Response;
+    try {
+      providerResponse = await fetch(`${requiredOpenRouterBase}/chat/completions`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
+          "Content-Type": "application/json",
+          "HTTP-Referer": process.env.CLIENT_URL || `http://127.0.0.1:${process.env.FRONTEND_PORT}`,
+          "X-Title": "Food Ordering Web Site",
+        },
+        body: JSON.stringify({
+          model: process.env.OPENROUTER_MODEL,
+          messages: [
+            { role: "system", content: "You are a food-ordering operations advisor. Give concise, practical guidance while flagging allergy, availability, payment, fulfillment, and human-confirmation constraints. Never claim an order or payment was executed." },
+            { role: "user", content: prompt },
+          ],
+          temperature: 0.2,
+          max_tokens: 700,
+        }),
+        signal: controller.signal,
+      });
+    } finally {
+      clearTimeout(timer);
+    }
+    const payload: any = await providerResponse.json().catch(() => null);
+    if (!providerResponse.ok) throw new Error(`OpenRouter request failed with status ${providerResponse.status}`);
+    const advice = payload?.choices?.[0]?.message?.content?.trim();
+    if (!advice) throw new Error("OpenRouter returned no ordering advice");
+    const actor = (req as any).user;
+    const stored = await pool.query(
+      `INSERT INTO food_order_ai_results(tenant_id,user_id,prompt,model,provider_receipt_id,result,usage)
+       VALUES($1,$2,$3,$4,$5,$6,$7::jsonb) RETURNING id,created_at`,
+      [actor.tenantId, actor.userId || actor.sub, prompt, process.env.OPENROUTER_MODEL, payload.id || null, advice, JSON.stringify(payload.usage || {})],
+    );
+    return res.json({ id: stored.rows[0].id, advice, model: process.env.OPENROUTER_MODEL, createdAt: stored.rows[0].created_at });
+  } catch (error) {
+    return next(error);
+  }
+});
+
 app.use("/api", signedAccess);
 
 app.use((req, res, next) => {
