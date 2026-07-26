@@ -15,4 +15,3 @@ function sequelize(instance) {
 }
 
 module.exports = { postgres, sequelize };
-
