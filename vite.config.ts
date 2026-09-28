@@ -24,6 +24,14 @@ export default defineConfig({
     },
   },
   root: path.resolve(import.meta.dirname, "client"),
+  server: {
+    proxy: {
+      "/api": {
+        target: `http://127.0.0.1:${process.env.BACKEND_PORT || process.env.PORT || 5000}`,
+        changeOrigin: true,
+      },
+    },
+  },
   build: {
     outDir: path.resolve(import.meta.dirname, "dist/public"),
     emptyOutDir: true,

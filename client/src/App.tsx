@@ -21,6 +21,8 @@ import FAQPage from "@/pages/FAQPage";
 import SupportPage from "@/pages/SupportPage";
 import PrivacyPolicyPage from "@/pages/PrivacyPolicyPage";
 import NotFound from "@/pages/not-found";
+import LoginPage from "@/pages/LoginPage";
+import DashboardPage from "@/pages/DashboardPage";
 
 function Router() {
   return (
@@ -38,6 +40,8 @@ function Router() {
       <Route path="/faq" component={FAQPage} />
       <Route path="/support" component={SupportPage} />
       <Route path="/privacy-policy" component={PrivacyPolicyPage} />
+      <Route path="/login" component={LoginPage} />
+      <Route path="/dashboard" component={DashboardPage} />
       <Route component={NotFound} />
     </Switch>
   );

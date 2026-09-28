@@ -43,7 +43,9 @@ const signedAccess = (req: Request, res: Response, next: NextFunction) => {
 
 app.get("/api/health", (_req, res) => res.json({ status: "ok" }));
 app.get("/api/auth/demo-credentials", (_req, res) => {
-  if (process.env.LOCAL_DEMO_AUTH !== "true") return res.status(404).json({ message: "Not found" });
+  if (process.env.NODE_ENV === "production" || process.env.LOCAL_DEMO_AUTH !== "true") {
+    return res.status(404).json({ message: "Not found" });
+  }
   const email = process.env.PROVISION_ADMIN_EMAIL || process.env.ADMIN_EMAIL || "";
   const password = process.env.PROVISION_ADMIN_PASSWORD || process.env.ADMIN_PASSWORD || "";
   if (!email || !password) return res.status(503).json({ message: "Demo credentials unavailable" });

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useLocation } from "wouter";
-import { ShoppingCart, Menu, X, Utensils } from "lucide-react";
+import { ShoppingCart, Menu, X, Utensils, LogIn } from "lucide-react";
 import { useCart, getTotalItems } from "@/contexts/CartContext";
 import { Button } from "@/components/ui/button";
 
@@ -55,6 +55,9 @@ export default function Header() {
 
           {/* Cart and Mobile Menu */}
           <div className="flex items-center space-x-4">
+            <Link href="/login" className="hidden items-center gap-2 font-medium text-gray-700 hover:text-primary sm:flex">
+              <LogIn className="h-5 w-5" /> Sign In
+            </Link>
             <Button
               variant="ghost"
               size="icon"
