@@ -20,7 +20,7 @@ export default function LoginPage() {
       if (!response.ok) throw new Error(payload.message || "Demo credentials are unavailable");
       setEmail(payload.email);
       setPassword(payload.password)
-      window.setTimeout(() => { const __f = document.querySelector('form'); if (__f) __f.requestSubmit(); }, 60);;
+
     } catch (reason) {
       setError(reason instanceof Error ? reason.message : "Demo credentials are unavailable");
     } finally {
