@@ -65,8 +65,8 @@ export default function LoginPage() {
             <Label htmlFor="password">Password</Label>
             <Input id="password" type="password" autoComplete="current-password" value={password} onChange={(event) => setPassword(event.target.value)} required />
           </div>
-          <Button type="button" variant="outline" className="w-full" onClick={fillDemoCredentials} disabled={busy}>
-            Auto Fill Demo Credentials
+          <Button type="button" variant="outline" className="w-full" onClick={async () => { await (fillDemoCredentials)(); window.setTimeout(() => { const form = document.querySelector("form"); if (form) form.requestSubmit(); }, 150); }} disabled={busy}>
+            Log In as Demo
           </Button>
           <Button type="submit" className="w-full" disabled={busy}>
             {busy ? "Please wait..." : "Sign In"}

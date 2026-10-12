@@ -10,6 +10,7 @@ export default function Header() {
   const [location] = useLocation();
 
   const navigation = [
+    { name: "AI Operations", path: "/ai-operations" },
     { name: "Home", path: "/" },
     { name: "Menu", path: "/menu" },
     { name: "Categories", path: "/categories" },

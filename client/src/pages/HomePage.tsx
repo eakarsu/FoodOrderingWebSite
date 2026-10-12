@@ -1,18 +1,15 @@
-import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "wouter";
-import { Clock, Award, Heart, Brain, Leaf, Star, MessageSquare, Phone, Settings } from "lucide-react";
+import { Clock, Award, Heart, Brain, MessageSquare, Phone, Settings } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useCart } from "@/contexts/CartContext";
-import { getAIRecommendations, type AIRecommendation } from "@/lib/openai";
 import type { MenuItem } from "@shared/schema";
 import ContactUsDirectly from "@/components/ContactUsDirectly";
 
 export default function HomePage() {
   const { dispatch } = useCart();
-  const [recommendations, setRecommendations] = useState<AIRecommendation[]>([]);
 
   // Fetch featured dishes (first 3 main courses)
   const { data: menuItems, isLoading } = useQuery<MenuItem[]>({
@@ -21,24 +18,7 @@ export default function HomePage() {
 
   const featuredDishes = menuItems?.filter(item => item.category === "mains").slice(0, 3) || [];
 
-  // Get AI recommendations on component mount
-  useEffect(() => {
-    const fetchRecommendations = async () => {
-      try {
-        const recs = await getAIRecommendations({
-          preferences: "healthy options and popular dishes",
-          previousOrders: "",
-        });
-        setRecommendations(recs);
-      } catch (error) {
-        console.error("Failed to fetch recommendations:", error);
-      }
-    };
-
-    fetchRecommendations();
-  }, []);
-
-  const handleAddToCart = (item: MenuItem | AIRecommendation) => {
+  const handleAddToCart = (item: MenuItem) => {
     dispatch({
       type: "ADD_ITEM",
       payload: {
@@ -216,80 +196,27 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* AI Recommendations */}
+      {/* Native AI order-planning workspace */}
       <section className="py-16 bg-cream">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-secondary mb-4">
               <Brain className="inline-block mr-3 text-primary" />
-              AI Recommended For You
+              AI Order Planning
             </h2>
             <p className="text-gray-600 max-w-2xl mx-auto">
-              Our intelligent system learns your preferences to suggest dishes you'll love.
+              Prepare a dietary review, a group order, or a pickup checklist with three complete examples and a separate Generate with OpenRouter action.
             </p>
           </div>
 
-          {recommendations.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {recommendations.slice(0, 2).map((rec, index) => (
-                <Card key={rec.id} className="p-6">
-                  <div className="flex items-center mb-4">
-                    <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center mr-4">
-                      {index === 0 ? (
-                        <Leaf className="h-6 w-6 text-white" />
-                      ) : (
-                        <Star className="h-6 w-6 text-white" />
-                      )}
-                    </div>
-                    <div>
-                      <h3 className="font-bold text-secondary">
-                        {index === 0 ? "Healthy Choice" : "Popular Pick"}
-                      </h3>
-                      <p className="text-sm text-gray-600">{rec.reason}</p>
-                    </div>
-                  </div>
-                  <img
-                    src={rec.image}
-                    alt={rec.name}
-                    className="w-full h-32 object-cover rounded-lg mb-4"
-                  />
-                  <h4 className="font-semibold text-secondary mb-2">{rec.name}</h4>
-                  <p className="text-gray-600 text-sm mb-4">{rec.description}</p>
-                  <div className="flex items-center justify-between">
-                    <span className="text-lg font-bold text-primary">${rec.price}</span>
-                    <Button
-                      size="sm"
-                      onClick={() => handleAddToCart(rec)}
-                      className="bg-primary hover:bg-primary/90 text-white"
-                    >
-                      Add to Cart
-                    </Button>
-                  </div>
-                </Card>
-              ))}
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {Array.from({ length: 2 }).map((_, index) => (
-                <Card key={index} className="p-6">
-                  <div className="flex items-center mb-4">
-                    <Skeleton className="w-12 h-12 rounded-full mr-4" />
-                    <div className="flex-1">
-                      <Skeleton className="h-5 w-24 mb-1" />
-                      <Skeleton className="h-4 w-32" />
-                    </div>
-                  </div>
-                  <Skeleton className="w-full h-32 rounded-lg mb-4" />
-                  <Skeleton className="h-5 w-3/4 mb-2" />
-                  <Skeleton className="h-4 w-full mb-4" />
-                  <div className="flex items-center justify-between">
-                    <Skeleton className="h-6 w-16" />
-                    <Skeleton className="h-8 w-20" />
-                  </div>
-                </Card>
-              ))}
-            </div>
-          )}
+          <Card className="mx-auto max-w-2xl p-6 text-center">
+            <p className="mb-4 text-gray-600">
+              Automated personalized dish recommendations are unavailable here. In AI Operations, review your request and generate a saved planning report; confirm ingredients, allergies, availability, and payment with the restaurant.
+            </p>
+            <Link href="/ai-operations">
+              <Button className="bg-primary hover:bg-primary/90 text-white">Open AI Operations</Button>
+            </Link>
+          </Card>
         </div>
       </section>
 

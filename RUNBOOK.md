@@ -1,5 +1,9 @@
 # Food ordering operations
 
+The **AI Operations** navigation entry opens `/ai-operations` for the existing signed order-advice capability. Three examples fill the entire native prompt, followed by one explicit **Generate with OpenRouter** action. Answers display as readable reports; Copy and Download export readable text. Saved reports are scoped to the current tenant and user and open in a centered preview. Edit prepares a new input, Cancel closes the preview, and provider receipts remain retained with Delete unavailable.
+
+Cancel stops the provider request and rolls back an unfinished report write; already completed receipts remain visible. A fresh database identity and role check protects the advice route even when a signed token remains unexpired. Advice never places an order, confirms allergens, authorizes payment or executes fulfillment. The generated menu/order prototype retains its existing startup and production gates.
+
 The governed API is authoritative for checkout evidence and lifecycle decisions. The prior in-memory menu/order prototype is disabled by default and forbidden in production. Identity JWTs must carry signed actor, tenant, role, and subject scopes. Restaurant and location ownership are explicit on every order.
 
 Run `./start.sh check`, back up PostgreSQL, then run `ALLOW_SCHEMA_MIGRATION=1 ./start.sh migrate`. Migrations are additive and repeatable. Start with `./start.sh start`; startup performs a read-only database readiness query and never installs, seeds, or kills unrelated processes. Rollback begins by deploying prior application code while retaining additive tables; restore the backup only after reconciling accepted orders.

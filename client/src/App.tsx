@@ -23,6 +23,7 @@ import PrivacyPolicyPage from "@/pages/PrivacyPolicyPage";
 import NotFound from "@/pages/not-found";
 import LoginPage from "@/pages/LoginPage";
 import DashboardPage from "@/pages/DashboardPage";
+import AIOperationsPage from "@/pages/AIOperationsPage";
 
 function Router() {
   return (
@@ -42,6 +43,7 @@ function Router() {
       <Route path="/privacy-policy" component={PrivacyPolicyPage} />
       <Route path="/login" component={LoginPage} />
       <Route path="/dashboard" component={DashboardPage} />
+      <Route path="/ai-operations" component={AIOperationsPage} />
       <Route component={NotFound} />
     </Switch>
   );
