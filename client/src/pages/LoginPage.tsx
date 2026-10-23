@@ -11,23 +11,6 @@ export default function LoginPage() {
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
 
-  const fillDemoCredentials = async () => {
-    setError("");
-    setBusy(true);
-    try {
-      const response = await fetch("/api/auth/demo-credentials", { cache: "no-store" });
-      const payload = await response.json();
-      if (!response.ok) throw new Error(payload.message || "Demo credentials are unavailable");
-      setEmail(payload.email);
-      setPassword(payload.password)
-
-    } catch (reason) {
-      setError(reason instanceof Error ? reason.message : "Demo credentials are unavailable");
-    } finally {
-      setBusy(false);
-    }
-  };
-
   const signIn = async (event: FormEvent) => {
     event.preventDefault();
     setError("");
@@ -65,8 +48,15 @@ export default function LoginPage() {
             <Label htmlFor="password">Password</Label>
             <Input id="password" type="password" autoComplete="current-password" value={password} onChange={(event) => setPassword(event.target.value)} required />
           </div>
-          <Button type="button" variant="outline" className="w-full" onClick={async () => { await (fillDemoCredentials)(); window.setTimeout(() => { const form = document.querySelector("form"); if (form) form.requestSubmit(); }, 150); }} disabled={busy}>
-            Log In as Demo
+          <Button type="button" variant="outline" className="w-full" aria-label="Fill demo credentials" onClick={async () => {
+            if (import.meta.env.VITE_DEMO_EMAIL && import.meta.env.VITE_DEMO_PASSWORD) { setEmail(import.meta.env.VITE_DEMO_EMAIL); setPassword(import.meta.env.VITE_DEMO_PASSWORD); return; }
+            try {
+              const response = await fetch("/api/auth/demo-credentials", { cache: "no-store" });
+              if (response.ok) { const data = await response.json(); if (data?.email && data?.password) { setEmail(data.email); setPassword(data.password); return; } }
+            } catch { /* fall through to message below */ }
+            setError("Demo credentials are not configured for this environment.");
+          }}>
+            Fill demo credentials
           </Button>
           <Button type="submit" className="w-full" disabled={busy}>
             {busy ? "Please wait..." : "Sign In"}
